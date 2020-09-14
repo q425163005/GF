@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
@@ -78,10 +79,15 @@ namespace Fuse
             base.OnClose(isShutdown, userData);
         }
 
+        public void Close()
+        {
+            StartCoroutine(CloseCo(0.3f));
+        }
+         
         private IEnumerator CloseCo(float duration)
         {
             yield return m_CanvasGroup.FadeToAlpha(0f, duration);
-            //GameEntry.UI.CloseUIForm(this);
+            GameEntry.UI.CloseUIForm(this.UIForm);
         }
 
         /// <summary>强更弹窗</summary>
