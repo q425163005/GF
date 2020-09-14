@@ -15,8 +15,6 @@ namespace Fuse
             get;
             set;
         }
-
-
 #endif
 
 
@@ -28,7 +26,6 @@ namespace Fuse
             public string ComponentType;
 
             public Object Object;
-
         }
         public List<CompCollectorInfo> CompCollectorInfos = new List<CompCollectorInfo>();
     }
