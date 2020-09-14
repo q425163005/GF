@@ -1,0 +1,114 @@
+using Fuse.Editor.DataTableTools;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using GameFramework;
+
+namespace Fuse.Editor
+{
+    /// <summary>
+    /// 框架工具菜单
+    /// </summary>
+    public class FuseToolsMenu
+    {
+        #region 快捷键       
+
+        private const string LastScenePrefKey = "CSF.LastSceneOpen";
+
+        /// <summary>
+        /// 打开主场景之前的一个场景
+        /// </summary>
+        [MenuItem("★工具★/快捷键/打开上个场景 _F4", false, -20)]
+        public static void OpenLastScene()
+        {
+            var lastScene = EditorPrefs.GetString(LastScenePrefKey);
+            if (!string.IsNullOrEmpty(lastScene))
+                ToolsHelper.OpenScene(lastScene);
+            else
+                Debug.LogError("Not found last scene!");
+        }
+
+        /// <summary>
+        /// 打开主场景
+        /// </summary>
+        [MenuItem("★工具★/快捷键/开始游戏 _F5", false, -10)]
+        public static void OpenMainScene()
+        {
+            var currentScene = EditorSceneManager.GetActiveScene().path;
+            var mainScene = "Assets/Main.unity";
+            if (mainScene != currentScene)
+                EditorPrefs.SetString(LastScenePrefKey, currentScene);
+
+            ToolsHelper.OpenScene(mainScene);
+
+            if (!EditorApplication.isPlaying)
+                EditorApplication.isPlaying = true;
+        }
+
+        //[MenuItem("★工具★/关卡编辑器")]
+        //public static void OpenEdtiroScene()
+        //{
+        //    var currentScene = EditorSceneManager.GetActiveScene().path;
+        //    var mainScene = "Assets/EditorTools/MapEditor/MapEditor.unity";
+        //    if (mainScene != currentScene)
+        //        EditorPrefs.SetString(LastScenePrefKey, currentScene);
+
+        //    ToolsHelper.OpenScene(mainScene);
+        //    if (!EditorApplication.isPlaying)
+        //        EditorApplication.isPlaying = true;
+
+        //    //设置关卡编辑分辨率
+        //    var type = typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.GameView");
+        //    var window = EditorWindow.GetWindow(type);
+        //    var SizeSelectionCallback = type.GetMethod("SizeSelectionCallback",
+        //        System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public |
+        //        System.Reflection.BindingFlags.NonPublic);
+        //    SizeSelectionCallback.Invoke(window, new object[] { 0, null });
+        //}
+
+        #endregion
+
+        [MenuItem("★工具★/拷贝热更新DLL",false,1)]
+        public static void BuildHotfixDLL()
+        {
+            BuildHotfixEditor.BuildHotfixDLL();
+        }
+
+        [MenuItem("★工具★/代码生成器/事件参数类代码生成器")]
+        public static void EventArgsCodeCreat()
+        {
+            EventArgsCodeGenerator.OpenAutoGenWindow();
+        }
+
+        [MenuItem("★工具★/代码生成器/实体与界面代码生成器")]
+        public static void EntityAndUIFormCodeCreat()
+        {
+            EventArgsCodeGenerator.OpenAutoGenWindow();
+        }
+
+        [MenuItem("★工具★/ILRuntime/Generate ILRuntime CLR Binding Code by Analysis")]
+        public static void GenerateCLRBindingByAnalysis()
+        {
+            ILRuntimeCLRBinding.GenerateCLRBindingByAnalysis();
+        }
+
+        [MenuItem("★工具★/Generate DataTables")]
+        private static void GenerateDataTables()
+        {
+            foreach (string dataTableName in ProcedurePreload.DataTableNames)
+            {
+                DataTableProcessor dataTableProcessor = DataTableGenerator.CreateDataTableProcessor(dataTableName);
+                if (!DataTableGenerator.CheckRawData(dataTableProcessor, dataTableName))
+                {
+                    Debug.LogError(Utility.Text.Format("Check raw data failure. DataTableName='{0}'", dataTableName));
+                    break;
+                }
+
+                DataTableGenerator.GenerateDataFile(dataTableProcessor, dataTableName);
+                DataTableGenerator.GenerateCodeFile(dataTableProcessor, dataTableName);
+            }
+
+            AssetDatabase.Refresh();
+        }
+    }
+}
