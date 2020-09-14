@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityGameFramework.Runtime;
 
 namespace Fuse
 {
-    public class UpdateResourceForm : UGuiForm
+    public class UpdateResourceForm : UIFormLogic
     {
         [SerializeField] private Text m_DescriptionText = null;
 
@@ -27,11 +29,11 @@ namespace Fuse
         private Action m_ConfirmAction;
         private Action m_CancelAction;
         
+        private CanvasGroup m_CanvasGroup  = null;
 
         private void Awake()
         {
-            m_ComfirmBtn.onClick.AddListener(btnConfirm_Click);
-            m_CancelBtn.onClick.AddListener(btnCancel_Click);
+          
         }
         
 
@@ -60,6 +62,10 @@ namespace Fuse
         protected override void OnInit(object userData)
         {
             base.OnInit(userData);
+            
+            m_CanvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
+            m_ComfirmBtn.onClick.AddListener(btnConfirm_Click);
+            m_CancelBtn.onClick.AddListener(btnCancel_Click);
         }
 
         protected override void OnOpen(object userData)
@@ -70,6 +76,12 @@ namespace Fuse
         protected override void OnClose(bool isShutdown, object userData)
         {
             base.OnClose(isShutdown, userData);
+        }
+
+        private IEnumerator CloseCo(float duration)
+        {
+            yield return m_CanvasGroup.FadeToAlpha(0f, duration);
+            //GameEntry.UI.CloseUIForm(this);
         }
 
         /// <summary>强更弹窗</summary>
