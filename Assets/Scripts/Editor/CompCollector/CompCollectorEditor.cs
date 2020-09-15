@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Fuse.Editor
 {
@@ -12,50 +14,30 @@ namespace Fuse.Editor
     {
         private CompCollector m_Target;
 
-        /// <summary>
-        /// 命名前缀与类型的映射
-        /// </summary>
-        private static Dictionary<string, string> m_PrefixesDict = new Dictionary<string, string>()
-        {
-            {"Trans","Transform" },
-            {"OldAnim","Animation"},
-            {"NewAnim","Animator"},
-
-            {"Rect","RectTransform"},
-            {"Canvas","Canvas"},
-            {"Group","CanvasGroup"},
-            {"VGroup","VerticalLayoutGroup"},
-            {"HGroup","HorizontalLayoutGroup"},
-            {"GGroup","GridLayoutGroup"},
-            {"TGroup","ToggleGroup"},
-
-            {"Btn","Button"},
-            {"Img","Image"},
-            {"RImg","RawImage"},
-            {"Txt","Text"},
-            {"Input","InputField"},
-            {"Slider","Slider"},
-            {"Mask","Mask"},
-            {"Mask2D","RectMask2D"},
-            {"Tog","Toggle"},
-            {"Sbar","Scrollbar"},
-            {"SRect","ScrollRect"},
-            {"Drop","Dropdown"},
-        };
-
         private string[] s_AssemblyNames = {"Fuse.GameMain"};
         private string[] m_HelperTypeNames;
         private string   m_HelperTypeName;
         private int      m_HelperTypeNameIndex;
 
-        private string m_PrefixesShowStr;//命名前缀与类型的映射提示
-        private string m_SearchInput;
+        private string   m_PrefixesShowStr; //命名前缀与类型的映射提示
+        private string   m_SearchInput;
+        private string[] m_SearchType;
+        private int      m_SelSearchIndex;
 
-        private SerializedProperty m_CompDatas;
-        private static Dictionary<GameObject, string[]> _outletObjects = new Dictionary<GameObject, string[]>();
+        private bool error_haveEmptyName    = false; //存在空名
+        private bool error_haveRepeatedName = false; //存在重复命名
+        private bool error_haveEmptyObject  = false; //存在空对象
+        private bool error_haveRepeatedComp = false; //存在同对象重复组件
+
+        //private static Dictionary<GameObject, string[]> _outletObjects = new Dictionary<GameObject, string[]>();
+        private static Dictionary<int, CompCollector.CompCollectorInfo> _outletObjects =
+            new Dictionary<int, CompCollector.CompCollectorInfo>();
+
+        private Dictionary<GameObject, List<string>> _cachedCompInfo = new Dictionary<GameObject, List<string>>();
+
         private GUIStyle GreenFont;
         private GUIStyle RedFont;
-        private HashSet<string> _cachedPropertyNames = new HashSet<string>();
+
 
         private void OnEnable()
         {
@@ -69,19 +51,20 @@ namespace Fuse.Editor
             RedFont.normal.textColor   = Color.red;
 
             m_Target = (CompCollector) target;
-            m_PrefixesShowStr = GetPrefixesShowStr();
-            m_HelperTypeNames = GetTypeNames(typeof(IAutoBindRuleHelper), s_AssemblyNames);
 
-            m_CompDatas = serializedObject.FindProperty("CompCollectorInfos");
+            m_HelperTypeNames = GetTypeNames(typeof(IAutoBindRuleHelper), s_AssemblyNames);
+           
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            
+
             DrawToolsMenu();
-            
+
             DrawCompList();
+
+            DrawErrorBox();
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -134,6 +117,16 @@ namespace Fuse.Editor
                 IAutoBindRuleHelper helper =
                     (IAutoBindRuleHelper) CreateHelperInstance(m_HelperTypeName, s_AssemblyNames);
                 m_Target.RuleHelper = helper;
+            }
+
+            if (string.IsNullOrEmpty(m_PrefixesShowStr))
+            {
+                m_PrefixesShowStr = m_Target.RuleHelper.GetBindTips();
+            }
+
+            if (m_SearchType==null)
+            {
+                m_SearchType = m_Target.RuleHelper.SearchNames();
             }
         }
 
@@ -229,8 +222,8 @@ namespace Fuse.Editor
 
                             //改名并添加
                             //temp.name = ToVariableName(temp.name);
-                            m_Target.CompCollectorInfos.Insert(0,
-                                                               new CompCollector.CompCollectorInfo {Object = temp});
+                            m_Target.CompCollectorInfos.Add(new CompCollector.CompCollectorInfo
+                                                                {Name = temp.name, Object = temp});
                         }
                     }
 
@@ -244,7 +237,7 @@ namespace Fuse.Editor
             GUILayout.BeginVertical();
 
             DrawHelperSelect();
-            //EditorGUILayout.HelpBox("命名规则：禁止中文、特殊字符、空格", MessageType.Warning);
+
             DrawBtnMenu();
 
             DrawSearchInput();
@@ -258,28 +251,23 @@ namespace Fuse.Editor
             GUILayout.Space(3);
             GUILayout.BeginHorizontal();
 
-            if (GUILayout.Button(new GUIContent("自动绑定") { tooltip = m_PrefixesShowStr }, GUILayout.Height(35)))
+            if (GUILayout.Button(new GUIContent("自动绑定") {tooltip = m_PrefixesShowStr}, GUILayout.Height(35)))
             {
                 AutoBindComponent();
             }
-          
-            if (GUILayout.Button( "清理空项", GUILayout.Height(35)))
+
+            if (GUILayout.Button("清理空项", GUILayout.Height(35)))
             {
-                if (m_Target.CompCollectorInfos != null || m_Target.CompCollectorInfos.Count != 0)
+                if (m_Target.CompCollectorInfos != null && m_Target.CompCollectorInfos.Count > 0)
                 {
                     Undo.RecordObject(target, "Remove AllNull");
-                    for (var j = m_Target.CompCollectorInfos.Count - 1; j >= 0; j--)
-                    {
-                        if (m_Target.CompCollectorInfos[j].Object == null)
-                        {
-                            m_Target.CompCollectorInfos.RemoveAt(j);
-                        }
-                    }
+                    m_Target.CompCollectorInfos.RemoveAll(s => s.Object == null || string.IsNullOrEmpty(s.Name));
                 }
             }
 
             if (GUILayout.Button("生成代码", GUILayout.Height(35)))
             {
+                GenerateCode();
             }
 
             GUILayout.EndHorizontal();
@@ -293,150 +281,239 @@ namespace Fuse.Editor
             m_SearchInput = EditorGUILayout.TextField(new GUIContent(""), m_SearchInput);
 
             GUI.enabled = !string.IsNullOrEmpty(m_SearchInput);
-            
-            if (GUILayout.Button("搜索", GUILayout.Width(80)))
+
+            if (GUILayout.Button(EditorGUIUtility.IconContent("sv_icon_none"), GUILayout.Width(20),
+                                 GUILayout.Height(19)))
             {
-                
+                m_SearchInput = string.Empty;
+                GUI.FocusControl(null);
             }
 
             GUI.enabled = true;
-            GUILayout.EndHorizontal();
-        }
 
-        private static string GetPrefixesShowStr()
-        {
-            string str = "命名映射表" + "\n";
-            str += "_为分隔符" + "\n\n";
-            foreach (var variable in m_PrefixesDict)
+            int selectedIndex = EditorGUILayout.Popup(m_SelSearchIndex, m_SearchType, GUILayout.Width(80));
+            if (selectedIndex != m_SelSearchIndex)
             {
-                str += $"{variable.Key}=>{variable.Value}\n";
+                m_SelSearchIndex = selectedIndex;
             }
 
-            return str;
+            GUILayout.EndHorizontal();
         }
-
+        
         /// <summary>
         /// 自动绑定组件
         /// </summary>
         private void AutoBindComponent()
         {
-            m_CompDatas.ClearArray();
+            List<string> m_TempFiledNames         = new List<string>();
+            List<string> m_TempComponentTypeNames = new List<string>();
 
             Transform[] childs = m_Target.gameObject.GetComponentsInChildren<Transform>(true);
             foreach (Transform child in childs)
             {
-                // m_TempFiledNames.Clear();
-                // m_TempComponentTypeNames.Clear();
-                //
-                // if (m_Target.RuleHelper.IsValidBind(child, m_TempFiledNames, m_TempComponentTypeNames))
-                // {
-                //     for (int i = 0; i < m_TempFiledNames.Count; i++)
-                //     {
-                //         Component com = child.GetComponent(m_TempComponentTypeNames[i]);
-                //         if (com == null)
-                //         {
-                //             Debug.LogError($"{child.name}上不存在{m_TempComponentTypeNames[i]}的组件");
-                //         }
-                //         else
-                //         {
-                //             AddBindData(m_TempFiledNames[i], child.GetComponent(m_TempComponentTypeNames[i]));
-                //         }
-                //
-                //     }
-                // }
+                m_TempFiledNames.Clear();
+                m_TempComponentTypeNames.Clear();
+
+                if (m_Target.RuleHelper.IsValidBind(child, m_TempFiledNames, m_TempComponentTypeNames))
+                {
+                    for (int i = 0; i < m_TempFiledNames.Count; i++)
+                    {
+                        List<CompCollector.CompCollectorInfo> collectorInfos =
+                            m_Target.CompCollectorInfos.FindAll(s => s.Object == child.gameObject);
+                       
+                        if (collectorInfos.Count>0)
+                        {
+                            foreach (var variable in collectorInfos)
+                            {
+                                if (!variable.ComponentType.Equals(m_TempComponentTypeNames[i]))
+                                {
+                                    m_Target.CompCollectorInfos.Add(new CompCollector.CompCollectorInfo()
+                                    {
+                                        Name          = m_TempFiledNames[i],
+                                        Object        = child.gameObject,
+                                        ComponentType = m_TempComponentTypeNames[i]
+                                    });
+                                }
+                            }
+                        }
+                        else
+                        {
+                            m_Target.CompCollectorInfos.Add(new CompCollector.CompCollectorInfo()
+                            {
+                                Name          = m_TempFiledNames[i],
+                                Object        = child.gameObject,
+                                ComponentType = m_TempComponentTypeNames[i]
+                            });
+                        }
+                    }
+                }
             }
         }
 
         #endregion
-        
 
         private void DrawCompList()
         {
             GUILayout.Space(5);
 
-            for (var j = m_Target.CompCollectorInfos.Count - 1; j >= 0; j--)
+            error_haveEmptyName    = false; //存在空名
+            error_haveRepeatedName = false; //存在重复命名
+            error_haveEmptyObject  = false; //存在空对象
+            error_haveRepeatedComp = false; //存在同对象重复组件
+            string[]                        typesOptions;
+            int                             currentTypeIndex;
+            CompCollector.CompCollectorInfo outletInfo;
+            _cachedCompInfo.Clear();
+
+            for (var j = 0; j < m_Target.CompCollectorInfos.Count; j++)
             {
-                var currentTypeIndex = -1;
-                CompCollector.CompCollectorInfo outletInfo = m_Target.CompCollectorInfos[j];
-                string[] typesOptions = new string[0];
+                outletInfo       = m_Target.CompCollectorInfos[j];
+                typesOptions     = new string[0];
+                currentTypeIndex = -1;
 
-                var isValid = outletInfo.Object != null && !_cachedPropertyNames.Contains(outletInfo.Name);
-
-                _cachedPropertyNames.Add(outletInfo.Name);
-
+                //自动选择组件类型
                 if (outletInfo.Object != null)
                 {
                     if (outletInfo.Object is GameObject)
                     {
-
-                        var gameObj = outletInfo.Object as GameObject;
+                        var gameObj    = outletInfo.Object as GameObject;
                         var components = gameObj.GetComponents<Component>();
 
                         if (components.Length == 1)
                             currentTypeIndex = 0;
                         else
-                            currentTypeIndex = components.Length;// 设置默认类型,默认选中最后一个
+                            currentTypeIndex = components.Length; // 设置默认类型,默认选中最后一个
                         string objTypeName = "";
 
-                        typesOptions = new string[components.Length + 1];
+                        typesOptions    = new string[components.Length + 1];
                         typesOptions[0] = gameObj.GetType().FullName;
+
                         if (typesOptions[0] == outletInfo.ComponentType)
                         {
                             currentTypeIndex = 0;
-                            objTypeName = gameObj.GetType().Name;
+                            objTypeName      = gameObj.GetType().Name;
                         }
 
                         for (var i = 1; i <= components.Length; i++)
                         {
-                            var com = components[i - 1];
+                            var com      = components[i - 1];
                             var typeName = typesOptions[i] = com.GetType().FullName;
                             if (typeName == outletInfo.ComponentType)
                             {
                                 currentTypeIndex = i;
-                                objTypeName = com.GetType().Name;
+                                objTypeName      = com.GetType().Name;
                             }
                         }
-                        _outletObjects[gameObj] = new string[] { outletInfo.Name, objTypeName };
 
-                        if (string.IsNullOrEmpty(outletInfo.Name))
-                            outletInfo.Name = gameObj.name;
+                        _outletObjects[j] = new CompCollector.CompCollectorInfo()
+                        {
+                            Name          = outletInfo.Name,
+                            ComponentType = objTypeName,
+                            Object        = gameObj
+                        };
+
+                        if (string.IsNullOrEmpty(outletInfo.Name)) outletInfo.Name = gameObj.name;
                     }
-
                 }
+
+
+                #region 错误提示
+
+                //无效项 ==> Name==null || Object==null || repeated comp type || repeated Name
+                bool allError  = outletInfo.Object == null || string.IsNullOrEmpty(outletInfo.Name); //空名||空物体
+                bool nameError = false;                                                              //重名
+                bool objError  = false;                                                              //同一物体相同组件
+                if (outletInfo.Object != null)
+                {
+                    foreach (var variable in m_Target.CompCollectorInfos)
+                    {
+                        if (outletInfo == variable) continue;
+
+                        if (variable.Name.Equals(outletInfo.Name)) nameError = true;
+
+                        if (variable.Object == null) continue;
+                        if (variable.Object == outletInfo.Object &&
+                            variable.ComponentType.Equals(outletInfo.ComponentType))
+                        {
+                            objError = true;
+                        }
+                    }
+                }
+
+                if (string.IsNullOrEmpty(outletInfo.Name)) error_haveEmptyName = true;
+                if (nameError) error_haveRepeatedName                          = true;
+                if (outletInfo.Object == null) error_haveEmptyObject           = true;
+                if (objError) error_haveRepeatedComp                           = true;
+
+                #endregion
+
+                #region 单项
 
                 EditorGUILayout.BeginHorizontal();
 
-                if (GUILayout.Button(EditorGUIUtility.IconContent("sv_icon_none"), GUILayout.Width(25), GUILayout.Height(18)))
+                //搜索指针Profiler.NextFrame
+                if (!string.IsNullOrEmpty(m_SearchInput))
+                {
+                    if (m_Target.RuleHelper.IsAccord(m_SelSearchIndex, m_SearchInput, outletInfo.Name))
+                    {
+                        GUILayout.Label(EditorGUIUtility.IconContent("Profiler.NextFrame"));
+                    }
+                }
+
+                if (GUILayout.Button(EditorGUIUtility.IconContent("sv_icon_none"), GUILayout.Width(25),
+                                     GUILayout.Height(18)))
                 {
                     Undo.RecordObject(target, "Remove OutletInfo");
                     if (m_Target.CompCollectorInfos[j].Object != null)
                     {
-                        _outletObjects.Remove(m_Target.CompCollectorInfos[j].Object as GameObject);
+                        _outletObjects.Remove(j);
                     }
+
                     m_Target.CompCollectorInfos.RemoveAt(j);
                 }
 
-                outletInfo.Name = EditorGUILayout.TextField(outletInfo.Name, GUILayout.Width(120));
-                //outletInfo.Name = EditorGUILayout.TextField("Name:", outletInfo.Name, GUILayout.Width(150));
+                if (allError || nameError)
+                {
+                    GUI.backgroundColor = Color.red;
+                }
+
+                outletInfo.Name = EditorGUILayout.TextField(outletInfo.Name, GUILayout.Width(150)).Replace(" ", "");
+
+                if (!allError)
+                {
+                    GUI.backgroundColor = Color.white;
+                }
+
+                if (objError)
+                {
+                    GUI.backgroundColor = Color.red;
+                }
+
                 if (outletInfo.Object != null)
                 {
-                    outletInfo.Name = outletInfo.Object.name;
-                    outletInfo.Object = EditorGUILayout.ObjectField("", outletInfo.Object, typeof(UnityEngine.Object), true, GUILayout.Width(150));
+                    outletInfo.Object =
+                        EditorGUILayout.ObjectField("", outletInfo.Object, typeof(UnityEngine.Object), true,
+                                                    GUILayout.Width(150));
                 }
                 else
                 {
-                    outletInfo.Name = "";
-                    outletInfo.Object = EditorGUILayout.ObjectField("", outletInfo.Object, typeof(UnityEngine.Object), true);
+                    outletInfo.Object =
+                        EditorGUILayout.ObjectField("", outletInfo.Object, typeof(UnityEngine.Object), true);
                 }
 
                 if (currentTypeIndex >= 0)
                 {
                     var typeIndex = EditorGUILayout.Popup("", currentTypeIndex, typesOptions);
                     outletInfo.ComponentType = typesOptions[typeIndex].ToString();
-
                 }
-               
+
+
                 EditorGUILayout.EndHorizontal();
+
+                #endregion
+
+
+                GUI.backgroundColor = Color.white;
             }
 
             if (GUILayout.Button("Add New One"))
@@ -446,8 +523,9 @@ namespace Fuse.Editor
                     m_Target.CompCollectorInfos = new List<CompCollector.CompCollectorInfo>();
                     _outletObjects.Clear();
                 }
+
                 Undo.RecordObject(target, "Add OutletInfo");
-                m_Target.CompCollectorInfos.Add(new CompCollector.CompCollectorInfo());
+                m_Target.CompCollectorInfos.Add(new CompCollector.CompCollectorInfo() {Name = ""});
             }
 
             if (EditorGUI.EndChangeCheck())
@@ -456,6 +534,38 @@ namespace Fuse.Editor
             }
 
             GUILayout.Space(5);
-        } 
+        }
+
+        private void DrawErrorBox()
+        {
+            if (!error_haveEmptyName    &&
+                !error_haveRepeatedName &&
+                !error_haveEmptyObject  &&
+                !error_haveRepeatedComp)
+                return;
+
+            string errorStr                      = "\n" + "***错误提示***" + "\n";
+            if (error_haveEmptyName) errorStr    += "=> 存在空命名"  + "\n";
+            if (error_haveRepeatedName) errorStr += "=> 存在重复命名" + "\n";
+            if (error_haveEmptyObject) errorStr  += "=> 存在空对象"  + "\n";
+            if (error_haveRepeatedComp) errorStr += "=> 同一对象引用组件重复";
+
+            EditorGUILayout.HelpBox(errorStr, MessageType.Error);
+        }
+
+        private void GenerateCode()
+        {
+            if (error_haveEmptyName    ||
+                error_haveRepeatedName ||
+                error_haveEmptyObject  ||
+                error_haveRepeatedComp)
+            {
+                Debug.LogError("请先清理完错误信息！");
+                return;
+            }
+
+
+                
+        }
     }
 }

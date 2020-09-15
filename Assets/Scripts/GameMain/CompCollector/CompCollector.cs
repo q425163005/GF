@@ -21,13 +21,22 @@ namespace Fuse
         [System.Serializable]
         public class CompCollectorInfo
         {
-            public string Name;
+            public string Name="";
 
-            public string ComponentType;
+            public string ComponentType="";
 
             public Object Object;
         }
         public List<CompCollectorInfo> CompCollectorInfos = new List<CompCollectorInfo>();
+
+        [ContextMenu("123")]
+        public void Test()
+        {
+            foreach (var variable in CompCollectorInfos)
+            {
+                Debug.Log(variable.ComponentType);
+            }
+        }
     }
 }
 

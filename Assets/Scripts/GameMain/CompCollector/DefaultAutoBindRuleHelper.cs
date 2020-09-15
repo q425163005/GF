@@ -39,6 +39,13 @@ namespace Fuse
             {"Drop", "Dropdown"},
         };
 
+        private string[] SearchTypeStr =
+        {
+            "包含搜索",
+            "精准搜索"
+        };
+
+
         public bool IsValidBind(Transform target, List<string> filedNames, List<string> componentTypeNames)
         {
             string[] strArray = target.name.Split('_');
@@ -48,8 +55,15 @@ namespace Fuse
                 return false;
             }
 
-            string filedName = strArray[strArray.Length - 1];
+            var components = target.GetComponents<Component>();
+            List<string> componentsStr=new List<string>();
+            foreach (var variable in components)
+            {
+                componentsStr.Add(variable.GetType().FullName);
+            }
 
+            string filedName = strArray[strArray.Length - 1];
+            
             for (int i = 0; i < strArray.Length - 1; i++)
             {
                 string str = strArray[i];
@@ -57,7 +71,17 @@ namespace Fuse
                 if (m_PrefixesDict.TryGetValue(str, out comName))
                 {
                     filedNames.Add($"{str}_{filedName}");
-                    componentTypeNames.Add(comName);
+
+                    string compFullName = componentsStr.Find(s => s.EndsWith(comName));
+                    if (compFullName!=null)
+                    {
+                        componentTypeNames.Add(compFullName);
+                    }
+                    else
+                    {
+                        Debug.LogError($"{target.name}上不存在{comName}的组件");
+                        return false;
+                    }
                 }
                 else
                 {
@@ -67,6 +91,35 @@ namespace Fuse
             }
 
             return true;
+        }
+
+        public string GetBindTips()
+        {
+            string str = "命名映射表" + "\n";
+            str += "_为分隔符" + "\n\n";
+            foreach (var variable in m_PrefixesDict)
+            {
+                str += $"{variable.Key}=>{variable.Value}\n";
+            }
+
+            return str;
+        }
+
+        public string[] SearchNames()
+        {
+            return SearchTypeStr;
+        }
+
+        public bool IsAccord(int searchType, string inputStr, string targetStr)
+        {
+            if (searchType==0)//包含搜索
+            {
+                return targetStr.ToLower().Contains(inputStr.ToLower());
+            }
+            else//精准搜索
+            {
+                return targetStr.ToLower().Equals(inputStr.ToLower());
+            }
         }
     }
 }
