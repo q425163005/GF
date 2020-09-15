@@ -151,6 +151,7 @@ namespace Fuse.Editor
             foreach (GameObject go in Selection.gameObjects)
             {
                 CompCollector compCollector = go.GetComponent<CompCollector>();
+                if (compCollector==null) continue;
                 if (compCollector.RuleHelper == null)
                 {
                     IAutoBindRuleHelper helper =

@@ -1,5 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Fuse
 {
@@ -120,6 +124,79 @@ namespace Fuse
 
         public void GenerateCode(CompCollector collector)
         {
+            string modName = SceneManager.GetActiveScene().name;
+            string uiName  = collector.gameObject.name;
+            CreateUI(modName,uiName,collector);
+        }
+
+        private void CreateUI(string modName, string uiName, CompCollector collector)
+        {
+            string outPath = Path.GetFullPath($"../Scripts/Hotfix/Module/{modName}/UI/{uiName}.cs");
+            outPath = GameFramework.Utility.Path.GetRegularPath(outPath);
+            Debug.Log(outPath);
+            StringBuilder       eventAddStrs = new StringBuilder();
+            StringBuilder       eventStrs    = new StringBuilder();
+            CompCollector.CompCollectorInfo info;
+            string              objType;
+            for (int i = collector.CompCollectorInfos.Count; --i >= 0;)
+            {
+                info = collector.CompCollectorInfos[i];
+                if (info == null) continue;
+                objType = getTypeName(info.ComponentType);
+                if (info.Object.name.StartsWith("Btn")) //自动生成按钮事件
+                {
+                    eventAddStrs.AppendLine($"            {info.Object.name}.AddClick({info.Object.name}_Click);   //\n");
+                    eventStrs.AppendLine($@"        /// <summary></summary>
+        void {info.Object.name}_Click()
+        {{
+        }}");
+                }
+            }
+
+            string fieldStr = $@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using DG.Tweening;
+namespace Fuse.Hotfix.{modName}
+{{
+    public partial class {uiName} : BaseUI
+    {{
+        /// <summary>XXXX界面</summary>
+        public {uiName}()
+        {{
+            UINode    = EUINode.UIWindow; //UI节点
+            OpenAnim  = EUIAnim.None;     //UI打开效果
+            CloseAnim = EUIAnim.None;     //UI关闭效果 
+        }}
+        
+        /// <summary>添加事件监听</summary>
+        protected override void Awake()
+        {{ 
+{eventAddStrs}
+        }}
+        
+         /// <summary>刷新</summary>
+        public override void Refresh()
+        {{
+        }}
+
+{eventStrs}
+        /// <summary>释放UI引用</summary>
+        public override void Dispose()
+        {{
+        }}
+    }}
+}}
+";
+            ToolsHelper.SaveFile(outPath, fieldStr, false);
+        }
+
+        private static string getTypeName(string fullName)
+        {
+            return fullName.Substring(fullName.LastIndexOf(".", StringComparison.Ordinal) + 1);
         }
     }
 }
