@@ -28,11 +28,7 @@ namespace Fuse.Editor
         private bool error_haveRepeatedName = false; //存在重复命名
         private bool error_haveEmptyObject  = false; //存在空对象
         private bool error_haveRepeatedComp = false; //存在同对象重复组件
-
-        //private static Dictionary<GameObject, string[]> _outletObjects = new Dictionary<GameObject, string[]>();
-//        private static Dictionary<int, CompCollector.CompCollectorInfo> _outletObjects =
-//            new Dictionary<int, CompCollector.CompCollectorInfo>();
-
+        
         private static Dictionary<GameObject, List<string>> _cachedCompInfo = new Dictionary<GameObject, List<string>>();
 
         private GUIStyle GreenFont;
@@ -620,7 +616,7 @@ namespace Fuse.Editor
                 return;
             }
 
-            m_Target.RuleHelper.GenerateCode();
+            m_Target.RuleHelper.GenerateCode(m_Target);
         }
     }
 }

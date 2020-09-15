@@ -118,7 +118,7 @@ namespace Fuse
             }
         }
 
-        public void GenerateCode()
+        public void GenerateCode(CompCollector collector)
         {
         }
     }
