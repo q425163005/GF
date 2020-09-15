@@ -28,15 +28,7 @@ namespace Fuse
             public Object Object;
         }
         public List<CompCollectorInfo> CompCollectorInfos = new List<CompCollectorInfo>();
-
-        [ContextMenu("123")]
-        public void Test()
-        {
-            foreach (var variable in CompCollectorInfos)
-            {
-                Debug.Log(variable.ComponentType);
-            }
-        }
+        
     }
 }
 

@@ -8,9 +8,7 @@ namespace Fuse
     /// </summary>
     public class DefaultAutoBindRuleHelper : IAutoBindRuleHelper
     {
-        /// <summary>
-        /// 命名前缀与类型的映射
-        /// </summary>
+        /// <summary>命名前缀与类型的映射</summary>
         private Dictionary<string, string> m_PrefixesDict = new Dictionary<string, string>()
         {
             {"Trans", "Transform"},
@@ -39,11 +37,9 @@ namespace Fuse
             {"Drop", "Dropdown"},
         };
 
-        private string[] SearchTypeStr =
-        {
-            "包含搜索",
-            "精准搜索"
-        };
+        /// <summary>搜索规则</summary>
+        private string[] SearchTypeStr = {"包含搜索", "精准搜索"};
+        
 
 
         public bool IsValidBind(Transform target, List<string> filedNames, List<string> componentTypeNames)
@@ -55,15 +51,15 @@ namespace Fuse
                 return false;
             }
 
-            var components = target.GetComponents<Component>();
-            List<string> componentsStr=new List<string>();
+            var          components    = target.GetComponents<Component>();
+            List<string> componentsStr = new List<string>();
             foreach (var variable in components)
             {
                 componentsStr.Add(variable.GetType().FullName);
             }
 
             string filedName = strArray[strArray.Length - 1];
-            
+
             for (int i = 0; i < strArray.Length - 1; i++)
             {
                 string str = strArray[i];
@@ -73,7 +69,7 @@ namespace Fuse
                     filedNames.Add($"{str}_{filedName}");
 
                     string compFullName = componentsStr.Find(s => s.EndsWith(comName));
-                    if (compFullName!=null)
+                    if (compFullName != null)
                     {
                         componentTypeNames.Add(compFullName);
                     }
@@ -112,14 +108,18 @@ namespace Fuse
 
         public bool IsAccord(int searchType, string inputStr, string targetStr)
         {
-            if (searchType==0)//包含搜索
+            if (searchType == 0) //包含搜索
             {
                 return targetStr.ToLower().Contains(inputStr.ToLower());
             }
-            else//精准搜索
+            else //精准搜索
             {
                 return targetStr.ToLower().Equals(inputStr.ToLower());
             }
+        }
+
+        public void GenerateCode()
+        {
         }
     }
 }

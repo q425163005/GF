@@ -21,5 +21,8 @@ namespace Fuse
 
         /// <summary>是否匹配</summary>
         bool IsAccord(int searchType, string inputStr, string targetStr);
+
+        /// <summary>生成绑定代码</summary>
+        void GenerateCode();
     }
 }

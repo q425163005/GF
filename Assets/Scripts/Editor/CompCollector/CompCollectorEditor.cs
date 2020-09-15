@@ -30,14 +30,18 @@ namespace Fuse.Editor
         private bool error_haveRepeatedComp = false; //存在同对象重复组件
 
         //private static Dictionary<GameObject, string[]> _outletObjects = new Dictionary<GameObject, string[]>();
-        private static Dictionary<int, CompCollector.CompCollectorInfo> _outletObjects =
-            new Dictionary<int, CompCollector.CompCollectorInfo>();
+//        private static Dictionary<int, CompCollector.CompCollectorInfo> _outletObjects =
+//            new Dictionary<int, CompCollector.CompCollectorInfo>();
 
-        private Dictionary<GameObject, List<string>> _cachedCompInfo = new Dictionary<GameObject, List<string>>();
+        private static Dictionary<GameObject, List<string>> _cachedCompInfo = new Dictionary<GameObject, List<string>>();
 
         private GUIStyle GreenFont;
         private GUIStyle RedFont;
 
+        static CompCollectorEditor()
+        {
+            EditorApplication.hierarchyWindowItemOnGUI += HierarchyItemCB;
+        }
 
         private void OnEnable()
         {
@@ -53,7 +57,6 @@ namespace Fuse.Editor
             m_Target = (CompCollector) target;
 
             m_HelperTypeNames = GetTypeNames(typeof(IAutoBindRuleHelper), s_AssemblyNames);
-           
         }
 
         public override void OnInspectorGUI()
@@ -67,6 +70,57 @@ namespace Fuse.Editor
             DrawErrorBox();
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private static void HierarchyItemCB(int instanceid, Rect selectionrect)
+        {
+            var obj = EditorUtility.InstanceIDToObject(instanceid) as GameObject;
+            if (obj != null)
+            {
+                CompCollector compCollector  = obj.GetComponent<CompCollector>();
+                if (compCollector != null)
+                {
+                    Rect r = new Rect(selectionrect);
+                    r.x =  r.width+20 ;
+                    r.y += 2;
+                    var style = new GUIStyle();
+                    style.normal.textColor = Color.yellow;
+                    GUI.Label(r, $"Infos:{compCollector.CompCollectorInfos.Count}", style);
+                }
+
+                if (_cachedCompInfo.ContainsKey(obj))
+                {
+                    Rect r = new Rect(selectionrect);
+                    r.x =  r.x + GetStringWidth(obj.name) + 25;
+                    r.y += 2;
+                    GUIStyle style = new GUIStyle();
+                    style.normal.textColor = Color.green;
+                    //GUI.Label(r, string.Format("{0} [{1}]", _outletObjects[obj][0], _outletObjects[obj][1]), style);
+
+                    string str = "";
+                    foreach (var variable in _cachedCompInfo[obj])
+                    {
+                        str += $"[{variable}]";
+                    }
+
+                    GUI.Label(r, str, style);
+                }
+            }
+        }
+
+        private static float GetStringWidth(string str)
+        {
+            Font font = GUI.skin.font;
+            font.RequestCharactersInTexture(str, font.fontSize, FontStyle.Normal);
+            CharacterInfo characterInfo;
+            float         width = 0f;
+            for (int i = 0; i < str.Length; i++)
+            {
+                font.GetCharacterInfo(str[i], out characterInfo, font.fontSize);
+                width += characterInfo.advance;
+            }
+
+            return width;
         }
 
 
@@ -124,7 +178,7 @@ namespace Fuse.Editor
                 m_PrefixesShowStr = m_Target.RuleHelper.GetBindTips();
             }
 
-            if (m_SearchType==null)
+            if (m_SearchType == null)
             {
                 m_SearchType = m_Target.RuleHelper.SearchNames();
             }
@@ -299,7 +353,7 @@ namespace Fuse.Editor
 
             GUILayout.EndHorizontal();
         }
-        
+
         /// <summary>
         /// 自动绑定组件
         /// </summary>
@@ -320,8 +374,8 @@ namespace Fuse.Editor
                     {
                         List<CompCollector.CompCollectorInfo> collectorInfos =
                             m_Target.CompCollectorInfos.FindAll(s => s.Object == child.gameObject);
-                       
-                        if (collectorInfos.Count>0)
+
+                        if (collectorInfos.Count > 0)
                         {
                             foreach (var variable in collectorInfos)
                             {
@@ -404,14 +458,16 @@ namespace Fuse.Editor
                                 objTypeName      = com.GetType().Name;
                             }
                         }
-
-                        _outletObjects[j] = new CompCollector.CompCollectorInfo()
+                        
+                        if (_cachedCompInfo.ContainsKey(gameObj))
                         {
-                            Name          = outletInfo.Name,
-                            ComponentType = objTypeName,
-                            Object        = gameObj
-                        };
-
+                            _cachedCompInfo[gameObj].Add(objTypeName);
+                        }
+                        else
+                        {
+                            _cachedCompInfo.Add(gameObj,new List<string>{ objTypeName });
+                        }
+                        
                         if (string.IsNullOrEmpty(outletInfo.Name)) outletInfo.Name = gameObj.name;
                     }
                 }
@@ -466,7 +522,7 @@ namespace Fuse.Editor
                     Undo.RecordObject(target, "Remove OutletInfo");
                     if (m_Target.CompCollectorInfos[j].Object != null)
                     {
-                        _outletObjects.Remove(j);
+                        _cachedCompInfo.Remove(m_Target.CompCollectorInfos[j].Object as GameObject);
                     }
 
                     m_Target.CompCollectorInfos.RemoveAt(j);
@@ -521,7 +577,7 @@ namespace Fuse.Editor
                 if (m_Target.CompCollectorInfos == null)
                 {
                     m_Target.CompCollectorInfos = new List<CompCollector.CompCollectorInfo>();
-                    _outletObjects.Clear();
+                    _cachedCompInfo.Clear();
                 }
 
                 Undo.RecordObject(target, "Add OutletInfo");
@@ -564,8 +620,7 @@ namespace Fuse.Editor
                 return;
             }
 
-
-                
+            m_Target.RuleHelper.GenerateCode();
         }
     }
 }
