@@ -10,53 +10,25 @@ namespace Fuse
     public class CompCollector : MonoBehaviour
     {
 #if UNITY_EDITOR
-        public IAutoBindRuleHelper RuleHelper {
-            get;
-            set;
-        }
-        
-        public ICodeGenerateHelper CodeHelper {
-            get;
-            set;
-        }
-        
-        public ICompSearchHelper SearchHelper {
-            get;
-            set;
-        }
+        public IAutoBindRuleHelper RuleHelper   { get; set; }
+        public ICodeGenerateHelper CodeHelper   { get; set; }
+        public ICompSearchHelper   SearchHelper { get; set; }
 
-        [SerializeField]
-        public string m_SelRuleName {
-            get;
-            set;
-        }
-
-        [SerializeField]
-        public string m_SelCodeName {
-            get;
-            set;
-        }
-
-        [SerializeField]
-        public string m_SelSearchName {
-            get;
-            set;
-        }
-        
+        [SerializeField] public string m_SelRuleName   { get; set; }
+        [SerializeField] public string m_SelCodeName   { get; set; }
+        [SerializeField] public string m_SelSearchName { get; set; }
 #endif
-
 
         [System.Serializable]
         public class CompCollectorInfo
         {
-            public string Name="";
+            public string Name = "";
 
-            public string ComponentType="";
+            public string ComponentType = "";
 
             public Object Object;
         }
+
         public List<CompCollectorInfo> CompCollectorInfos = new List<CompCollectorInfo>();
-        
     }
 }
-

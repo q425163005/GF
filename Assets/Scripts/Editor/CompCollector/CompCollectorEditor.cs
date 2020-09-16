@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Fuse.Editor
 {
@@ -16,7 +14,7 @@ namespace Fuse.Editor
 
         #region 辅助器选择框相关
 
-        private string[] s_AssemblyNames = {"Fuse.GameMain"};
+        private string[] s_AssemblyNames = { "Fuse.GameMain" };
 
         private string[] m_HelperTypeNames;
         private int      m_HelperTypeIndex;
@@ -32,8 +30,7 @@ namespace Fuse.Editor
         private string m_SearchInput;
 
         #endregion
-
-
+        
         private bool error_haveEmptyName    = false; //存在空名
         private bool error_haveRepeatedName = false; //存在重复命名
         private bool error_haveEmptyObject  = false; //存在空对象
@@ -228,51 +225,6 @@ namespace Fuse.Editor
                 m_Target.SearchHelper =
                     (ICompSearchHelper)CreateHelperInstance(m_Target.m_SelSearchName, s_AssemblyNames);
             }
-
-
-//            m_SearchTypeName = m_SearchTypeNames[0];
-//
-//            ICompSearchHelper helper;
-//
-//            if (m_Target.CodeHelper != null)
-//            {
-//                m_SearchTypeName = m_Target.RuleHelper.GetType().Name;
-//
-//                for (int i = 0; i < m_SearchTypeNames.Length; i++)
-//                {
-//                    if (m_SearchTypeName == m_SearchTypeNames[i])
-//                    {
-//                        m_Target.m_SelCodeType = i;
-//                    }
-//                }
-//            }
-//            else
-//            {
-//                helper                = (ICompSearchHelper) CreateHelperInstance(m_SearchTypeName, s_AssemblyNames);
-//                m_Target.SearchHelper = helper;
-//            }
-//
-//            foreach (GameObject go in Selection.gameObjects)
-//            {
-//                CompCollector compCollector = go.GetComponent<CompCollector>();
-//                if (compCollector == null) continue;
-//                if (compCollector.RuleHelper == null)
-//                {
-//                    helper =
-//                        (ICompSearchHelper) CreateHelperInstance(m_SearchTypeName, s_AssemblyNames);
-//                    compCollector.SearchHelper = helper;
-//                }
-//            }
-//
-//            int selectedIndex =
-//                EditorGUILayout.Popup(m_Target.m_SelSearchType, m_SearchTypeCustomNames, GUILayout.Width(80));
-//            if (selectedIndex != m_Target.m_SelSearchType)
-//            {
-//                m_Target.m_SelSearchType = selectedIndex;
-//                m_SearchTypeName         = m_SearchTypeNames[selectedIndex];
-//                helper                   = (ICompSearchHelper) CreateHelperInstance(m_SearchTypeName, s_AssemblyNames);
-//                m_Target.SearchHelper    = helper;
-//            }
         }
 
         /// <summary>
