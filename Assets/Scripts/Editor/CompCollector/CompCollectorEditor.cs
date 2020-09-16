@@ -14,22 +14,33 @@ namespace Fuse.Editor
     {
         private CompCollector m_Target;
 
-        private string[] s_AssemblyNames = {"Fuse.GameMain"};
-        private string[] m_HelperTypeNames;
-        private string   m_HelperTypeName;
-        private int      m_HelperTypeNameIndex;
+        #region 辅助器选择框相关
 
-        private string   m_PrefixesShowStr; //命名前缀与类型的映射提示
-        private string   m_SearchInput;
-        private string[] m_SearchType;
-        private int      m_SelSearchIndex;
+        private string[] s_AssemblyNames = {"Fuse.GameMain"};
+
+        private string[] m_HelperTypeNames;
+        private int      m_HelperTypeIndex;
+
+        private string[] m_CodeTypeNames;
+        private int   m_CodeTypeIndex;
+
+        private string[] m_SearchTypeNames;
+        private int   m_SearchTypeIndex;
+        private string[] m_SearchTypeCustomNames;
+
+        private string m_PrefixesShowStr; //命名前缀与类型的映射提示
+        private string m_SearchInput;
+
+        #endregion
+
 
         private bool error_haveEmptyName    = false; //存在空名
         private bool error_haveRepeatedName = false; //存在重复命名
         private bool error_haveEmptyObject  = false; //存在空对象
         private bool error_haveRepeatedComp = false; //存在同对象重复组件
-        
-        private static Dictionary<GameObject, List<string>> _cachedCompInfo = new Dictionary<GameObject, List<string>>();
+
+        private static Dictionary<GameObject, List<string>>
+            _cachedCompInfo = new Dictionary<GameObject, List<string>>();
 
         private GUIStyle GreenFont;
         private GUIStyle RedFont;
@@ -53,6 +64,16 @@ namespace Fuse.Editor
             m_Target = (CompCollector) target;
 
             m_HelperTypeNames = GetTypeNames(typeof(IAutoBindRuleHelper), s_AssemblyNames);
+            m_CodeTypeNames   = GetTypeNames(typeof(ICodeGenerateHelper), s_AssemblyNames);
+            m_SearchTypeNames = GetTypeNames(typeof(ICompSearchHelper), s_AssemblyNames);
+
+            m_SearchTypeCustomNames = new string[m_SearchTypeNames.Length];
+            for (var index = 0; index < m_SearchTypeNames.Length; index++)
+            {
+                var               variable = m_SearchTypeNames[index];
+                ICompSearchHelper helper   = (ICompSearchHelper) CreateHelperInstance(variable, s_AssemblyNames);
+                m_SearchTypeCustomNames[index] = helper.CustomName();
+            }
         }
 
         public override void OnInspectorGUI()
@@ -68,16 +89,18 @@ namespace Fuse.Editor
             serializedObject.ApplyModifiedProperties();
         }
 
+        #region Hierarchy高亮
+
         private static void HierarchyItemCB(int instanceid, Rect selectionrect)
         {
             var obj = EditorUtility.InstanceIDToObject(instanceid) as GameObject;
             if (obj != null)
             {
-                CompCollector compCollector  = obj.GetComponent<CompCollector>();
+                CompCollector compCollector = obj.GetComponent<CompCollector>();
                 if (compCollector != null)
                 {
                     Rect r = new Rect(selectionrect);
-                    r.x =  r.width+20 ;
+                    r.x =  r.width + 20;
                     r.y += 2;
                     var style = new GUIStyle();
                     style.normal.textColor = Color.yellow;
@@ -119,66 +142,137 @@ namespace Fuse.Editor
             return width;
         }
 
+        #endregion
+
 
         #region 绘制辅助器选择框
 
         /// <summary>
-        /// 绘制辅助器选择框
+        /// 绑定组件辅助器选择框
         /// </summary>
         private void DrawHelperSelect()
         {
-            m_HelperTypeName = m_HelperTypeNames[0];
-
-            if (m_Target.RuleHelper != null)
+            if (string.IsNullOrEmpty(m_Target.m_SelRuleName))
             {
-                m_HelperTypeName = m_Target.RuleHelper.GetType().Name;
-
-                for (int i = 0; i < m_HelperTypeNames.Length; i++)
-                {
-                    if (m_HelperTypeName == m_HelperTypeNames[i])
-                    {
-                        m_HelperTypeNameIndex = i;
-                    }
-                }
-            }
-            else
-            {
-                IAutoBindRuleHelper helper =
-                    (IAutoBindRuleHelper) CreateHelperInstance(m_HelperTypeName, s_AssemblyNames);
-                m_Target.RuleHelper = helper;
+                m_Target.m_SelRuleName = m_HelperTypeNames[0];
             }
 
-            foreach (GameObject go in Selection.gameObjects)
-            {
-                CompCollector compCollector = go.GetComponent<CompCollector>();
-                if (compCollector==null) continue;
-                if (compCollector.RuleHelper == null)
-                {
-                    IAutoBindRuleHelper helper =
-                        (IAutoBindRuleHelper) CreateHelperInstance(m_HelperTypeName, s_AssemblyNames);
-                    compCollector.RuleHelper = helper;
-                }
-            }
+            m_HelperTypeIndex = m_HelperTypeNames.ToList().IndexOf(m_Target.m_SelRuleName);
+            if (m_HelperTypeIndex < 0) m_HelperTypeIndex = 0;
+            m_Target.m_SelRuleName = m_HelperTypeNames[m_HelperTypeIndex];
+            m_Target.RuleHelper =
+                (IAutoBindRuleHelper) CreateHelperInstance(m_Target.m_SelRuleName, s_AssemblyNames);
 
-            int selectedIndex = EditorGUILayout.Popup("AutoBindRuleHelper", m_HelperTypeNameIndex, m_HelperTypeNames);
-            if (selectedIndex != m_HelperTypeNameIndex)
+            int selectedIndex = EditorGUILayout.Popup(m_HelperTypeIndex, m_HelperTypeNames);
+            if (selectedIndex != m_HelperTypeIndex)
             {
-                m_HelperTypeNameIndex = selectedIndex;
-                m_HelperTypeName      = m_HelperTypeNames[selectedIndex];
-                IAutoBindRuleHelper helper =
-                    (IAutoBindRuleHelper) CreateHelperInstance(m_HelperTypeName, s_AssemblyNames);
-                m_Target.RuleHelper = helper;
+                m_HelperTypeIndex = selectedIndex;
+                m_Target.m_SelRuleName = m_HelperTypeNames[selectedIndex];
+                m_Target.RuleHelper =
+                    (IAutoBindRuleHelper) CreateHelperInstance(m_Target.m_SelRuleName, s_AssemblyNames);
             }
 
             if (string.IsNullOrEmpty(m_PrefixesShowStr))
             {
                 m_PrefixesShowStr = m_Target.RuleHelper.GetBindTips();
             }
+        }
 
-            if (m_SearchType == null)
+        /// <summary>
+        /// 绘制代码辅助器选择框
+        /// </summary>
+        private void DrawCodeSelect()
+        {
+            if (string.IsNullOrEmpty(m_Target.m_SelCodeName))
             {
-                m_SearchType = m_Target.RuleHelper.SearchNames();
+                m_Target.m_SelCodeName = m_CodeTypeNames[0];
             }
+
+            m_CodeTypeIndex = m_CodeTypeNames.ToList().IndexOf(m_Target.m_SelCodeName);
+            if (m_CodeTypeIndex < 0) m_CodeTypeIndex = 0;
+            m_Target.m_SelCodeName = m_CodeTypeNames[m_CodeTypeIndex];
+            m_Target.CodeHelper =
+                (ICodeGenerateHelper)CreateHelperInstance(m_Target.m_SelCodeName, s_AssemblyNames);
+
+            int selectedIndex = EditorGUILayout.Popup(m_CodeTypeIndex, m_CodeTypeNames);
+            if (selectedIndex != m_CodeTypeIndex)
+            {
+                m_CodeTypeIndex = selectedIndex;
+                m_Target.m_SelCodeName = m_CodeTypeNames[selectedIndex];
+                m_Target.CodeHelper =
+                    (ICodeGenerateHelper)CreateHelperInstance(m_Target.m_SelCodeName, s_AssemblyNames);
+            }
+        }
+
+        /// <summary>
+        /// 搜索类型辅助器选择框
+        /// </summary>
+        private void DrawSearchSelect()
+        {
+            if (string.IsNullOrEmpty(m_Target.m_SelSearchName))
+            {
+                m_Target.m_SelSearchName = m_SearchTypeNames[0];
+            }
+
+            m_SearchTypeIndex = m_SearchTypeNames.ToList().IndexOf(m_Target.m_SelSearchName);
+            if (m_SearchTypeIndex < 0) m_SearchTypeIndex = 0;
+            m_Target.m_SelSearchName = m_SearchTypeNames[m_SearchTypeIndex];
+            m_Target.SearchHelper =
+                (ICompSearchHelper)CreateHelperInstance(m_Target.m_SelSearchName, s_AssemblyNames);
+
+            int selectedIndex = EditorGUILayout.Popup(m_SearchTypeIndex, m_SearchTypeCustomNames);
+            if (selectedIndex != m_SearchTypeIndex)
+            {
+                m_SearchTypeIndex = selectedIndex;
+                m_Target.m_SelSearchName = m_SearchTypeNames[selectedIndex];
+                m_Target.SearchHelper =
+                    (ICompSearchHelper)CreateHelperInstance(m_Target.m_SelSearchName, s_AssemblyNames);
+            }
+
+
+//            m_SearchTypeName = m_SearchTypeNames[0];
+//
+//            ICompSearchHelper helper;
+//
+//            if (m_Target.CodeHelper != null)
+//            {
+//                m_SearchTypeName = m_Target.RuleHelper.GetType().Name;
+//
+//                for (int i = 0; i < m_SearchTypeNames.Length; i++)
+//                {
+//                    if (m_SearchTypeName == m_SearchTypeNames[i])
+//                    {
+//                        m_Target.m_SelCodeType = i;
+//                    }
+//                }
+//            }
+//            else
+//            {
+//                helper                = (ICompSearchHelper) CreateHelperInstance(m_SearchTypeName, s_AssemblyNames);
+//                m_Target.SearchHelper = helper;
+//            }
+//
+//            foreach (GameObject go in Selection.gameObjects)
+//            {
+//                CompCollector compCollector = go.GetComponent<CompCollector>();
+//                if (compCollector == null) continue;
+//                if (compCollector.RuleHelper == null)
+//                {
+//                    helper =
+//                        (ICompSearchHelper) CreateHelperInstance(m_SearchTypeName, s_AssemblyNames);
+//                    compCollector.SearchHelper = helper;
+//                }
+//            }
+//
+//            int selectedIndex =
+//                EditorGUILayout.Popup(m_Target.m_SelSearchType, m_SearchTypeCustomNames, GUILayout.Width(80));
+//            if (selectedIndex != m_Target.m_SelSearchType)
+//            {
+//                m_Target.m_SelSearchType = selectedIndex;
+//                m_SearchTypeName         = m_SearchTypeNames[selectedIndex];
+//                helper                   = (ICompSearchHelper) CreateHelperInstance(m_SearchTypeName, s_AssemblyNames);
+//                m_Target.SearchHelper    = helper;
+//            }
         }
 
         /// <summary>
@@ -271,8 +365,6 @@ namespace Fuse.Editor
                                 break;
                             }
 
-                            //改名并添加
-                            //temp.name = ToVariableName(temp.name);
                             m_Target.CompCollectorInfos.Add(new CompCollector.CompCollectorInfo
                                                                 {Name = temp.name, Object = temp});
                         }
@@ -287,7 +379,10 @@ namespace Fuse.Editor
             GUILayout.Space(10);
             GUILayout.BeginVertical();
 
+            GUILayout.BeginHorizontal();
             DrawHelperSelect();
+            DrawCodeSelect();
+            GUILayout.EndHorizontal();
 
             DrawBtnMenu();
 
@@ -341,67 +436,18 @@ namespace Fuse.Editor
             }
 
             GUI.enabled = true;
-
-            int selectedIndex = EditorGUILayout.Popup(m_SelSearchIndex, m_SearchType, GUILayout.Width(80));
-            if (selectedIndex != m_SelSearchIndex)
-            {
-                m_SelSearchIndex = selectedIndex;
-            }
+            DrawSearchSelect();
+//            if (m_Target.m_SelSearchType>=0)
+//            {
+//                int selectedIndex = EditorGUILayout.Popup(m_Target.m_SelSearchType, m_SearchTypeShowNames, GUILayout.Width(80));
+//                if (selectedIndex != m_Target.m_SelSearchType)
+//                {
+//                    m_Target.m_SelSearchType = selectedIndex;
+//                }
+//            }
 
             GUILayout.EndHorizontal();
         }
-
-        /// <summary>
-        /// 自动绑定组件
-        /// </summary>
-        private void AutoBindComponent()
-        {
-            List<string> m_TempFiledNames         = new List<string>();
-            List<string> m_TempComponentTypeNames = new List<string>();
-
-            Transform[] childs = m_Target.gameObject.GetComponentsInChildren<Transform>(true);
-            foreach (Transform child in childs)
-            {
-                m_TempFiledNames.Clear();
-                m_TempComponentTypeNames.Clear();
-
-                if (m_Target.RuleHelper.IsValidBind(child, m_TempFiledNames, m_TempComponentTypeNames))
-                {
-                    for (int i = 0; i < m_TempFiledNames.Count; i++)
-                    {
-                        List<CompCollector.CompCollectorInfo> collectorInfos =
-                            m_Target.CompCollectorInfos.FindAll(s => s.Object == child.gameObject);
-
-                        if (collectorInfos.Count > 0)
-                        {
-                            foreach (var variable in collectorInfos)
-                            {
-                                if (!variable.ComponentType.Equals(m_TempComponentTypeNames[i]))
-                                {
-                                    m_Target.CompCollectorInfos.Add(new CompCollector.CompCollectorInfo()
-                                    {
-                                        Name          = m_TempFiledNames[i],
-                                        Object        = child.gameObject,
-                                        ComponentType = m_TempComponentTypeNames[i]
-                                    });
-                                }
-                            }
-                        }
-                        else
-                        {
-                            m_Target.CompCollectorInfos.Add(new CompCollector.CompCollectorInfo()
-                            {
-                                Name          = m_TempFiledNames[i],
-                                Object        = child.gameObject,
-                                ComponentType = m_TempComponentTypeNames[i]
-                            });
-                        }
-                    }
-                }
-            }
-        }
-
-        #endregion
 
         private void DrawCompList()
         {
@@ -455,16 +501,16 @@ namespace Fuse.Editor
                                 objTypeName      = com.GetType().Name;
                             }
                         }
-                        
+
                         if (_cachedCompInfo.ContainsKey(gameObj))
                         {
                             _cachedCompInfo[gameObj].Add(objTypeName);
                         }
                         else
                         {
-                            _cachedCompInfo.Add(gameObj,new List<string>{ objTypeName });
+                            _cachedCompInfo.Add(gameObj, new List<string> {objTypeName});
                         }
-                        
+
                         if (string.IsNullOrEmpty(outletInfo.Name)) outletInfo.Name = gameObj.name;
                     }
                 }
@@ -507,7 +553,7 @@ namespace Fuse.Editor
                 //搜索指针Profiler.NextFrame
                 if (!string.IsNullOrEmpty(m_SearchInput))
                 {
-                    if (m_Target.RuleHelper.IsAccord(m_SelSearchIndex, m_SearchInput, outletInfo.Name))
+                    if (m_Target.SearchHelper.IsAccord(m_SearchInput, outletInfo.Name))
                     {
                         GUILayout.Label(EditorGUIUtility.IconContent("Profiler.NextFrame"));
                     }
@@ -606,6 +652,58 @@ namespace Fuse.Editor
             EditorGUILayout.HelpBox(errorStr, MessageType.Error);
         }
 
+        #endregion
+
+        /// <summary>
+        /// 自动绑定组件
+        /// </summary>
+        private void AutoBindComponent()
+        {
+            List<string> m_TempFiledNames         = new List<string>();
+            List<string> m_TempComponentTypeNames = new List<string>();
+
+            Transform[] childs = m_Target.gameObject.GetComponentsInChildren<Transform>(true);
+            foreach (Transform child in childs)
+            {
+                m_TempFiledNames.Clear();
+                m_TempComponentTypeNames.Clear();
+
+                if (m_Target.RuleHelper.IsValidBind(child, m_TempFiledNames, m_TempComponentTypeNames))
+                {
+                    for (int i = 0; i < m_TempFiledNames.Count; i++)
+                    {
+                        List<CompCollector.CompCollectorInfo> collectorInfos =
+                            m_Target.CompCollectorInfos.FindAll(s => s.Object == child.gameObject);
+
+                        if (collectorInfos.Count > 0)
+                        {
+                            foreach (var variable in collectorInfos)
+                            {
+                                if (!variable.ComponentType.Equals(m_TempComponentTypeNames[i]))
+                                {
+                                    m_Target.CompCollectorInfos.Add(new CompCollector.CompCollectorInfo()
+                                    {
+                                        Name          = m_TempFiledNames[i],
+                                        Object        = child.gameObject,
+                                        ComponentType = m_TempComponentTypeNames[i]
+                                    });
+                                }
+                            }
+                        }
+                        else
+                        {
+                            m_Target.CompCollectorInfos.Add(new CompCollector.CompCollectorInfo()
+                            {
+                                Name          = m_TempFiledNames[i],
+                                Object        = child.gameObject,
+                                ComponentType = m_TempComponentTypeNames[i]
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
         private void GenerateCode()
         {
             if (error_haveEmptyName    ||
@@ -617,7 +715,7 @@ namespace Fuse.Editor
                 return;
             }
 
-            m_Target.RuleHelper.GenerateCode(m_Target);
+            //m_Target.RuleHelper.GenerateCode(m_Target);
         }
     }
 }

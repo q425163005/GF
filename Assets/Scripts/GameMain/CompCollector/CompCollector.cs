@@ -10,11 +10,39 @@ namespace Fuse
     public class CompCollector : MonoBehaviour
     {
 #if UNITY_EDITOR
-
         public IAutoBindRuleHelper RuleHelper {
             get;
             set;
         }
+        
+        public ICodeGenerateHelper CodeHelper {
+            get;
+            set;
+        }
+        
+        public ICompSearchHelper SearchHelper {
+            get;
+            set;
+        }
+
+        [SerializeField]
+        public string m_SelRuleName {
+            get;
+            set;
+        }
+
+        [SerializeField]
+        public string m_SelCodeName {
+            get;
+            set;
+        }
+
+        [SerializeField]
+        public string m_SelSearchName {
+            get;
+            set;
+        }
+        
 #endif
 
 
