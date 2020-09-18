@@ -140,8 +140,7 @@ namespace Fuse.Editor
         }
 
         #endregion
-
-
+        
         #region 绘制辅助器选择框
 
         /// <summary>
@@ -606,9 +605,7 @@ namespace Fuse.Editor
 
         #endregion
 
-        /// <summary>
-        /// 自动绑定组件
-        /// </summary>
+        /// <summary>自动绑定组件</summary>
         private void AutoBindComponent()
         {
             List<string> m_TempFiledNames         = new List<string>();

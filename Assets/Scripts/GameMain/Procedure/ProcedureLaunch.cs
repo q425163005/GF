@@ -61,11 +61,11 @@ namespace Fuse
             }
 
             Language language = GameEntry.Localization.Language;
-            if (GameEntry.Setting.HasSetting(Constant.Setting.Language))
+            if (GameEntry.Setting.HasSetting("Setting.Language"))
             {
                 try
                 {
-                    string languageString = GameEntry.Setting.GetString(Constant.Setting.Language);
+                    string languageString = GameEntry.Setting.GetString("Setting.Language");
                     language = (Language)Enum.Parse(typeof(Language), languageString);
                 }
                 catch
@@ -81,7 +81,7 @@ namespace Fuse
                 // 若是暂不支持的语言，则使用英语
                 language = Language.English;
 
-                GameEntry.Setting.SetString(Constant.Setting.Language, language.ToString());
+                GameEntry.Setting.SetString("Setting.Language", language.ToString());
                 GameEntry.Setting.Save();
             }
 
