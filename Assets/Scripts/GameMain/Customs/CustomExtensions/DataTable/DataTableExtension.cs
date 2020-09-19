@@ -40,7 +40,7 @@ namespace Fuse
                 Log.Warning("Can not get data row type with class name '{0}'.", dataRowClassName);
                 return;
             }
-
+             
             string name = splitedNames.Length > 1 ? splitedNames[1] : null;
             DataTableBase dataTable = dataTableComponent.CreateDataTable(dataRowType, name);
             //dataTable.ReadData(dataTableAssetName, Constant.AssetPriority.DataTableAsset, userData);

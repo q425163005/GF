@@ -53,7 +53,7 @@ namespace Fuse
             base.OnLeave(procedureOwner, isShutdown);
 
             //更新检测界面
-            GameEntry.UI.OpenUIForm(AssetUtility.UpdateFormAsset, "UpdateRes");
+            GameEntry.UI.OpenUIForm(UpdateResourceForm.AssetFullPath, "UpdateRes");
         }
     }
 }

@@ -73,42 +73,12 @@ namespace Fuse.Editor
         {
             BuildHotfixEditor.BuildHotfixDLL();
         }
-
-        [MenuItem("★工具★/代码生成器/事件参数类代码生成器")]
-        public static void EventArgsCodeCreat()
-        {
-            EventArgsCodeGenerator.OpenAutoGenWindow();
-        }
-
-        [MenuItem("★工具★/代码生成器/实体与界面代码生成器")]
-        public static void EntityAndUIFormCodeCreat()
-        {
-            EventArgsCodeGenerator.OpenAutoGenWindow();
-        }
+        
 
         [MenuItem("★工具★/ILRuntime/Generate ILRuntime CLR Binding Code by Analysis")]
         public static void GenerateCLRBindingByAnalysis()
         {
             ILRuntimeCLRBinding.GenerateCLRBindingByAnalysis();
-        }
-
-        [MenuItem("★工具★/Generate DataTables")]
-        private static void GenerateDataTables()
-        {
-            foreach (string dataTableName in ProcedurePreload.DataTableNames)
-            {
-                DataTableProcessor dataTableProcessor = DataTableGenerator.CreateDataTableProcessor(dataTableName);
-                if (!DataTableGenerator.CheckRawData(dataTableProcessor, dataTableName))
-                {
-                    Debug.LogError(Utility.Text.Format("Check raw data failure. DataTableName='{0}'", dataTableName));
-                    break;
-                }
-
-                DataTableGenerator.GenerateDataFile(dataTableProcessor, dataTableName);
-                DataTableGenerator.GenerateCodeFile(dataTableProcessor, dataTableName);
-            }
-
-            AssetDatabase.Refresh();
         }
     }
 }

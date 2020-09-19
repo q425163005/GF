@@ -38,7 +38,7 @@ namespace Fuse
             GameEntry.Event.Subscribe(ResourceUpdateSuccessEventArgs.EventId, OnResourceUpdateSuccess);
             GameEntry.Event.Subscribe(ResourceUpdateFailureEventArgs.EventId, OnResourceUpdateFailure);
 
-            m_UpdateResourceForm = (UpdateResourceForm)GameEntry.UI.GetUIForm(AssetUtility.UpdateFormAsset).Logic;
+            m_UpdateResourceForm = (UpdateResourceForm)GameEntry.UI.GetUIForm(UpdateResourceForm.AssetFullPath).Logic;
 
             //            if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork)
             //            {

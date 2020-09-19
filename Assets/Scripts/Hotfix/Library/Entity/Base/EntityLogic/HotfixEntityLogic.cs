@@ -10,22 +10,12 @@ namespace Fuse.Hotfix
     /// </summary>
     public class HotfixEntityLogic
     {
-
-        /// <summary>
-        /// 主工程的实体逻辑脚本
-        /// </summary>
-        protected Fuse.HotfixEntityLogic EntityLogic
-        {
-            get;
-            private set;
-        }
-
+        
         /// <summary>
         /// 实体初始化
         /// </summary>
-        public virtual void OnInit(Fuse.HotfixEntityLogic entityLogic, object userData)
+        public virtual void OnInit(object userData)
         {
-            EntityLogic = entityLogic;
         }
 
         /// <summary>

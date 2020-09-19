@@ -174,9 +174,9 @@ namespace Fuse
         }
         */
 
-        public static void CloseUIForm(this UIComponent uiComponent, UGuiForm uiForm)
-        {
-            uiComponent.CloseUIForm(uiForm.UIForm);
-        }
+//        public static void CloseUIForm(this UIComponent uiComponent, UGuiForm uiForm)
+//        {
+//            uiComponent.CloseUIForm(uiForm.UIForm);
+//        }
     }
 }

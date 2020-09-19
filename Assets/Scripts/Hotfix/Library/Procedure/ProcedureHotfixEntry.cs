@@ -14,7 +14,7 @@ namespace Fuse.Hotfix
 
             Log.Info("进入了热更新入口流程");
 
-            UpdateResourceForm m_UpdateResourceForm = (UpdateResourceForm)GameEntry.UI.GetUIForm(AssetUtility.UpdateFormAsset).Logic;
+            UpdateResourceForm m_UpdateResourceForm = (UpdateResourceForm)GameEntry.UI.GetUIForm(UpdateResourceForm.AssetFullPath).Logic;
             m_UpdateResourceForm.SetProgress(1f, GameEntry.Localization.GetString("ForceUpdate.Message"));
 
             //GameEntry.UI.CloseUIForm(m_UpdateResourceForm);

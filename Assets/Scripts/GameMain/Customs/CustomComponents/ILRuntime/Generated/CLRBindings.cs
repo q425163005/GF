@@ -111,7 +111,6 @@ namespace ILRuntime.Runtime.Generated
             System_Action_Binding.Register(app);
             System_Single_Binding.Register(app);
             System_Int32_Binding.Register(app);
-            Fuse_AssetUtility_Binding.Register(app);
             UnityGameFramework_Runtime_UIComponent_Binding.Register(app);
             UnityGameFramework_Runtime_UIForm_Binding.Register(app);
             UnityGameFramework_Runtime_LocalizationComponent_Binding.Register(app);

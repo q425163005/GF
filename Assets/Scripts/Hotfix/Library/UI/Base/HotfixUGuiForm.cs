@@ -9,22 +9,22 @@ namespace Fuse.Hotfix
     /// </summary>
     public class HotfixUGuiForm
     {
-        /// <summary>
-        /// 主工程的界面逻辑脚本
-        /// </summary>
-        protected Fuse.HotfixUGuiForm UIFormLogic
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// 界面初始化
-        /// </summary>
-        public virtual void OnInit(Fuse.HotfixUGuiForm uiFormLogic,object userdata)
-        {
-            UIFormLogic = uiFormLogic;
-        }
+//        /// <summary>
+//        /// 主工程的界面逻辑脚本
+//        /// </summary>
+//        protected Fuse.HotfixUGuiForm UIFormLogic
+//        {
+//            get;
+//            private set;
+//        }
+//
+//        /// <summary>
+//        /// 界面初始化
+//        /// </summary>
+//        public virtual void OnInit(Fuse.HotfixUGuiForm uiFormLogic,object userdata)
+//        {
+//            UIFormLogic = uiFormLogic;
+//        }
 
         /// <summary>
         /// 界面打开
