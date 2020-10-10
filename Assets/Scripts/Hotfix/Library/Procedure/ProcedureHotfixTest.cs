@@ -24,7 +24,7 @@ namespace Fuse.Hotfix
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
             if (Input.GetKeyDown(KeyCode.A))
             {
-                Session session = HotfixGameEntry.ETNetwork.CreateHotfixSession();
+                Session session = Mgr.ETNetwork.CreateHotfixSession();
                 session.Send(new HotfixTestMessage() { Info = "6666" });
 
                 HotfixRpcResponse response = (HotfixRpcResponse)await session.Call(new HotfixRpcRequest() { Info = "Hello Server" });

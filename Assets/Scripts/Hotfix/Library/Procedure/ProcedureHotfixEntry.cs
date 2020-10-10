@@ -16,7 +16,7 @@ namespace Fuse.Hotfix
 
             UpdateResourceForm m_UpdateResourceForm = (UpdateResourceForm)GameEntry.UI.GetUIForm(UpdateResourceForm.AssetFullPath).Logic;
             m_UpdateResourceForm.SetProgress(1f, GameEntry.Localization.GetString("ForceUpdate.Message"));
-
+          
             //GameEntry.UI.CloseUIForm(m_UpdateResourceForm);
 
             //TODO:在这里切换到游戏的正式开始场景
@@ -25,4 +25,3 @@ namespace Fuse.Hotfix
         }
     }
 }
-
