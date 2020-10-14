@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityGameFramework.Runtime;
 using ProcedureOwner = Fuse.Hotfix.IFsm;
 
 namespace Fuse.Hotfix
@@ -16,8 +15,9 @@ namespace Fuse.Hotfix
 
             UpdateResourceForm m_UpdateResourceForm = (UpdateResourceForm)GameEntry.UI.GetUIForm(UpdateResourceForm.AssetFullPath).Logic;
             m_UpdateResourceForm.SetProgress(1f, GameEntry.Localization.GetString("ForceUpdate.Message"));
-          
-            //GameEntry.UI.CloseUIForm(m_UpdateResourceForm);
+            
+            Mgr.UI.Show<LoginUI>();
+            GameEntry.UI.CloseUIForm(m_UpdateResourceForm.UIForm);
 
             //TODO:在这里切换到游戏的正式开始场景
             //            procedureOwner.SetData<VarInt>(Fuse.Constant.ProcedureData.NextSceneId, (int)SceneId.TestScene);

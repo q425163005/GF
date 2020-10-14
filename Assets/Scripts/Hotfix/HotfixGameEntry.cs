@@ -1,6 +1,4 @@
 ﻿
-using UnityGameFramework.Runtime;
-
 namespace Fuse.Hotfix
 {
     /// <summary>

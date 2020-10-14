@@ -6,7 +6,6 @@
 //------------------------------------------------------------
 
 using GameFramework.Fsm;
-using UnityGameFramework.Runtime;
 using ProcedureOwner = Fuse.Hotfix.IFsm;
 
 namespace Fuse.Hotfix

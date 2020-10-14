@@ -664,7 +664,7 @@ namespace Fuse.Editor
                 return;
             }
 
-            //m_Target.RuleHelper.GenerateCode(m_Target);
+            m_Target.CodeHelper.GenerateCode(m_Target);
         }
     }
 }
