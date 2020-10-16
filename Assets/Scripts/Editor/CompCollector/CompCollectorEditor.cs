@@ -388,15 +388,6 @@ namespace Fuse.Editor
 
             GUI.enabled = true;
             DrawSearchSelect();
-//            if (m_Target.m_SelSearchType>=0)
-//            {
-//                int selectedIndex = EditorGUILayout.Popup(m_Target.m_SelSearchType, m_SearchTypeShowNames, GUILayout.Width(80));
-//                if (selectedIndex != m_Target.m_SelSearchType)
-//                {
-//                    m_Target.m_SelSearchType = selectedIndex;
-//                }
-//            }
-
             GUILayout.EndHorizontal();
         }
 

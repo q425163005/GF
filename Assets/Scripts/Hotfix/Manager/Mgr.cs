@@ -1,4 +1,8 @@
-﻿using Fuse.Hotfix.Manager;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using Fuse.Hotfix.Manager;
+using UnityEditor;
 
 namespace Fuse.Hotfix
 {
@@ -171,14 +175,52 @@ namespace Fuse.Hotfix
             UI = new UIMgr(GameEntry.UI);
 
             //初始化ET网络
-            Mgr.ETNetwork.Init();
+            ETNetwork.Init();
+
             //初始化流程管理器
-            //TODO:可修改为使用反射获取到所有流程然后注册
-            Mgr.Procedure.Initialize(Mgr.Fsm
-                                     , new ProcedureHotfixEntry()
-                                     , new ProcedureChangeScene()
-                                     , new ProcedureHotfixTest()
-            );
+            ProcedureBase[] procedureArry = GetAllProcedure(out var nameList);
+            Procedure.SetAllProcedureName(nameList);
+            Procedure.Initialize(Fsm, procedureArry);
+        }
+
+        //反射获取到所有流程
+        private static ProcedureBase[] GetAllProcedure(out List<string> nameList)
+        {
+            nameList = new List<string>();
+            Assembly     assembly          = Assembly.Load("Fuse.Hotfix");
+            var          types             = assembly.GetTypes();
+            foreach (var type in types)
+            {
+                var baseType = type.BaseType; //获取基类
+                while (baseType != null)      //获取所有基类
+                {
+                    if (baseType.Name == "ProcedureBase")
+                    {
+                        nameList.Add(type.Name);
+                        break;
+                    }
+                    else
+                    {
+                        baseType = baseType.BaseType;
+                    }
+                }
+            }
+
+            List<ProcedureBase> allProcedure = new List<ProcedureBase>();
+            foreach (var variable in nameList)
+            {
+                Type type = Type.GetType("Fuse.Hotfix." + variable);
+                try
+                {
+                    allProcedure.Add(Activator.CreateInstance(type) as ProcedureBase);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex.Message + ex.StackTrace);
+                }
+            }
+
+            return allProcedure.ToArray();
         }
 
         public static void Dispose()
@@ -187,6 +229,7 @@ namespace Fuse.Hotfix
             Procedure?.Shutdown();
             Event?.Shutdown();
             ETNetwork?.Shutdown();
+            UI?.Shutdown();
         }
     }
 }

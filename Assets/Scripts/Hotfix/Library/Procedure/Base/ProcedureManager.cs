@@ -8,6 +8,8 @@
 using GameFramework;
 using GameFramework.Fsm;
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Fuse.Hotfix
 {
@@ -19,6 +21,8 @@ namespace Fuse.Hotfix
         private FsmManager m_FsmManager;
         private IFsm m_ProcedureFsm;
 
+        private HotfixProcedureMgr EditorProcedureMgr;
+
         /// <summary>
         /// 初始化流程管理器的新实例。
         /// </summary>
@@ -26,6 +30,15 @@ namespace Fuse.Hotfix
         {
             m_FsmManager = null;
             m_ProcedureFsm = null;
+
+            GameObject go = new GameObject("__HotFixProcedure__");
+            go.transform.parent = GameEntry.Base.transform.parent;
+            EditorProcedureMgr = go.AddComponent<HotfixProcedureMgr>();
+        }
+
+        public void SetAllProcedureName(List<string> nameList)
+        {
+            EditorProcedureMgr.allHotfixProcedure = nameList;
         }
 
         /// <summary>
@@ -105,6 +118,7 @@ namespace Fuse.Hotfix
             }
 
             m_ProcedureFsm.Start<T>();
+            EditorProcedureMgr.nowHotfixProcedure = typeof(T).Name;
         }
 
         /// <summary>
@@ -119,6 +133,7 @@ namespace Fuse.Hotfix
             }
 
             m_ProcedureFsm.Start(procedureType);
+            EditorProcedureMgr.nowHotfixProcedure = procedureType.Name;
         }
 
         /// <summary>

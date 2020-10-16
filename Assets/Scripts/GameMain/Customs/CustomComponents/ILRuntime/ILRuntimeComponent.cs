@@ -6,7 +6,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using GameFramework.FileSystem;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityGameFramework.Runtime;
 using AppDomain = ILRuntime.Runtime.Enviorment.AppDomain;
 
@@ -92,14 +96,24 @@ namespace Fuse
         {
             AppDomain = new AppDomain();
             ILRuntimeHelper.InitILRuntime(AppDomain);
-
+            
             TextAsset dllAsset = await GameEntry.Resource.AwaitLoadAsset<TextAsset>(AssetUtility.GetHotfixDLLAsset("Hotfix.dll"));
-            byte[] dll = dllAsset.bytes;
+            byte[]    dll      = dllAsset.bytes;
+
+            if (Application.isEditor)
+            {
+                dll = await GetDll("Library/ScriptAssemblies/Fuse.Hotfix.dll");
+            }
             Log.Info("hotfix dll加载完毕");
 
 #if DEBUG && !DISABLE_ILRUNTIME_DEBUG
+            
             TextAsset pdbAsset = await GameEntry.Resource.AwaitLoadAsset<TextAsset>(AssetUtility.GetHotfixDLLAsset("Hotfix.pdb"));
-            byte[] pdb = pdbAsset.bytes;
+            byte[]    pdb      = pdbAsset.bytes;
+            if (Application.isEditor)
+            {
+                pdb = await GetDll("Library/ScriptAssemblies/Fuse.Hotfix.pdb");
+            }
             Log.Info("hotfix pdb加载完毕");
 
             AppDomain.LoadAssembly(new MemoryStream(dll), new MemoryStream(pdb), new ILRuntime.Mono.Cecil.Pdb.PdbReaderProvider());
@@ -115,6 +129,13 @@ namespace Fuse
             StartCoroutine(HotfixStart());
         }
 
+        private async Task<byte[]> GetDll(string dllname)
+        {
+            string path = Application.dataPath.Replace("Assets","") + dllname;
+            Log.Info(path);
+            return await GameEntry.WebRequest.AwaitAddWebRequest(path);
+        }
+
         /// <summary>
         /// 开始执行热更新层代码
         /// </summary>
@@ -128,7 +149,30 @@ namespace Fuse
 
             m_Update = type.GetMethod("Update", 2);
             m_Shutdown = type.GetMethod("Shutdown", 0);
-            
+        }
+
+        void Test()
+        {
+            Assembly assembly = Assembly.Load("Fuse.Hotfix");
+            var types = assembly.GetTypes();
+            foreach (var type in types)
+            {
+                var baseType = type.BaseType; //获取基类
+                while (baseType != null)      //获取所有基类
+                {
+                  
+                    if (baseType.Name == "ProcedureBase")
+                    {
+                        Log.Info(type.FullName);
+                        break;
+                    }
+                    else
+                    {
+                        baseType = baseType.BaseType;
+                    }
+                }
+
+            }
         }
     }
 

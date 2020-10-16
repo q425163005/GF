@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fuse;
@@ -151,6 +152,7 @@ namespace Fuse.Hotfix
             }
             return obj;
         }
+        
     }
 }
 

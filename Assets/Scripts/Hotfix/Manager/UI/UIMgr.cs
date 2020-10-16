@@ -211,5 +211,13 @@ namespace Fuse.Hotfix.Manager
         {
             return Component.GetAllLoadingUIFormSerialIds();
         }
+
+
+
+        public void Shutdown()
+        {
+            _uiList.Clear();
+        }
+
     }
 }
