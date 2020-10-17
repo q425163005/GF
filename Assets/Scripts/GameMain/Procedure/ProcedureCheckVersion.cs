@@ -99,10 +99,7 @@ namespace Fuse
             if (m_VersionInfo.ForceUpdateGame)
             {
                 // 需要强制更新游戏应用
-                UpdateResourceForm m_UpdateResourceForm =
-                    (UpdateResourceForm) GameEntry.UI.GetUIForm(UpdateResourceForm.AssetFullPath).Logic;
-                m_UpdateResourceForm.ShowFoceUpdate(GotoUpdateApp, ExitGame);
-
+                UpdateResourceForm.ShowFoceUpdate(GotoUpdateApp, ExitGame);
                 return;
             }
 

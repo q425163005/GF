@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<UnityGameFramework>
+  <BuildReport>
+    <Summary>
+      <ProductName>GameFramework</ProductName>
+      <CompanyName>DefaultCompany</CompanyName>
+      <GameIdentifier>com.DefaultCompany.GameFramework</GameIdentifier>
+      <GameFrameworkVersion>2020.07.30</GameFrameworkVersion>
+      <UnityVersion>2020.2.0a21</UnityVersion>
+      <ApplicableGameVersion>0.1</ApplicableGameVersion>
+      <InternalResourceVersion>2</InternalResourceVersion>
+      <Platforms>Windows</Platforms>
+      <ZipSelected>True</ZipSelected>
+      <BuildAssetBundleOptions>272</BuildAssetBundleOptions>
+    </Summary>
+    <Resources Count="2">
+      <Resource Name="BundleRes/Data/HotFix/Hotfix" Extension="dat" LoadType="0" Packed="False">
+        <Assets Count="2">
+          <Asset Guid="7f6361d0432b6b34eae63fd117db31dd" Name="Assets/Res/BundleRes/Data/HotFix/Hotfix.dll.bytes" Length="74240" HashCode="-1287003739" />
+          <Asset Guid="adbe70db2594a194cb3450a623172e53" Name="Assets/Res/BundleRes/Data/HotFix/Hotfix.pdb.bytes" Length="34520" HashCode="-1937346960" />
+        </Assets>
+        <Codes>
+          <Windows Length="61989" HashCode="36738651" ZipLength="50660" ZipHashCode="-2028806449" />
+        </Codes>
+      </Resource>
+      <Resource Name="BundleRes/UI/Login/LoginUI" Extension="dat" LoadType="0" Packed="False">
+        <Assets Count="1">
+          <Asset Guid="ca0856309e7f62a4596f4a2040fd7aae" Name="Assets/Res/BundleRes/UI/Login/LoginUI.prefab" Length="12006" HashCode="-1020609074" />
+        </Assets>
+        <Codes>
+          <Windows Length="10742" HashCode="-1543698002" ZipLength="8791" ZipHashCode="1115747121" />
+        </Codes>
+      </Resource>
+    </Resources>
+  </BuildReport>
+</UnityGameFramework>

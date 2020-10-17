@@ -109,7 +109,7 @@ namespace Fuse.Hotfix
                 return;
             }
 
-            Log.Info("Load scene '{0}' OK.", ne.SceneAssetName);
+            Log.Info($"Load scene '{ne.SceneAssetName}' OK.");
 
             // if (m_BackgroundMusicId > 0)
             // {
@@ -138,7 +138,7 @@ namespace Fuse.Hotfix
                 return;
             }
 
-            Log.Info("Load scene '{0}' update, progress '{1}'.", ne.SceneAssetName, ne.Progress.ToString("P2"));
+            Log.Info($"Load scene '{ne.SceneAssetName}' update, progress '{ne.Progress.ToString("P2")}'.");
         }
 
         private void OnLoadSceneDependencyAsset(object sender, GameEventArgs e)
@@ -149,7 +149,7 @@ namespace Fuse.Hotfix
                 return;
             }
 
-            Log.Info("Load scene '{0}' dependency asset '{1}', count '{2}/{3}'.", ne.SceneAssetName, ne.DependencyAssetName, ne.LoadedCount.ToString(), ne.TotalCount.ToString());
+            Log.Info($"Load scene '{ne.SceneAssetName}' dependency asset '{ne.DependencyAssetName}', count '{ne.LoadedCount}/{ne.TotalCount}'.");
         }
     }
 }

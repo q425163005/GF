@@ -89,7 +89,6 @@ namespace ILRuntime.Runtime.Generated
             System_Threading_CancellationToken_Binding.Register(app);
             ETModel_ErrorCode_Binding.Register(app);
             ETModel_RpcException_Binding.Register(app);
-            UnityGameFramework_Runtime_Log_Binding.Register(app);
             GameFramework_GameFrameworkException_Binding.Register(app);
             Fuse_ETNetworkComponent_Binding.Register(app);
             UnityEngine_Vector3_Binding.Register(app);
@@ -100,6 +99,11 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_KeyValuePair_2_String_ILTypeInstance_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_Variable_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Int32_ILTypeInstance_Binding.Register(app);
+            UnityGameFramework_Runtime_Log_Binding.Register(app);
+            Fuse_HotfixProcedureMgr_Binding.Register(app);
+            UnityEngine_GameObject_Binding.Register(app);
+            UnityEngine_Component_Binding.Register(app);
+            UnityEngine_Transform_Binding.Register(app);
             UnityGameFramework_Runtime_LoadSceneSuccessEventArgs_Binding.Register(app);
             UnityGameFramework_Runtime_EventComponent_Binding.Register(app);
             UnityGameFramework_Runtime_LoadSceneFailureEventArgs_Binding.Register(app);
@@ -110,9 +114,6 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_Dictionary_2_Int32_Action_Binding.Register(app);
             System_Action_Binding.Register(app);
             System_Single_Binding.Register(app);
-            System_Int32_Binding.Register(app);
-            UnityGameFramework_Runtime_UIComponent_Binding.Register(app);
-            UnityGameFramework_Runtime_UIForm_Binding.Register(app);
             UnityGameFramework_Runtime_LocalizationComponent_Binding.Register(app);
             Fuse_UpdateResourceForm_Binding.Register(app);
             System_Runtime_CompilerServices_AsyncVoidMethodBuilder_Binding.Register(app);
@@ -123,8 +124,21 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_IEnumerable_1_KeyValuePair_2_String_ILTypeInstance_Binding.Register(app);
             System_Collections_Generic_IEnumerator_1_KeyValuePair_2_String_ILTypeInstance_Binding.Register(app);
             System_Collections_Generic_IDictionary_2_String_ILTypeInstance_Binding.Register(app);
+            Fuse_CompCollector_Binding.Register(app);
+            System_Collections_Generic_List_1_Fuse_CompCollector_Binding_CompCollectorInfo_Binding.Register(app);
+            System_Collections_Generic_List_1_Fuse_CompCollector_Binding_CompCollectorInfo_Binding_Enumerator_Binding.Register(app);
+            Fuse_CompCollector_Binding_CompCollectorInfo_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_String_GameObject_Binding.Register(app);
+            System_Collections_Generic_List_1_String_Binding.Register(app);
+            System_Reflection_Assembly_Binding.Register(app);
+            System_Collections_Generic_List_1_String_Binding_Enumerator_Binding.Register(app);
+            UnityEngine_UI_Button_Binding.Register(app);
+            UnityEngine_Events_UnityEvent_Binding.Register(app);
+            UnityGameFramework_Runtime_UIComponent_Binding.Register(app);
+            System_Enum_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Int32_LinkedList_1_EventHandler_1_ILTypeInstance_Binding.Register(app);
             System_Collections_Generic_LinkedList_1_EventHandler_1_ILTypeInstance_Binding.Register(app);
+            System_Int32_Binding.Register(app);
             System_Collections_Generic_LinkedListNode_1_EventHandler_1_ILTypeInstance_Binding.Register(app);
             System_EventHandler_1_ILTypeInstance_Binding.Register(app);
 

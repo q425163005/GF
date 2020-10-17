@@ -14,7 +14,7 @@ namespace Fuse
         private long                   m_UpdateTotalZipLength    = 0L;
         private int                    m_UpdateSuccessCount      = 0;
         private List<UpdateLengthData> m_UpdateLengthData        = new List<UpdateLengthData>();
-        private UpdateResourceForm m_UpdateResourceForm;
+  
 
         public override bool UseNativeDialog
         {
@@ -37,8 +37,7 @@ namespace Fuse
             GameEntry.Event.Subscribe(ResourceUpdateChangedEventArgs.EventId, OnResourceUpdateChanged);
             GameEntry.Event.Subscribe(ResourceUpdateSuccessEventArgs.EventId, OnResourceUpdateSuccess);
             GameEntry.Event.Subscribe(ResourceUpdateFailureEventArgs.EventId, OnResourceUpdateFailure);
-
-            m_UpdateResourceForm = (UpdateResourceForm)GameEntry.UI.GetUIForm(UpdateResourceForm.AssetFullPath).Logic;
+            
 
             //            if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork)
             //            {
@@ -104,7 +103,7 @@ namespace Fuse
                                                                       progressTotal,
                                                                       GetByteLengthString((int) GameEntry
                                                                                                .Download.CurrentSpeed));
-            m_UpdateResourceForm.SetProgress(progressTotal, descriptionText);
+            UpdateResourceForm.SetProgress(progressTotal, descriptionText);
         }
 
         private string GetByteLengthString(long byteLength)

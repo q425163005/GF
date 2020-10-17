@@ -13,11 +13,10 @@ namespace Fuse.Hotfix
 
             Log.Info("进入了热更新入口流程");
 
-            UpdateResourceForm m_UpdateResourceForm = (UpdateResourceForm)GameEntry.UI.GetUIForm(UpdateResourceForm.AssetFullPath).Logic;
-            m_UpdateResourceForm.SetProgress(1f, GameEntry.Localization.GetString("ForceUpdate.Message"));
+            UpdateResourceForm.SetProgress(1f, GameEntry.Localization.GetString("ForceUpdate.Message"));
             
             Mgr.UI.Show<LoginUI>();
-            GameEntry.UI.CloseUIForm(m_UpdateResourceForm.UIForm);
+         
 
             //TODO:在这里切换到游戏的正式开始场景
             //            procedureOwner.SetData<VarInt>(Fuse.Constant.ProcedureData.NextSceneId, (int)SceneId.TestScene);

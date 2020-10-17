@@ -2,9 +2,8 @@
 {
     public enum EUIGroup
     {
-        Default=-1,
-
-        UpdateRes = 0,
+        Default=0,
+        
         Main = 1,
 
     }

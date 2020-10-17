@@ -18,6 +18,7 @@ namespace Fuse
         {
             base.OnEnter(procedureOwner);
 
+            //更新检测界面
             GameEntry.ILRuntime.LoadHotfixDLL();
             GameEntry.Fsm.DestroyFsm<IProcedureManager>();
         }

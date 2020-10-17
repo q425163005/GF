@@ -28,6 +28,9 @@ namespace Fuse
 
         private IMethod m_Shutdown;
 
+        private const string HotfixDLLPath = "Assets/Res/BundleRes/Data/HotFix/Hotfix.dll.bytes";
+        private const string HotfixPDBPath = "Assets/Res/BundleRes/Data/HotFix/Hotfix.pdb.bytes";
+
         /// <summary>
         /// 是否开启ILRuntime模式
         /// </summary>
@@ -97,7 +100,7 @@ namespace Fuse
             AppDomain = new AppDomain();
             ILRuntimeHelper.InitILRuntime(AppDomain);
             
-            TextAsset dllAsset = await GameEntry.Resource.AwaitLoadAsset<TextAsset>(AssetUtility.GetHotfixDLLAsset("Hotfix.dll"));
+            TextAsset dllAsset = await GameEntry.Resource.AwaitLoadAsset<TextAsset>(HotfixDLLPath);
             byte[]    dll      = dllAsset.bytes;
 
             if (Application.isEditor)
@@ -108,7 +111,7 @@ namespace Fuse
 
 #if DEBUG && !DISABLE_ILRUNTIME_DEBUG
             
-            TextAsset pdbAsset = await GameEntry.Resource.AwaitLoadAsset<TextAsset>(AssetUtility.GetHotfixDLLAsset("Hotfix.pdb"));
+            TextAsset pdbAsset = await GameEntry.Resource.AwaitLoadAsset<TextAsset>(HotfixPDBPath);
             byte[]    pdb      = pdbAsset.bytes;
             if (Application.isEditor)
             {
@@ -123,8 +126,11 @@ namespace Fuse
 #else
             AppDomain.LoadAssembly(new MemoryStream(dll));
 #endif
+#if UNITY_EDITOR
             //设置Unity主线程ID 这样就可以用Profiler看性能消耗了
             AppDomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
+#endif
+
 
             StartCoroutine(HotfixStart());
         }
@@ -132,7 +138,6 @@ namespace Fuse
         private async Task<byte[]> GetDll(string dllname)
         {
             string path = Application.dataPath.Replace("Assets","") + dllname;
-            Log.Info(path);
             return await GameEntry.WebRequest.AwaitAddWebRequest(path);
         }
 
@@ -144,7 +149,6 @@ namespace Fuse
             yield return null;
             string typeFullName = "Fuse.Hotfix.HotfixGameEntry";
             IType type = AppDomain.LoadedTypes[typeFullName];
-            Log.Info(typeFullName);
             AppDomain.Invoke(typeFullName, "Start", null, null);
 
             m_Update = type.GetMethod("Update", 2);

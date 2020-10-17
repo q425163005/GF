@@ -14,17 +14,20 @@ namespace Fuse.Editor
 
         #region 辅助器选择框相关
 
-        private string[] s_AssemblyNames = { "Fuse.GameMain" };
+        private string[] s_AssemblyNames = { "Fuse.Editor" };
 
         private string[] m_HelperTypeNames;
         private int      m_HelperTypeIndex;
-
+        private IAutoBindRuleHelper RuleHelper;
+        
         private string[] m_CodeTypeNames;
         private int   m_CodeTypeIndex;
+        private ICodeGenerateHelper CodeHelper;
 
         private string[] m_SearchTypeNames;
         private int   m_SearchTypeIndex;
         private string[] m_SearchTypeCustomNames;
+        private ICompSearchHelper SearchHelper;
 
         private string m_PrefixesShowStr; //命名前缀与类型的映射提示
         private string m_SearchInput;
@@ -156,21 +159,19 @@ namespace Fuse.Editor
             m_HelperTypeIndex = m_HelperTypeNames.ToList().IndexOf(m_Target.m_SelRuleName);
             if (m_HelperTypeIndex < 0) m_HelperTypeIndex = 0;
             m_Target.m_SelRuleName = m_HelperTypeNames[m_HelperTypeIndex];
-            m_Target.RuleHelper =
-                (IAutoBindRuleHelper) CreateHelperInstance(m_Target.m_SelRuleName, s_AssemblyNames);
+            RuleHelper = (IAutoBindRuleHelper) CreateHelperInstance(m_Target.m_SelRuleName, s_AssemblyNames);
 
             int selectedIndex = EditorGUILayout.Popup(m_HelperTypeIndex, m_HelperTypeNames);
             if (selectedIndex != m_HelperTypeIndex)
             {
                 m_HelperTypeIndex = selectedIndex;
                 m_Target.m_SelRuleName = m_HelperTypeNames[selectedIndex];
-                m_Target.RuleHelper =
-                    (IAutoBindRuleHelper) CreateHelperInstance(m_Target.m_SelRuleName, s_AssemblyNames);
+                RuleHelper = (IAutoBindRuleHelper) CreateHelperInstance(m_Target.m_SelRuleName, s_AssemblyNames);
             }
 
             if (string.IsNullOrEmpty(m_PrefixesShowStr))
             {
-                m_PrefixesShowStr = m_Target.RuleHelper.GetBindTips();
+                m_PrefixesShowStr = RuleHelper.GetBindTips();
             }
         }
 
@@ -187,16 +188,14 @@ namespace Fuse.Editor
             m_CodeTypeIndex = m_CodeTypeNames.ToList().IndexOf(m_Target.m_SelCodeName);
             if (m_CodeTypeIndex < 0) m_CodeTypeIndex = 0;
             m_Target.m_SelCodeName = m_CodeTypeNames[m_CodeTypeIndex];
-            m_Target.CodeHelper =
-                (ICodeGenerateHelper)CreateHelperInstance(m_Target.m_SelCodeName, s_AssemblyNames);
+            CodeHelper = (ICodeGenerateHelper)CreateHelperInstance(m_Target.m_SelCodeName, s_AssemblyNames);
 
             int selectedIndex = EditorGUILayout.Popup(m_CodeTypeIndex, m_CodeTypeNames);
             if (selectedIndex != m_CodeTypeIndex)
             {
                 m_CodeTypeIndex = selectedIndex;
                 m_Target.m_SelCodeName = m_CodeTypeNames[selectedIndex];
-                m_Target.CodeHelper =
-                    (ICodeGenerateHelper)CreateHelperInstance(m_Target.m_SelCodeName, s_AssemblyNames);
+                CodeHelper = (ICodeGenerateHelper)CreateHelperInstance(m_Target.m_SelCodeName, s_AssemblyNames);
             }
         }
 
@@ -213,16 +212,14 @@ namespace Fuse.Editor
             m_SearchTypeIndex = m_SearchTypeNames.ToList().IndexOf(m_Target.m_SelSearchName);
             if (m_SearchTypeIndex < 0) m_SearchTypeIndex = 0;
             m_Target.m_SelSearchName = m_SearchTypeNames[m_SearchTypeIndex];
-            m_Target.SearchHelper =
-                (ICompSearchHelper)CreateHelperInstance(m_Target.m_SelSearchName, s_AssemblyNames);
+            SearchHelper = (ICompSearchHelper)CreateHelperInstance(m_Target.m_SelSearchName, s_AssemblyNames);
 
             int selectedIndex = EditorGUILayout.Popup(m_SearchTypeIndex, m_SearchTypeCustomNames);
             if (selectedIndex != m_SearchTypeIndex)
             {
                 m_SearchTypeIndex = selectedIndex;
                 m_Target.m_SelSearchName = m_SearchTypeNames[selectedIndex];
-                m_Target.SearchHelper =
-                    (ICompSearchHelper)CreateHelperInstance(m_Target.m_SelSearchName, s_AssemblyNames);
+                SearchHelper = (ICompSearchHelper)CreateHelperInstance(m_Target.m_SelSearchName, s_AssemblyNames);
             }
         }
 
@@ -495,7 +492,7 @@ namespace Fuse.Editor
                 //搜索指针Profiler.NextFrame
                 if (!string.IsNullOrEmpty(m_SearchInput))
                 {
-                    if (m_Target.SearchHelper.IsAccord(m_SearchInput, outletInfo.Name))
+                    if (SearchHelper.IsAccord(m_SearchInput, outletInfo.Name))
                     {
                         GUILayout.Label(EditorGUIUtility.IconContent("Profiler.NextFrame"));
                     }
@@ -608,7 +605,7 @@ namespace Fuse.Editor
                 m_TempFiledNames.Clear();
                 m_TempComponentTypeNames.Clear();
 
-                if (m_Target.RuleHelper.IsValidBind(child, m_TempFiledNames, m_TempComponentTypeNames))
+                if (RuleHelper.IsValidBind(child, m_TempFiledNames, m_TempComponentTypeNames))
                 {
                     for (int i = 0; i < m_TempFiledNames.Count; i++)
                     {
@@ -655,7 +652,7 @@ namespace Fuse.Editor
                 return;
             }
 
-            m_Target.CodeHelper.GenerateCode(m_Target);
+            CodeHelper.GenerateCode(m_Target);
         }
     }
 }

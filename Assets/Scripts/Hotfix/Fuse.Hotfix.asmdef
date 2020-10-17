@@ -1,6 +1,6 @@
 {
     "name": "Fuse.Hotfix",
-    "rootNamespace": "",
+    "rootNamespace": "Fuse.Hotfix",
     "references": [
         "UnityGameFramework.Runtime",
         "Fuse.GameMain",

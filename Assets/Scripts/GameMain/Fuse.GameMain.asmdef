@@ -1,6 +1,6 @@
 {
     "name": "Fuse.GameMain",
-    "rootNamespace": "",
+    "rootNamespace": "Fuse.GameMain",
     "references": [
         "UnityGameFramework.Runtime",
         "Fuse.Libraries",

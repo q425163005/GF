@@ -1,0 +1,13 @@
+ManifestFileVersion: 0
+CRC: 803877344
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: bundleres/data/hotfix/hotfix
+      Dependencies: {}
+    Info_1:
+      Name: bundleres/ui/login/loginui
+      Dependencies: {}
+    Info_2:
+      Name: versioncheck/updateresourceform
+      Dependencies: {}

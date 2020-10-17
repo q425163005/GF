@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections;
-using DG.Tweening;
-using GameFramework.Resource;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityGameFramework.Runtime;
 
 namespace Fuse
 {
-    public class UpdateResourceForm : UIFormLogic
+    public class UpdateResourceForm : MonoBehaviour
     {
-        public const string AssetFullPath = "Assets/Res/VersionCheck/UpdateResourceForm.prefab";
-        
+        private static UpdateResourceForm UI;
+
         [SerializeField] private Text m_DescriptionText = null;
 
         [SerializeField] private Slider m_ProgressSlider = null;
@@ -37,8 +33,9 @@ namespace Fuse
 
         private void Awake()
         {
+            m_ComfirmBtn.onClick.AddListener(btnConfirm_Click);
+            m_CancelBtn.onClick.AddListener(btnCancel_Click);
         }
-
 
         private void btnConfirm_Click()
         {
@@ -51,8 +48,7 @@ namespace Fuse
             m_CancelAction?.Invoke();
         }
 
-
-        public void SetProgress(float progress, string description)
+        public void SetProgres(float progress, string description)
         {
             if (!m_ProgressSlider.gameObject.activeSelf)
             {
@@ -63,38 +59,36 @@ namespace Fuse
             m_DescriptionText.text = description;
         }
 
-        protected override void OnInit(object userData)
+        public static void Open()
         {
-            base.OnInit(userData);
-
-            m_CanvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
-            m_ComfirmBtn.onClick.AddListener(btnConfirm_Click);
-            m_CancelBtn.onClick.AddListener(btnCancel_Click);
+            if (UI == null)
+            {
+                GameObject obj = Instantiate(Resources.Load<GameObject>("UpdateResourceForm"),
+                                             GameEntry.UI.transform.Find("UI Form Instances"));
+                UI = obj.GetComponent<UpdateResourceForm>();
+            }
         }
 
-        protected override void OnOpen(object userData)
+        public static void Close()
         {
-            base.OnOpen(userData);
+            if (UI!=null)
+            {
+                Destroy(UI.gameObject);
+            }
         }
 
-        protected override void OnClose(bool isShutdown, object userData)
+        public static void SetProgress(float progress, string description)
         {
-            base.OnClose(isShutdown, userData);
+            UI?.SetProgres(progress,description);
         }
 
-        public void Close()
+        public static void ShowFoceUpdate(Action confirmAction, Action CancelAction)
         {
-            StartCoroutine(CloseCo(0.3f));
-        }
-
-        private IEnumerator CloseCo(float duration)
-        {
-            yield return m_CanvasGroup.FadeToAlpha(0f, duration);
-            GameEntry.UI.CloseUIForm(this.UIForm);
+            UI?.ShowFoceUpdateWindow(confirmAction, CancelAction);
         }
 
         /// <summary>强更弹窗</summary>
-        public void ShowFoceUpdate(Action confirmAction, Action CancelAction)
+        public void ShowFoceUpdateWindow(Action confirmAction, Action CancelAction)
         {
             m_DialogTitleText.text = GameEntry.Localization.GetString("ForceUpdate.Title");
             m_DialogDesText.text   = GameEntry.Localization.GetString("ForceUpdate.Message");

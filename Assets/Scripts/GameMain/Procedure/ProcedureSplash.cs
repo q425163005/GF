@@ -52,8 +52,14 @@ namespace Fuse
         {
             base.OnLeave(procedureOwner, isShutdown);
 
+            
+        }
+
+        protected override void OnEnter(ProcedureOwner procedureOwner)
+        {
+            base.OnEnter(procedureOwner);
             //更新检测界面
-            GameEntry.UI.OpenUIForm(UpdateResourceForm.AssetFullPath, "UpdateRes");
+            UpdateResourceForm.Open();
         }
     }
 }

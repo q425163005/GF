@@ -33,7 +33,7 @@ namespace Fuse.Hotfix
         protected internal override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            Log.Info("Enter '{0}' procedure.", GetType().FullName);
+            Log.Info($"Enter '{GetType().FullName}' procedure." );
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Fuse.Hotfix
         protected internal override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
         {
             base.OnLeave(procedureOwner, isShutdown);
-            Log.Info("Leave '{0}' procedure.", GetType().FullName);
+            Log.Info($"Leave '{GetType().FullName}' procedure." );
         }
 
         /// <summary>

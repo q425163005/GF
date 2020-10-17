@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<UnityGameFramework>
+  <ResourceCollection>
+    <Resources>
+      <Resource Name="BundleRes/Data/HotFix/Hotfix" LoadType="0" Packed="False" />
+      <Resource Name="BundleRes/UI/Login/LoginUI" LoadType="0" Packed="False" />
+      <Resource Name="VersionCheck/UpdateResourceForm" LoadType="0" Packed="True" />
+    </Resources>
+    <Assets>
+      <Asset Guid="2826fc694374b3a4b865502249c58ce8" ResourceName="VersionCheck/UpdateResourceForm" />
+      <Asset Guid="7f6361d0432b6b34eae63fd117db31dd" ResourceName="BundleRes/Data/HotFix/Hotfix" />
+      <Asset Guid="adbe70db2594a194cb3450a623172e53" ResourceName="BundleRes/Data/HotFix/Hotfix" />
+      <Asset Guid="ca0856309e7f62a4596f4a2040fd7aae" ResourceName="BundleRes/UI/Login/LoginUI" />
+    </Assets>
+  </ResourceCollection>
+</UnityGameFramework>
