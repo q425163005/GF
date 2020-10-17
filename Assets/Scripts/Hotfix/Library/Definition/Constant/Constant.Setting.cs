@@ -7,7 +7,7 @@
         /// </summary>
         public static class Setting
         {
-
+            public const string Language = "Setting.Language";
         }
     }
 }

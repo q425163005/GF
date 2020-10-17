@@ -130,8 +130,6 @@ namespace Fuse
             //设置Unity主线程ID 这样就可以用Profiler看性能消耗了
             AppDomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
 #endif
-
-
             StartCoroutine(HotfixStart());
         }
 
@@ -154,30 +152,7 @@ namespace Fuse
             m_Update = type.GetMethod("Update", 2);
             m_Shutdown = type.GetMethod("Shutdown", 0);
         }
-
-        void Test()
-        {
-            Assembly assembly = Assembly.Load("Fuse.Hotfix");
-            var types = assembly.GetTypes();
-            foreach (var type in types)
-            {
-                var baseType = type.BaseType; //获取基类
-                while (baseType != null)      //获取所有基类
-                {
-                  
-                    if (baseType.Name == "ProcedureBase")
-                    {
-                        Log.Info(type.FullName);
-                        break;
-                    }
-                    else
-                    {
-                        baseType = baseType.BaseType;
-                    }
-                }
-
-            }
-        }
+        
     }
 
 }

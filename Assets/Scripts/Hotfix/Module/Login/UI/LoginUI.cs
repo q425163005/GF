@@ -1,4 +1,7 @@
-﻿namespace Fuse.Hotfix
+﻿using GameFramework.Localization;
+using UnityGameFramework.Runtime;
+
+namespace Fuse.Hotfix
 {
 	public partial class LoginUI : BaseUI
 	{
@@ -20,6 +23,13 @@
         private void Btn_Login_Click()
         {
             Log.Info("click Btn_Login");
+
+            GameEntry.Setting.SetString(Constant.Setting.Language,
+                                        GameEntry.Localization.Language == Language.ChineseSimplified
+                                            ? Language.English.ToString()
+                                            : Language.ChineseSimplified.ToString());
+            GameEntry.Setting.Save();
+            UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Restart);
         }
     }
 }
