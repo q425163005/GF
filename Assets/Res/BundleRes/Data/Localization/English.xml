@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Dictionaries>
+  <Dictionary Language="English">
+    <String Key="LoginUI.UserName" Value="Account: " />
+    <String Key="LoginUI.Password" Value="Password: " />
+    <String Key="LoginUI.btnLogin" Value="Login" />
+    <String Key="LoginUI.btnStartGame" Value="Start" />
+    <String Key="LoginUI.Logout" Value="Logout" />
+    <String Key="LoginUI.btnChangServer" Value="Tap Server" />
+    <String Key="LoginUI.UserName.Placeholder" Value="Enter Username" />
+    <String Key="LoginUI.Password.Placeholder" Value="Enter Password" />
+    <String Key="LoginUI.Tips.Connect.Failed" Value="Server connection failed!" />
+    <String Key="LoginVerify.Failure" Value="Authentication failed" />
+    <String Key="LoginVerify.ServerIdError" Value="Server ID error" />
+    <String Key="LoginVerify.ChError" Value="Channel not available" />
+    <String Key="LoginUI.ReLogin" Value="Retry" />
+    <String Key="LoginUI.IOSVerLow" Value="Please upgrade your system for Apple login" />
+    <String Key="LoginUI.CantLoginPlay" Value="Daily from 10pm to 8am next day, \nAdults only/Alias login" />
+    <String Key="LoginUI.CantBuy" Value="Adults only/Alias top-up" />
+    <String Key="LoginUI.NoticeIsNull" Value="No announcement now!" />
+    <String Key="SelServerUI.SelServerTitle" Value="Select Server" />
+    <String Key="Loading.Default" Value="Loading..." />
+    <String Key="Loading.EnterGame" Value="Loading game data..." />
+    <String Key="Loading.GetServerData" Value="Accessing server data..." />
+    <String Key="RemouldUI.HomeLevel" Value="Upgrade &lt;color=#ffd108&gt;Stronghold&lt;/color&gt; to &lt;color=#ffd108&gt;Lv.{0}&lt;/color&gt; to convert!" />
+  </Dictionary>
+</Dictionaries>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Fuse.Hotfix.Manager;
+using Fuse.Tasks;
 using UnityEditor;
 
 namespace Fuse.Hotfix
@@ -34,6 +35,22 @@ namespace Fuse.Hotfix
         /// </summary>
         public static UIMgr UI { get; private set; }
 
+        /// <summary>
+        /// 资源
+        /// </summary>
+        public static ResourceMgr Res { get; private set; }
+
+        /// <summary>
+        /// Config
+        /// </summary>
+        public static ConfigMgr Config { get; private set; }
+
+        /// <summary>
+        /// 获取本地化组件。
+        /// </summary>
+        public static LangMgr Lang { get; private set; }
+
+
         //
         //        /// <summary>
         //        /// 获取游戏基础组件。
@@ -59,13 +76,7 @@ namespace Fuse.Hotfix
         //            private set;
         //        }
         //
-        //        /// <summary>
-        //        /// 获取数据表组件。
-        //        /// </summary>
-        //        public static DataTableComponent DataTable {
-        //            get;
-        //            private set;
-        //        }
+
         //
         //        /// <summary>
         //        /// 获取调试组件。
@@ -99,13 +110,7 @@ namespace Fuse.Hotfix
         //            private set;
         //        }
         //        
-        //        /// <summary>
-        //        /// 获取本地化组件。
-        //        /// </summary>
-        //        public static LocalizationComponent Localization {
-        //            get;
-        //            private set;
-        //        }
+
         //
         //        /// <summary>
         //        /// 获取网络组件。
@@ -172,7 +177,11 @@ namespace Fuse.Hotfix
             Event     = new EventManager();
             ETNetwork = new ETNetworkManager();
 
-            UI = new UIMgr(GameEntry.UI);
+            UI     = new UIMgr(GameEntry.UI);
+            Res    = new ResourceMgr(GameEntry.Resource);
+            Config = new ConfigMgr();
+            Lang   = new LangMgr(GameEntry.Localization);
+
 
             //初始化ET网络
             ETNetwork.Init();
@@ -187,8 +196,8 @@ namespace Fuse.Hotfix
         private static ProcedureBase[] GetAllProcedure(out List<string> nameList)
         {
             nameList = new List<string>();
-            Assembly     assembly          = Assembly.Load("Fuse.Hotfix");
-            var          types             = assembly.GetTypes();
+            Assembly assembly = Assembly.Load("Fuse.Hotfix");
+            var      types    = assembly.GetTypes();
             foreach (var type in types)
             {
                 var baseType = type.BaseType; //获取基类

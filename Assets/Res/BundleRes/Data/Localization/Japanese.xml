@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Dictionaries>
+  <Dictionary Language="Japanese">
+    <String Key="LoginUI.UserName" Value="ユーザー名" />
+    <String Key="LoginUI.Password" Value="パスワード" />
+    <String Key="LoginUI.btnLogin" Value="登録する" />
+    <String Key="LoginUI.btnStartGame" Value="ゲームを始める" />
+    <String Key="LoginUI.Logout" Value="ログアウト" />
+    <String Key="LoginUI.btnChangServer" Value="をクリックする" />
+    <String Key="LoginUI.UserName.Placeholder" Value="ユーザー名を入力してください！" />
+    <String Key="LoginUI.Password.Placeholder" Value="パスワードを入力してください！" />
+    <String Key="LoginUI.Tips.Connect.Failed" Value="サーバーを接続して失敗しました！" />
+    <String Key="LoginVerify.Failure" Value="" />
+    <String Key="LoginVerify.ServerIdError" Value="" />
+    <String Key="LoginVerify.ChError" Value="" />
+    <String Key="LoginUI.ReLogin" Value="" />
+    <String Key="LoginUI.IOSVerLow" Value="" />
+    <String Key="LoginUI.CantLoginPlay" Value="" />
+    <String Key="LoginUI.CantBuy" Value="" />
+    <String Key="LoginUI.NoticeIsNull" Value="" />
+    <String Key="SelServerUI.SelServerTitle" Value="サーバーを選択" />
+    <String Key="Loading.Default" Value="" />
+    <String Key="Loading.EnterGame" Value="" />
+    <String Key="Loading.GetServerData" Value="" />
+    <String Key="RemouldUI.HomeLevel" Value="" />
+  </Dictionary>
+</Dictionaries>

@@ -73,7 +73,13 @@ namespace Fuse.Editor
         {
             BuildHotfixEditor.BuildHotfixDLL();
         }
-        
+
+        [MenuItem("★工具★/Excel转Config工具", false, 2)]
+        public static void Excel2Config()
+        {
+            ConfigGeneratorEditor.ShowWindow();
+        }
+
 
         [MenuItem("★工具★/ILRuntime/Generate ILRuntime CLR Binding Code by Analysis")]
         public static void GenerateCLRBindingByAnalysis()

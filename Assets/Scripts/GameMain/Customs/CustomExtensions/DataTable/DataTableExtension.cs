@@ -43,7 +43,7 @@ namespace Fuse
              
             string name = splitedNames.Length > 1 ? splitedNames[1] : null;
             DataTableBase dataTable = dataTableComponent.CreateDataTable(dataRowType, name);
-            //dataTable.ReadData(dataTableAssetName, Constant.AssetPriority.DataTableAsset, userData);
+            dataTable.ReadData(dataTableAssetName, 100, userData);
         }
 
         public static Color32 ParseColor32(string value)

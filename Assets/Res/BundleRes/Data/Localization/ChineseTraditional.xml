@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Dictionaries>
+  <Dictionary Language="ChineseTraditional">
+    <String Key="LoginUI.UserName" Value="帳號:" />
+    <String Key="LoginUI.Password" Value="密碼:" />
+    <String Key="LoginUI.btnLogin" Value="登錄遊戲" />
+    <String Key="LoginUI.btnStartGame" Value="開始遊戲" />
+    <String Key="LoginUI.Logout" Value="註銷" />
+    <String Key="LoginUI.btnChangServer" Value="點擊選服" />
+    <String Key="LoginUI.UserName.Placeholder" Value="請輸入用戶名!!!" />
+    <String Key="LoginUI.Password.Placeholder" Value="請輸入密碼!!!" />
+    <String Key="LoginUI.Tips.Connect.Failed" Value="連接伺服器失敗!" />
+    <String Key="LoginVerify.Failure" Value="驗證失敗" />
+    <String Key="LoginVerify.ServerIdError" Value="伺服器Id錯誤" />
+    <String Key="LoginVerify.ChError" Value="渠道未開放" />
+    <String Key="LoginUI.ReLogin" Value="重登" />
+    <String Key="LoginUI.IOSVerLow" Value="蘋果登入，請陞級你的系統" />
+    <String Key="LoginUI.CantLoginPlay" Value="每日22:00-次日8:00，\n禁止未成年人用戶/未實名認證用戶登錄遊戲" />
+    <String Key="LoginUI.CantBuy" Value="禁止未成年人用戶/未實名認證用戶進行充值活動" />
+    <String Key="LoginUI.NoticeIsNull" Value="當前沒有公告！" />
+    <String Key="SelServerUI.SelServerTitle" Value="選擇伺服器" />
+    <String Key="Loading.Default" Value="載入中…" />
+    <String Key="Loading.EnterGame" Value="載入玩家數據…" />
+    <String Key="Loading.GetServerData" Value="獲取服務器數據…" />
+    <String Key="RemouldUI.HomeLevel" Value="升級&lt;color=#ffd108&gt;主城堡&lt;/color&gt;到&lt;color=#ffd108&gt;{0}級&lt;/color&gt;以進行改造！" />
+  </Dictionary>
+</Dictionaries>

@@ -15,36 +15,40 @@ namespace Fuse
 {
     public static class ILRuntimeHelper
     {
-        public static void InitILRuntime(AppDomain appDomain)
+        public static void InitILRuntime(AppDomain appdomain)
         {
             //TODO:注册重定向方法
 
             //TODO:适配委托
+            appdomain.DelegateManager.RegisterMethodDelegate<System.String, System.Object, System.Single, System.Object>();
+            appdomain.DelegateManager.RegisterMethodDelegate<System.String, GameFramework.Resource.LoadResourceStatus, System.String, System.Object>();
+            appdomain.DelegateManager.RegisterFunctionDelegate<System.Boolean>();
+
 
             //GF用
-            appDomain.DelegateManager.RegisterMethodDelegate<float>();
-            appDomain.DelegateManager.RegisterMethodDelegate<object, ILTypeInstance>();
-            appDomain.DelegateManager.RegisterMethodDelegate<object, GameFramework.Event.GameEventArgs>();
+            appdomain.DelegateManager.RegisterMethodDelegate<float>();
+            appdomain.DelegateManager.RegisterMethodDelegate<object, ILTypeInstance>();
+            appdomain.DelegateManager.RegisterMethodDelegate<object, GameFramework.Event.GameEventArgs>();
 
 
             //ET用
-            appDomain.DelegateManager.RegisterMethodDelegate<List<object>>();
-            appDomain.DelegateManager.RegisterMethodDelegate<AChannel, System.Net.Sockets.SocketError>();
-            appDomain.DelegateManager.RegisterMethodDelegate<byte[], int, int>();
-            appDomain.DelegateManager.RegisterMethodDelegate<IResponse>();
-            appDomain.DelegateManager.RegisterMethodDelegate<Session, object>();
-            appDomain.DelegateManager.RegisterMethodDelegate<Session, byte, ushort, MemoryStream>();
-            appDomain.DelegateManager.RegisterMethodDelegate<Session>();
-            appDomain.DelegateManager.RegisterMethodDelegate<ILTypeInstance>();
-            appDomain.DelegateManager.RegisterMethodDelegate<Session, ushort, MemoryStream>();
+            appdomain.DelegateManager.RegisterMethodDelegate<List<object>>();
+            appdomain.DelegateManager.RegisterMethodDelegate<AChannel, System.Net.Sockets.SocketError>();
+            appdomain.DelegateManager.RegisterMethodDelegate<byte[], int, int>();
+            appdomain.DelegateManager.RegisterMethodDelegate<IResponse>();
+            appdomain.DelegateManager.RegisterMethodDelegate<Session, object>();
+            appdomain.DelegateManager.RegisterMethodDelegate<Session, byte, ushort, MemoryStream>();
+            appdomain.DelegateManager.RegisterMethodDelegate<Session>();
+            appdomain.DelegateManager.RegisterMethodDelegate<ILTypeInstance>();
+            appdomain.DelegateManager.RegisterMethodDelegate<Session, ushort, MemoryStream>();
 
             //PB用
-            appDomain.DelegateManager.RegisterFunctionDelegate<IMessageAdaptor.Adaptor>();
-            appDomain.DelegateManager.RegisterMethodDelegate<IMessageAdaptor.Adaptor>();
+            appdomain.DelegateManager.RegisterFunctionDelegate<IMessageAdaptor.Adaptor>();
+            appdomain.DelegateManager.RegisterMethodDelegate<IMessageAdaptor.Adaptor>();
 
 
             //TODO:注册委托
-            appDomain.DelegateManager.RegisterDelegateConvertor<UnityAction>((action) =>
+            appdomain.DelegateManager.RegisterDelegateConvertor<UnityAction>((action) =>
             {
                 return new UnityAction(() =>
                 {
@@ -52,7 +56,7 @@ namespace Fuse
                 });
             });
 
-            appDomain.DelegateManager.RegisterDelegateConvertor<UnityAction<float>>((action) =>
+            appdomain.DelegateManager.RegisterDelegateConvertor<UnityAction<float>>((action) =>
             {
                 return new UnityAction<float>((a) =>
                 {
@@ -60,7 +64,7 @@ namespace Fuse
                 });
             });
 
-            appDomain.DelegateManager.RegisterDelegateConvertor<EventHandler<GameFramework.Event.GameEventArgs>>((act) =>
+            appdomain.DelegateManager.RegisterDelegateConvertor<EventHandler<GameFramework.Event.GameEventArgs>>((act) =>
             {
                 return new EventHandler<GameFramework.Event.GameEventArgs>((sender, e) =>
                 {
@@ -68,7 +72,7 @@ namespace Fuse
                 });
             });
 
-            appDomain.DelegateManager.RegisterDelegateConvertor<EventHandler<ILTypeInstance>>((act) =>
+            appdomain.DelegateManager.RegisterDelegateConvertor<EventHandler<ILTypeInstance>>((act) =>
             {
                 return new EventHandler<ILTypeInstance>((sender, e) =>
                 {
@@ -76,22 +80,40 @@ namespace Fuse
                 });
             });
 
+          
+            appdomain.DelegateManager.RegisterDelegateConvertor<GameFramework.Resource.LoadAssetSuccessCallback>((act) =>
+            {
+                return new GameFramework.Resource.LoadAssetSuccessCallback((assetName, asset, duration, userData) =>
+                {
+                    ((Action<System.String, System.Object, System.Single, System.Object>)act)(assetName, asset, duration, userData);
+                });
+            });
+
+            appdomain.DelegateManager.RegisterDelegateConvertor<GameFramework.Resource.LoadAssetFailureCallback>((act) =>
+            {
+                return new GameFramework.Resource.LoadAssetFailureCallback((assetName, status, errorMessage, userData) =>
+                {
+                    ((Action<System.String, GameFramework.Resource.LoadResourceStatus, System.String, System.Object>)act)(assetName, status, errorMessage, userData);
+                });
+            });
+
+
 
             //注册CLR绑定代码
-            CLRBindings.Initialize(appDomain);
+            CLRBindings.Initialize(appdomain);
 
             //TODO:注册跨域继承适配器
-            appDomain.RegisterCrossBindingAdaptor(new IMessageAdaptor());
-            appDomain.RegisterCrossBindingAdaptor(new IDisposableAdaptor());
-            appDomain.RegisterCrossBindingAdaptor(new IAsyncStateMachineAdaptor());
+            appdomain.RegisterCrossBindingAdaptor(new IMessageAdaptor());
+            appdomain.RegisterCrossBindingAdaptor(new IDisposableAdaptor());
+            appdomain.RegisterCrossBindingAdaptor(new IAsyncStateMachineAdaptor());
 
             //TODO:注册值类型绑定
-            appDomain.RegisterValueTypeBinder(typeof(Vector3), new Vector3Binder());
-            appDomain.RegisterValueTypeBinder(typeof(Quaternion), new QuaternionBinder());
-            appDomain.RegisterValueTypeBinder(typeof(Vector2), new Vector2Binder());
+            appdomain.RegisterValueTypeBinder(typeof(Vector3), new Vector3Binder());
+            appdomain.RegisterValueTypeBinder(typeof(Quaternion), new QuaternionBinder());
+            appdomain.RegisterValueTypeBinder(typeof(Vector2), new Vector2Binder());
 
             //注册LitJson
-            LitJson.JsonMapper.RegisterILRuntimeCLRRedirection(appDomain);
+            LitJson.JsonMapper.RegisterILRuntimeCLRRedirection(appdomain);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿
+
 namespace Fuse.Hotfix
 {
     /// <summary>
@@ -11,11 +12,10 @@ namespace Fuse.Hotfix
             Log.Info("热更新层启动!");
 
             Mgr.Initialize();
-            
             //开始热更新层入口流程
-            Mgr.Procedure.StartProcedure<ProcedureHotfixEntry>();
+            Mgr.Procedure.StartProcedure<ProcedureHotfixPreload>();
         }
-
+        
         public static void Update(float elapseSeconds, float realElapseSeconds)
         {
             Mgr.Fsm.Update(elapseSeconds, realElapseSeconds);
