@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using ETHotfix;
+using Fuse.Hotfix.Common;
+using Fuse.Hotfix.Login;
 using GameFramework.Event;
 using UnityEngine;
 using UnityGameFramework.Runtime;
@@ -17,9 +19,10 @@ namespace Fuse.Hotfix
             base.OnEnter(procedureOwner);
             
             Log.Info("进入了热更新测试流程");
+            Mgr.UI.Show<LoginUI>();
         }
 
-        protected internal override async void OnUpdate(IFsm procedureOwner, float elapseSeconds, float realElapseSeconds)
+        protected internal override void OnUpdate(IFsm procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 //            if (Input.GetKeyDown(KeyCode.A))

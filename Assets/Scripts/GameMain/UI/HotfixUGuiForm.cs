@@ -34,8 +34,8 @@ namespace Fuse
             base.OnInit(userData);
 
             m_HotfixInstance = this;
-            string hotfixUGuiFormFullName = $"Fuse.Hotfix.{UIForm.UIFormAssetName.Split(',')[0].Split('/').Last()}";
-            hotfixUGuiFormFullName=hotfixUGuiFormFullName.Replace(".prefab", "");
+            string[] arry = UIForm.UIFormAssetName.Split('/');
+            string hotfixUGuiFormFullName = $"Fuse.Hotfix.{arry[arry.Length-2]}.{arry.Last().Split('.')[0]}";
 
             //获取热更新层的实例
             IType  type           = GameEntry.ILRuntime.AppDomain.LoadedTypes[hotfixUGuiFormFullName];

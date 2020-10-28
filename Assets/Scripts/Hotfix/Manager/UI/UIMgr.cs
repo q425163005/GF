@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GameFramework.Event;
 using UnityEditor;
 using UnityGameFramework.Runtime;
 
@@ -24,13 +25,37 @@ namespace Fuse.Hotfix.Manager
             }
         }
 
-        public string GetUIAssetName<T>() where T : BaseUI
+        private void OnOpenUIFormSuccess(object sender, GameEventArgs e)
         {
-            string name = typeof(T).Name;
-            return $"Assets/Res/BundleRes/UI/{name.Replace("UI", "")}/{name}.prefab";
+            OpenUIFormSuccessEventArgs ne = (OpenUIFormSuccessEventArgs)e;
+            if (ne.UserData != this)
+            {
+                return;
+            }
+
+            //m_MenuForm = (MenuForm)ne.UIForm.Logic;
         }
 
-        public T Show<T>(int priority=0, bool pauseCoveredUIForm=false, object userData=null) where T : BaseUI, new()
+        public void SetUIBase(BaseUI ui,string uiName)
+        {
+            if (_uiList.ContainsKey(uiName))
+            {
+                if (_uiList[uiName].SerialId== ui.SerialId)
+                {
+                    _uiList[uiName] = ui;
+                }
+            }
+        }
+
+        public string GetUIAssetName<T>() where T : BaseUI
+        {
+            Type type = typeof(T);
+            string name;
+            name = type.Namespace.Substring(type.Namespace.LastIndexOf(".") + 1) + "/" + type.Name;
+            return $"Assets/Res/BundleRes/UI/{name}.prefab";
+        }
+
+        public int Show<T>(int priority=0, bool pauseCoveredUIForm=false, object userData=null) where T : BaseUI, new()
         {
             string name = typeof(T).Name;
             T      ui   = null;
@@ -43,14 +68,14 @@ namespace Fuse.Hotfix.Manager
                     ui = new T();
                     _uiList.Add(name, ui);
                     string uiGroupName = ui.UIGroup.ToString();
-                    Component.OpenUIForm(GetUIAssetName<T>(), uiGroupName, priority, pauseCoveredUIForm, userData);
+                    ui.SerialId = Component.OpenUIForm(GetUIAssetName<T>(), uiGroupName, priority, pauseCoveredUIForm, userData);
                 }
             }
             catch (Exception ex)
             {
                 Log.Error(ex.Message + ex.StackTrace);
             }
-            return ui;
+            return ui.SerialId;
         }
 
         /// <summary>

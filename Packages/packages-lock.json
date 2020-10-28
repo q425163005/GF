@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.jiangyin.gameframework": {
-      "version": "https://github.com/EllanJiang/UnityGameFramework.git",
+      "version": "https://gitee.com/jiangyin/UnityGameFramework.git",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -13,7 +13,7 @@
         "com.unity.modules.jsonserialize": "1.0.0",
         "com.unity.modules.unitywebrequest": "1.0.0"
       },
-      "hash": "f14aed219f536fcaabc9cdef750545689cf64e2f"
+      "hash": "a9a9a8ae57325e7290c8e77c32dbc4f3d981b59f"
     },
     "com.ourpalm.ilruntime": {
       "version": "1.6.4",

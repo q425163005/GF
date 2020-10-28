@@ -9,7 +9,7 @@
     }
   ],
   "dependencies": {
-    "com.jiangyin.gameframework": "https://github.com/EllanJiang/UnityGameFramework.git",
+    "com.jiangyin.gameframework": "https://gitee.com/jiangyin/UnityGameFramework.git",
     "com.ourpalm.ilruntime": "1.6.4",
     "com.unity.collab-proxy": "1.3.9",
     "com.unity.ide.rider": "2.0.7",

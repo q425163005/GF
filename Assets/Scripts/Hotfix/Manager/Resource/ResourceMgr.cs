@@ -22,9 +22,9 @@ namespace Fuse.Hotfix
         /// <param name="assetName">资源名</param>
         /// <param name="priority">优先级</param>
         /// <param name="successCallBack">成功回调（资源）</param>
-        public void LoadAsset(string assetName, Action<object> successCallBack)
+        public void LoadAsset(string assetName, Action<object> successCallBack, int priority = 0)
         {
-            LoadAsset(assetName, 0, (a, b) => { successCallBack(a); });
+            LoadAsset(assetName, (a, b) => { successCallBack(a); }, priority);
         }
 
         /// <summary>
@@ -33,18 +33,14 @@ namespace Fuse.Hotfix
         /// <param name="assetName">资源名</param>
         /// <param name="priority">优先级</param>
         /// <param name="successCallBack">成功回调（资源，自定义数据）</param>
-        public void LoadAsset(string assetName, int priority, Action<object, object> successCallBack)
+        public void LoadAsset(string assetName, Action<object, object> successCallBack, int priority = 0)
         {
             Component.LoadAsset(assetName, priority, new LoadAssetCallbacks(
-                                    (backAssetName, asset, duration, userData) =>
-                                    {
-                                        successCallBack(asset, userData);
-                                    },
+                                    (backAssetName, asset, duration, userData) => { successCallBack(asset, userData); },
                                     (backAssetName, status, errorMessage, userData) =>
                                     {
                                         Log.Error($"资源 ：{assetName}  加载失败，errorMessage：{errorMessage}");
                                     }));
         }
-        
     }
 }

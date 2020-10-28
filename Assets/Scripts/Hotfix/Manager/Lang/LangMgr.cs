@@ -10,7 +10,7 @@ namespace Fuse.Hotfix
     public class LangMgr
     {
         public LocalizationComponent Component { get; }
-        public bool isLoaded = false;
+        public bool                  isLoaded = false;
 
         public LangMgr(LocalizationComponent component)
         {
@@ -21,14 +21,14 @@ namespace Fuse.Hotfix
         private async CTask LoadLocalizationFile()
         {
             isLoaded = false;
-            string fileName = Constant.AssetPath.Localization(Component.Language.ToString());
+            string fileName  = Constant.AssetPath.Localization(Component.Language.ToString());
             object configObj = null;
-            Mgr.Res.LoadAsset(fileName, (a) => { configObj = a; });
+            Mgr.Res.LoadAsset(fileName, (a) => { configObj = a; }, Constant.AssetPriority.ConfigAsset);
             await CTask.WaitUntil(() => configObj != null);
             Component.ParseData(configObj.ToString());
             isLoaded = true;
         }
-        
+
 
         public string Get(string key)
         {

@@ -31,9 +31,10 @@ namespace Fuse.Hotfix
         private async CTask readConfig<T>(Dictionary<object, T> source) where T : BaseConfig, new()
         {
             loadCount += 1;
-            string fileName = typeof(T).Name;
+            string fileName  = typeof(T).Name;
             object configObj = null;
-            Mgr.Res.LoadAsset(Constant.AssetPath.Config(fileName), s => { configObj = s; });
+            Mgr.Res.LoadAsset(Constant.AssetPath.Config(fileName), s => { configObj = s; },
+                              Constant.AssetPriority.ConfigAsset);
             await CTask.WaitUntil(() => configObj != null);
             if (configObj != null)
             {
@@ -69,7 +70,8 @@ namespace Fuse.Hotfix
             source.Clear();
 
             object configObj = null;
-            Mgr.Res.LoadAsset(Constant.AssetPath.Config(fileName), s => { configObj = s; });
+            Mgr.Res.LoadAsset(Constant.AssetPath.Config(fileName), s => { configObj = s; },
+                              Constant.AssetPriority.ConfigAsset);
             await CTask.WaitUntil(() => configObj != null);
 
             if (configObj != null)
@@ -102,7 +104,8 @@ namespace Fuse.Hotfix
             string fileName = typeof(T).Name;
 
             object configObj = null;
-            Mgr.Res.LoadAsset(Constant.AssetPath.Config(fileName), s => { configObj = s; });
+            Mgr.Res.LoadAsset(Constant.AssetPath.Config(fileName), s => { configObj = s; },
+                              Constant.AssetPriority.ConfigAsset);
             await CTask.WaitUntil(() => configObj != null);
 
             if (configObj != null)
@@ -116,6 +119,7 @@ namespace Fuse.Hotfix
             {
                 Log.Error($"配置文件不存在{fileName}");
             }
+
             loadedCount += 1;
             return default(T);
         }

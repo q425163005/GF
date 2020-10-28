@@ -19,11 +19,13 @@ namespace Fuse.Hotfix
         protected internal override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds,
                                                   float          realElapseSeconds)
         {
-            base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
+            base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds); 
             
             if (!Mgr.Config.isAllLoaded) return;
             if (!Mgr.Lang.isLoaded) return;
             ChangeState<ProcedureHotfixTest>(procedureOwner);
+            //ChangeScene<ProcedureHotfixTest>(procedureOwner, "Home");
+           // ChangeScene(procedureOwner, "Home", "ProcedureHotfixTest");
         }
 
         protected internal override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)

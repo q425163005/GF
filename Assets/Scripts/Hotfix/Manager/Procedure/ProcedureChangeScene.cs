@@ -4,6 +4,7 @@ using GameFramework.Event;
 using GameFramework.Procedure;
 using System;
 using System.Collections.Generic;
+using Fuse.Hotfix.Common;
 using UnityGameFramework.Runtime;
 using ProcedureOwner = Fuse.Hotfix.IFsm;
 
@@ -26,10 +27,11 @@ namespace Fuse.Hotfix
         /// </summary>
         private int m_TargetSceneId = 0;
 
-        /// <summary>
-        /// 场景ID-流程切换方法的字典
-        /// </summary>
-        private Dictionary<int, Action> m_TargetProcedureChange = new Dictionary<int, Action>();
+        private string SceneName;
+        private string TargetProcedure;
+
+
+        public static LoadingUI loadingUI;
 
         protected internal override void OnInit(ProcedureOwner procedureOwner)
         {
@@ -42,6 +44,10 @@ namespace Fuse.Hotfix
         protected internal override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
+            Mgr.UI.Show<LoadingUI>();
+
+            SceneName       = procedureOwner.GetData<VarString>("SceneName");
+            TargetProcedure = procedureOwner.GetData<VarString>("TargetProcedure");
 
             m_IsChangeSceneComplete = false;
 
@@ -59,20 +65,9 @@ namespace Fuse.Hotfix
 
             // 还原游戏速度
             GameEntry.Base.ResetNormalGameSpeed();
-
-            //读取下一场景ID，根据ID读取场景表中的行数据
-            // m_TargetSceneId = procedureOwner.GetData<VarInt>(Fuse.Constant.ProcedureData.NextSceneId).Value;
-            // IDataTable<DRScene> dtScene = GameEntry.DataTable.GetDataTable<DRScene>();
-            // DRScene drScene = dtScene.GetDataRow(m_TargetSceneId);
-            // if (drScene == null)
-            // {
-            //     Log.Warning("Can not load scene '{0}' from data table.", m_TargetSceneId.ToString());
-            //     return;
-            // }
-            //
-            // //根据行数据里的场景资源名加载场景
-            // GameEntry.Scene.LoadScene(AssetUtility.GetSceneAsset(drScene.AssetName), Fuse.Constant.AssetPriority.SceneAsset, this);
-            // m_BackgroundMusicId = drScene.BackgroundMusicId;
+            //根据行数据里的场景资源名加载场景
+            GameEntry.Scene.LoadScene(Constant.AssetPath.Scene(SceneName), Constant.AssetPriority.SceneAsset, this);
+            //m_BackgroundMusicId = drScene.BackgroundMusicId;
         }
 
         protected internal override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
@@ -83,27 +78,35 @@ namespace Fuse.Hotfix
             GameEntry.Event.Unsubscribe(LoadSceneDependencyAssetEventArgs.EventId, OnLoadSceneDependencyAsset);
 
             base.OnLeave(procedureOwner, isShutdown);
+
+            loadingUI?.SetProgress(1);
+            Mgr.UI.Close<LoadingUI>();
         }
 
-        protected internal override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
+        protected internal override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds,
+                                                  float          realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 
-            if (!m_IsChangeSceneComplete)
+            loadingUI = Mgr.UI.GetUI<LoadingUI>();
+            if (!m_IsChangeSceneComplete || loadingUI==null)
             {
                 return;
             }
 
+            Type type = Type.GetType("Fuse.Hotfix." + TargetProcedure);
+            ChangeState(procedureOwner, type);
+
             //根据切换到的目标场景ID进行对应的流程切换
-            if (m_TargetProcedureChange.ContainsKey(m_TargetSceneId))
-            {
-                m_TargetProcedureChange[m_TargetSceneId]?.Invoke();
-            }
+            //            if (m_TargetProcedureChange.ContainsKey(m_TargetSceneId))
+            //            {
+            //                m_TargetProcedureChange[m_TargetSceneId]?.Invoke();
+            //            }
         }
 
         private void OnLoadSceneSuccess(object sender, GameEventArgs e)
         {
-            LoadSceneSuccessEventArgs ne = (LoadSceneSuccessEventArgs)e;
+            LoadSceneSuccessEventArgs ne = (LoadSceneSuccessEventArgs) e;
             if (ne.UserData != this)
             {
                 return;
@@ -111,17 +114,17 @@ namespace Fuse.Hotfix
 
             Log.Info($"Load scene '{ne.SceneAssetName}' OK.");
 
-            // if (m_BackgroundMusicId > 0)
-            // {
-            //     GameEntry.Sound.PlayMusic(m_BackgroundMusicId);
-            // }
+//            if (m_BackgroundMusicId > 0)
+//            {
+//                GameEntry.Sound.PlaySound() .PlayMusic(m_BackgroundMusicId);
+//            }
 
             m_IsChangeSceneComplete = true;
         }
 
         private void OnLoadSceneFailure(object sender, GameEventArgs e)
         {
-            LoadSceneFailureEventArgs ne = (LoadSceneFailureEventArgs)e;
+            LoadSceneFailureEventArgs ne = (LoadSceneFailureEventArgs) e;
             if (ne.UserData != this)
             {
                 return;
@@ -132,7 +135,7 @@ namespace Fuse.Hotfix
 
         private void OnLoadSceneUpdate(object sender, GameEventArgs e)
         {
-            LoadSceneUpdateEventArgs ne = (LoadSceneUpdateEventArgs)e;
+            LoadSceneUpdateEventArgs ne = (LoadSceneUpdateEventArgs) e;
             if (ne.UserData != this)
             {
                 return;
@@ -143,13 +146,14 @@ namespace Fuse.Hotfix
 
         private void OnLoadSceneDependencyAsset(object sender, GameEventArgs e)
         {
-            LoadSceneDependencyAssetEventArgs ne = (LoadSceneDependencyAssetEventArgs)e;
+            LoadSceneDependencyAssetEventArgs ne = (LoadSceneDependencyAssetEventArgs) e;
             if (ne.UserData != this)
             {
                 return;
             }
 
-            Log.Info($"Load scene '{ne.SceneAssetName}' dependency asset '{ne.DependencyAssetName}', count '{ne.LoadedCount}/{ne.TotalCount}'.");
+            Log.Info(
+                $"Load scene '{ne.SceneAssetName}' dependency asset '{ne.DependencyAssetName}', count '{ne.LoadedCount}/{ne.TotalCount}'.");
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Fuse.Hotfix
 {
     public class Log
     {
-        public static bool isShowLog = true;
+        private static bool isShowLog = true;
         public static void SetIsShowLog(bool isShow)
         {
             isShowLog = isShow;

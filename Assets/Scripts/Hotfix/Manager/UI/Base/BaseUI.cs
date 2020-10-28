@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fuse;
+using Fuse.Hotfix.Manager;
 
 namespace Fuse.Hotfix
 {
@@ -14,22 +15,22 @@ namespace Fuse.Hotfix
         /// <summary>
         /// 主工程的界面逻辑脚本
         /// </summary>
-        protected Fuse.HotfixUGuiForm UIFormLogic
-        {
-            get;
-            private set;
-        }
-        
-        public EUIGroup UIGroup = EUIGroup.Default;
-        protected object AwakeUserData;
+        protected Fuse.HotfixUGuiForm UIFormLogic { get; private set; }
+
+        public    EUIGroup                       UIGroup  = EUIGroup.Default;
+        public    int                            SerialId = -99;
+        protected object                         AwakeUserData;
         protected Dictionary<string, GameObject> objectList = new Dictionary<string, GameObject>();
 
         /// <summary>
         /// 界面初始化
         /// </summary>
-        public void OnInit(Fuse.HotfixUGuiForm uiFormLogic,object userdata)
+        public void OnInit(Fuse.HotfixUGuiForm uiFormLogic, object userdata)
         {
             UIFormLogic = uiFormLogic;
+            SerialId      = UIFormLogic.UIForm.SerialId;
+            UIFormLogic.Name = UIFormLogic.Name.Replace("(Clone)", "");
+            Mgr.UI.SetUIBase(this, UIFormLogic.Name);
             AwakeUserData = userdata;
             CompCollector collector = uiFormLogic.gameObject.GetComponent<CompCollector>();
             foreach (var variable in collector.CompCollectorInfos)
@@ -41,12 +42,10 @@ namespace Fuse.Hotfix
         /// <summary>初始化UI控件</summary>
         protected virtual void InitializeComponent()
         {
-
         }
 
         protected virtual void Awake()
         {
-
         }
 
         /// <summary>
@@ -54,7 +53,6 @@ namespace Fuse.Hotfix
         /// </summary>
         public virtual void OnOpen(object userdata)
         {
-            
         }
 
         /// <summary>
@@ -64,7 +62,7 @@ namespace Fuse.Hotfix
         {
             Close(isShutdown, userdata);
             AwakeUserData = null;
-            objectList = null;
+            objectList    = null;
         }
 
         /// <summary>
@@ -72,7 +70,6 @@ namespace Fuse.Hotfix
         /// </summary>
         protected virtual void Close(bool isShutdown, object userdata)
         {
-            
         }
 
 
@@ -150,9 +147,8 @@ namespace Fuse.Hotfix
             {
                 Log.Error($"未找到GameObject对象,请在CompCollector中设置:{name}");
             }
+
             return obj;
         }
-        
     }
 }
-

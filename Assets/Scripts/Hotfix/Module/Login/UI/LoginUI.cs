@@ -1,7 +1,7 @@
 ﻿using GameFramework.Localization;
 using UnityGameFramework.Runtime;
 
-namespace Fuse.Hotfix
+namespace Fuse.Hotfix.Login
 {
 	public partial class LoginUI : BaseUI
 	{
@@ -12,6 +12,7 @@ namespace Fuse.Hotfix
 		protected override void Awake()
 		{
             Btn_Login.onClick.AddListener(Btn_Login_Click);
+            
 		}
 
         public override void OnOpen(object userdata)

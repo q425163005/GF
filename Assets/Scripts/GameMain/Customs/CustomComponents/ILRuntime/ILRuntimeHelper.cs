@@ -97,8 +97,7 @@ namespace Fuse
                 });
             });
 
-
-
+            
             //注册CLR绑定代码
             CLRBindings.Initialize(appdomain);
 

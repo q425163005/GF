@@ -3,7 +3,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Fuse.Hotfix
+namespace Fuse.Hotfix.Login
 {
 	public partial class LoginUI : BaseUI
 	{

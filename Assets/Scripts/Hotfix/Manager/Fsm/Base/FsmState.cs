@@ -8,6 +8,7 @@
 using GameFramework;
 using System;
 using System.Collections.Generic;
+using UnityGameFramework.Runtime;
 
 namespace Fuse.Hotfix
 {
@@ -154,6 +155,30 @@ namespace Fuse.Hotfix
             }
 
             fsmImplement.ChangeState(stateType);
+        }
+
+        protected void ChangeScene(IFsm fsm,string sceneName,string procedure)
+        {
+            fsm.SetData<VarString>("SceneName",sceneName);
+            fsm.SetData<VarString>("TargetProcedure", procedure);
+            Fsm fsmImplement = (Fsm)fsm;
+            if (fsmImplement == null)
+            {
+                throw new GameFrameworkException("FSM is invalid.");
+            }
+            fsmImplement.ChangeState<ProcedureChangeScene>();
+        }
+
+        protected void ChangeScene<TState>(IFsm fsm, string sceneName) where TState : FsmState
+        {
+            fsm.SetData<VarString>("SceneName", sceneName);
+            fsm.SetData<VarString>("TargetProcedure", typeof(TState).Name);
+            Fsm fsmImplement = (Fsm)fsm;
+            if (fsmImplement == null)
+            {
+                throw new GameFrameworkException("FSM is invalid.");
+            }
+            fsmImplement.ChangeState<ProcedureChangeScene>();
         }
 
         /// <summary>
