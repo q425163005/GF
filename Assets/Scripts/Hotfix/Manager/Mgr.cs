@@ -29,6 +29,11 @@ namespace Fuse.Hotfix
         /// </summary>
         public static ETNetworkManager ETNetwork { get; private set; }
 
+        /// <summary>
+        /// 定时器管理器
+        /// </summary>
+        public static TimerMgr Timer { get; private set; }
+
 
         /// <summary>
         /// 界面
@@ -176,6 +181,7 @@ namespace Fuse.Hotfix
             Procedure = new ProcedureManager();
             Event     = new EventManager();
             ETNetwork = new ETNetworkManager();
+            Timer     = new TimerMgr();
 
             UI     = new UIMgr(GameEntry.UI);
             Res    = new ResourceMgr(GameEntry.Resource);
@@ -238,6 +244,8 @@ namespace Fuse.Hotfix
             Procedure?.Shutdown();
             Event?.Shutdown();
             ETNetwork?.Shutdown();
+            Timer.StopAll();
+
             UI?.Shutdown();
         }
     }

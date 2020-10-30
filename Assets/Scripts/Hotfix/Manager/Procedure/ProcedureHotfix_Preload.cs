@@ -7,7 +7,7 @@ using ProcedureOwner = Fuse.Hotfix.IFsm;
 
 namespace Fuse.Hotfix
 {
-    public class ProcedureHotfixPreload : ProcedureBase
+    public class ProcedureHotfix_Preload : ProcedureBase
     {
         protected internal override void OnEnter(ProcedureOwner procedureOwner)
         {
@@ -23,9 +23,7 @@ namespace Fuse.Hotfix
             
             if (!Mgr.Config.isAllLoaded) return;
             if (!Mgr.Lang.isLoaded) return;
-            ChangeState<ProcedureHotfixTest>(procedureOwner);
-            //ChangeScene<ProcedureHotfixTest>(procedureOwner, "Home");
-           // ChangeScene(procedureOwner, "Home", "ProcedureHotfixTest");
+            procedureOwner.ChangeState<ProcedureHotfix_Login>();
         }
 
         protected internal override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)

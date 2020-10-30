@@ -18,16 +18,16 @@ namespace Fuse.Hotfix.Manager
         public UIMgr(UIComponent component)
         {
             Component = component;
-          
+
             foreach (var variable in Enum.GetValues(typeof(EUIGroup)))
             {
-                Component.AddUIGroup(Enum.GetName(typeof(EUIGroup), variable), (int)variable);
+                Component.AddUIGroup(Enum.GetName(typeof(EUIGroup), variable), (int) variable);
             }
         }
 
         private void OnOpenUIFormSuccess(object sender, GameEventArgs e)
         {
-            OpenUIFormSuccessEventArgs ne = (OpenUIFormSuccessEventArgs)e;
+            OpenUIFormSuccessEventArgs ne = (OpenUIFormSuccessEventArgs) e;
             if (ne.UserData != this)
             {
                 return;
@@ -36,11 +36,11 @@ namespace Fuse.Hotfix.Manager
             //m_MenuForm = (MenuForm)ne.UIForm.Logic;
         }
 
-        public void SetUIBase(BaseUI ui,string uiName)
+        public void SetUIBase(BaseUI ui, string uiName)
         {
             if (_uiList.ContainsKey(uiName))
             {
-                if (_uiList[uiName].SerialId== ui.SerialId)
+                if (_uiList[uiName].SerialId == ui.SerialId)
                 {
                     _uiList[uiName] = ui;
                 }
@@ -49,18 +49,19 @@ namespace Fuse.Hotfix.Manager
 
         public string GetUIAssetName<T>() where T : BaseUI
         {
-            Type type = typeof(T);
+            Type   type = typeof(T);
             string name;
             name = type.Namespace.Substring(type.Namespace.LastIndexOf(".") + 1) + "/" + type.Name;
             return $"Assets/Res/BundleRes/UI/{name}.prefab";
         }
 
-        public int Show<T>(int priority=0, bool pauseCoveredUIForm=false, object userData=null) where T : BaseUI, new()
+        public int Show<T>(object userData = null, bool pauseCoveredUIForm = false)
+            where T : BaseUI, new()
         {
             string name = typeof(T).Name;
             T      ui   = null;
             if (_uiList.ContainsKey(name))
-                ui = (T)_uiList[name];
+                ui = (T) _uiList[name];
             try
             {
                 if (ui == null)
@@ -68,13 +69,16 @@ namespace Fuse.Hotfix.Manager
                     ui = new T();
                     _uiList.Add(name, ui);
                     string uiGroupName = ui.UIGroup.ToString();
-                    ui.SerialId = Component.OpenUIForm(GetUIAssetName<T>(), uiGroupName, priority, pauseCoveredUIForm, userData);
+                    ui.SerialId = Component.OpenUIForm(GetUIAssetName<T>(), uiGroupName,
+                                                       Constant.AssetPriority.UIFormAsset, pauseCoveredUIForm,
+                                                       userData);
                 }
             }
             catch (Exception ex)
             {
                 Log.Error(ex.Message + ex.StackTrace);
             }
+
             return ui.SerialId;
         }
 
@@ -89,6 +93,7 @@ namespace Fuse.Hotfix.Manager
                 Log.Warning("UI form is invalid.");
                 return;
             }
+
             string name = typeof(T).Name;
             if (_uiList.ContainsKey(name))
             {
@@ -100,6 +105,21 @@ namespace Fuse.Hotfix.Manager
                 Component.CloseUIForm(GetUIForm<T>());
             else
                 Component.CloseUIForm(GetUIForm<T>(), userData);
+        }
+
+        /// <summary>
+        /// 关闭UI
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public void CloseForName(string name)
+        {
+            if (_uiList.ContainsKey(name))
+            {
+                BaseUI ui = _uiList[name];
+                _uiList.Remove(name);
+
+                Component.CloseUIForm(ui.SerialId);
+            }
         }
 
         /// <summary>
@@ -126,7 +146,7 @@ namespace Fuse.Hotfix.Manager
         {
             string name = typeof(T).Name;
             if (_uiList.ContainsKey(name))
-                return (T)_uiList[name];
+                return (T) _uiList[name];
             return null;
         }
 
@@ -140,6 +160,7 @@ namespace Fuse.Hotfix.Manager
                 Log.Warning("UI form is invalid.");
                 return;
             }
+
             if (userData == null)
                 Component.RefocusUIForm(GetUIForm<T>());
             else
@@ -179,7 +200,7 @@ namespace Fuse.Hotfix.Manager
         /// <summary>
         /// 关闭所有已加载的界面。
         /// </summary>
-        public void CloseAllLoadedUIForms(object userData=null)
+        public void CloseAllLoadedUIForms(object userData = null)
         {
             if (userData == null)
                 Component.CloseAllLoadedUIForms();
@@ -206,6 +227,7 @@ namespace Fuse.Hotfix.Manager
                 Log.Warning("UI form is invalid.");
                 return false;
             }
+
             return Component.IsValidUIForm(GetUIForm<T>());
         }
 
@@ -238,11 +260,9 @@ namespace Fuse.Hotfix.Manager
         }
 
 
-
         public void Shutdown()
         {
             _uiList.Clear();
         }
-
     }
 }

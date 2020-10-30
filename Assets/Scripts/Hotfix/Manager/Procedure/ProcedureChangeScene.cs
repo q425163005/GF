@@ -30,13 +30,11 @@ namespace Fuse.Hotfix
         private string SceneName;
         private string TargetProcedure;
 
-
-        public static LoadingUI loadingUI;
+        
 
         protected internal override void OnInit(ProcedureOwner procedureOwner)
         {
             base.OnInit(procedureOwner);
-
             //TODO:在这里配置场景ID与切换到对应流程的方法
             //m_TargetProcedureChange.Add((int)SceneId.TestScene, () => ChangeState<ProcedureHotfixTest>(procedureOwner));
         }
@@ -44,8 +42,7 @@ namespace Fuse.Hotfix
         protected internal override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            Mgr.UI.Show<LoadingUI>();
-
+           
             SceneName       = procedureOwner.GetData<VarString>("SceneName");
             TargetProcedure = procedureOwner.GetData<VarString>("TargetProcedure");
 
@@ -78,24 +75,22 @@ namespace Fuse.Hotfix
             GameEntry.Event.Unsubscribe(LoadSceneDependencyAssetEventArgs.EventId, OnLoadSceneDependencyAsset);
 
             base.OnLeave(procedureOwner, isShutdown);
-
-            loadingUI?.SetProgress(1);
-            Mgr.UI.Close<LoadingUI>();
+            
         }
 
         protected internal override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds,
                                                   float          realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
-
-            loadingUI = Mgr.UI.GetUI<LoadingUI>();
-            if (!m_IsChangeSceneComplete || loadingUI==null)
+            
+            if (!m_IsChangeSceneComplete)
             {
                 return;
             }
 
             Type type = Type.GetType("Fuse.Hotfix." + TargetProcedure);
-            ChangeState(procedureOwner, type);
+            procedureOwner.ChangeState(type);
+            //ChangeState(procedureOwner, type);
 
             //根据切换到的目标场景ID进行对应的流程切换
             //            if (m_TargetProcedureChange.ContainsKey(m_TargetSceneId))
@@ -114,11 +109,11 @@ namespace Fuse.Hotfix
 
             Log.Info($"Load scene '{ne.SceneAssetName}' OK.");
 
-//            if (m_BackgroundMusicId > 0)
-//            {
-//                GameEntry.Sound.PlaySound() .PlayMusic(m_BackgroundMusicId);
-//            }
-
+            //            if (m_BackgroundMusicId > 0)
+            //            {
+            //                GameEntry.Sound.PlaySound() .PlayMusic(m_BackgroundMusicId);
+            //            }
+            LoadingUI.SetValue(0.2f);
             m_IsChangeSceneComplete = true;
         }
 
@@ -140,6 +135,7 @@ namespace Fuse.Hotfix
             {
                 return;
             }
+            LoadingUI.SetValue(0.2f* ne.Progress);
 
             Log.Info($"Load scene '{ne.SceneAssetName}' update, progress '{ne.Progress.ToString("P2")}'.");
         }

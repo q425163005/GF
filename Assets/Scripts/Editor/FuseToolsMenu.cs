@@ -80,6 +80,12 @@ namespace Fuse.Editor
             ConfigGeneratorEditor.ShowWindow();
         }
 
+        [MenuItem("★工具★/代码模板生成工具", false, 3)]
+        public static void CodeGenerator()
+        {
+            CodeGeneratorEditor.ShowWindow();
+        }
+
 
         [MenuItem("★工具★/ILRuntime/Generate ILRuntime CLR Binding Code by Analysis")]
         public static void GenerateCLRBindingByAnalysis()

@@ -17,8 +17,9 @@ namespace Fuse.Hotfix
         /// </summary>
         protected Fuse.HotfixUGuiForm UIFormLogic { get; private set; }
 
-        public    EUIGroup                       UIGroup  = EUIGroup.Default;
-        public    int                            SerialId = -99;
+        public    EUIGroup                       UIGroup    = EUIGroup.Default;
+        public    int                            SerialId   = -99;
+        protected bool                           isInstance = false;
         protected object                         AwakeUserData;
         protected Dictionary<string, GameObject> objectList = new Dictionary<string, GameObject>();
 
@@ -27,14 +28,15 @@ namespace Fuse.Hotfix
         /// </summary>
         public void OnInit(Fuse.HotfixUGuiForm uiFormLogic, object userdata)
         {
-            UIFormLogic = uiFormLogic;
-            SerialId      = UIFormLogic.UIForm.SerialId;
+            UIFormLogic      = uiFormLogic;
+            SerialId         = UIFormLogic.UIForm.SerialId;
             UIFormLogic.Name = UIFormLogic.Name.Replace("(Clone)", "");
             Mgr.UI.SetUIBase(this, UIFormLogic.Name);
             AwakeUserData = userdata;
             CompCollector collector = uiFormLogic.gameObject.GetComponent<CompCollector>();
             foreach (var variable in collector.CompCollectorInfos)
                 objectList.Add(variable.Name, variable.Object as GameObject);
+            isInstance = true;
             InitializeComponent();
             Awake();
         }
@@ -72,6 +74,11 @@ namespace Fuse.Hotfix
         {
         }
 
+        /// <summary>关闭当前UI</summary>
+        public virtual void CloseSelf()
+        {
+            Mgr.UI.CloseForName(GetType().Name);
+        }
 
         /// <summary>
         /// 界面暂停

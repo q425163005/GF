@@ -1,6 +1,4 @@
-﻿
-
-namespace Fuse.Hotfix
+﻿namespace Fuse.Hotfix
 {
     /// <summary>
     /// 热更新层游戏入口
@@ -13,13 +11,14 @@ namespace Fuse.Hotfix
 
             Mgr.Initialize();
             //开始热更新层入口流程
-            Mgr.Procedure.StartProcedure<ProcedureHotfixPreload>();
+            Mgr.Procedure.StartProcedure<ProcedureHotfix_Preload>();
         }
-        
+
         public static void Update(float elapseSeconds, float realElapseSeconds)
         {
             Mgr.Fsm.Update(elapseSeconds, realElapseSeconds);
             Mgr.Event.Update(elapseSeconds, realElapseSeconds);
+            Mgr.Timer.timerUpdateEvent(elapseSeconds, realElapseSeconds);
         }
 
         public static void Shutdown()
@@ -28,4 +27,3 @@ namespace Fuse.Hotfix
         }
     }
 }
-

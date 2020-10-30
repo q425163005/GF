@@ -5,6 +5,7 @@
       <Resource Name="BundleRes/Data/HotFix/Hotfix" LoadType="0" Packed="False" />
       <Resource Name="BundleRes/Scene/Home" LoadType="0" Packed="False" />
       <Resource Name="BundleRes/UI/Common/LoadingUI" LoadType="0" Packed="False" />
+      <Resource Name="BundleRes/UI/Home/HomeUI" LoadType="0" Packed="False" />
       <Resource Name="BundleRes/UI/Login/LoginUI" LoadType="0" Packed="False" />
       <Resource Name="VersionCheck/UpdateResourceForm" LoadType="0" Packed="True" />
     </Resources>
@@ -13,6 +14,7 @@
       <Asset Guid="61b81d4043dd307438ca4379e6659dff" ResourceName="BundleRes/UI/Common/LoadingUI" />
       <Asset Guid="7f6361d0432b6b34eae63fd117db31dd" ResourceName="BundleRes/Data/HotFix/Hotfix" />
       <Asset Guid="adbe70db2594a194cb3450a623172e53" ResourceName="BundleRes/Data/HotFix/Hotfix" />
+      <Asset Guid="b8b6a9e94005f70488608db67dc5e28e" ResourceName="BundleRes/UI/Home/HomeUI" />
       <Asset Guid="ca0856309e7f62a4596f4a2040fd7aae" ResourceName="BundleRes/UI/Login/LoginUI" />
       <Asset Guid="d78d3355139143148b2472af25e4a58d" ResourceName="BundleRes/Scene/Home" />
     </Assets>

@@ -23,7 +23,7 @@ namespace Fuse.Editor
             string outPath = Path.GetFullPath($"Assets/Scripts/Hotfix/Module/{modName}/UI/{uiName}.cs");
             outPath = GameFramework.Utility.Path.GetRegularPath(outPath);
 
-            ToolsHelper.SaveFile(outPath, getUICodeStr(uiName), false);
+            ToolsHelper.SaveFile(outPath, getUICodeStr(modName, uiName), false);
             AssetDatabase.Refresh();
         }
 
@@ -32,7 +32,7 @@ namespace Fuse.Editor
             string outPath = Path.GetFullPath($"Assets/Scripts/Hotfix/Module/{modName}/UI/View/{uiName}View.cs");
             outPath = GameFramework.Utility.Path.GetRegularPath(outPath);
 
-            ToolsHelper.SaveFile(outPath, getUIViewCodeStr(uiName, collector));
+            ToolsHelper.SaveFile(outPath, getUIViewCodeStr(modName, uiName, collector));
             AssetDatabase.Refresh();
         }
 
@@ -41,11 +41,11 @@ namespace Fuse.Editor
             return fullName.Substring(fullName.LastIndexOf(".", StringComparison.Ordinal) + 1);
         }
 
-        private string getUICodeStr(string uiName)
+        private string getUICodeStr(string modName, string uiName)
         {
             StringBuilder codeStr = new StringBuilder();
             //命名空间
-            codeStr.AppendLine("namespace Fuse.Hotfix");
+            codeStr.AppendLine("namespace Fuse.Hotfix." + modName);
             codeStr.AppendLine("{");
 
             //类名
@@ -66,7 +66,7 @@ namespace Fuse.Editor
             return codeStr.ToString();
         }
 
-        private string getUIViewCodeStr(string uiName, CompCollector collector)
+        private string getUIViewCodeStr(string modName, string uiName, CompCollector collector)
         {
             StringBuilder codeStr = new StringBuilder();
 
@@ -78,7 +78,7 @@ namespace Fuse.Editor
             codeStr.AppendLine("");
 
             //命名空间
-            codeStr.AppendLine("namespace Fuse.Hotfix");
+            codeStr.AppendLine("namespace Fuse.Hotfix." + modName);
             codeStr.AppendLine("{");
 
             //类名
@@ -98,6 +98,7 @@ namespace Fuse.Editor
             {
                 codeStr.AppendLine($"\t\t\t{variable.Name} = Get<{variable.ComponentType}>(\"{variable.Name}\");");
             }
+
             codeStr.AppendLine("\t\t}");
 
             codeStr.AppendLine("\t}");
