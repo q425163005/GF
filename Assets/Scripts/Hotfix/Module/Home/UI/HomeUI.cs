@@ -8,6 +8,7 @@
 		}
 		protected override void Awake()
 		{
+            //log
 		}
 	}
 }
