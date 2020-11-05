@@ -1,4 +1,8 @@
-﻿namespace Fuse.Hotfix.Home
+﻿using Fuse.Hotfix.Common;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+namespace Fuse.Hotfix.Home
 {
 	public partial class HomeUI : BaseUI
 	{
@@ -6,10 +10,11 @@
 		{
 			UIGroup = EUIGroup.Main;
 		}
-		protected override void Awake()
+		protected override void Awake(object userdata)
 		{
             //log
-		}
+            
+        }
 	}
 }
 

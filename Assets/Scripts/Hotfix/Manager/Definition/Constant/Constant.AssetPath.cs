@@ -6,11 +6,14 @@ namespace Fuse.Hotfix
 {
     public static partial class Constant
     {
+        private const string ResRoot = "Assets/Res/BundleRes";
+
         public static class AssetPath
         {
-            public static string Config(string       fileName)  => $"Assets/Res/BundleRes/Data/Config/{fileName}.txt";
-            public static string Localization(string lang)      => $"Assets/Res/BundleRes/Data/Localization/{lang}.xml";
-            public static string Scene(string        sceneName) => $"Assets/Res/BundleRes/Scene/{sceneName}.unity";
+            public static string Config(string       fileName)             => $"{ResRoot}/Data/Config/{fileName}.txt";
+            public static string Localization(string lang)                 => $"{ResRoot}/Data/Localization/{lang}.xml";
+            public static string Scene(string        sceneName)            => $"{ResRoot}/Scene/{sceneName}.unity";
+            public static string Ui(string           space, string uiName) => $"{ResRoot}/UI/{space}/{uiName}.prefab";
         }
     }
 }

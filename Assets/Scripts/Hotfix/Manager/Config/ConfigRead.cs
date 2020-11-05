@@ -32,14 +32,9 @@ namespace Fuse.Hotfix
         {
             loadCount += 1;
             string fileName  = typeof(T).Name;
-            object configObj = null;
-            Mgr.Res.LoadAsset(Constant.AssetPath.Config(fileName), s => { configObj = s; },
-                              Constant.AssetPriority.ConfigAsset);
-            await CTask.WaitUntil(() => configObj != null);
-            if (configObj != null)
+            string strconfig = await Mgr.Res.LoadAsset_Config(fileName);
+            if (string.IsNullOrEmpty(strconfig))
             {
-                string strconfig = configObj.ToString();
-
                 List<T> list = JsonMapper.ToObject<List<T>>(strconfig);
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -70,13 +65,9 @@ namespace Fuse.Hotfix
             source.Clear();
 
             object configObj = null;
-            Mgr.Res.LoadAsset(Constant.AssetPath.Config(fileName), s => { configObj = s; },
-                              Constant.AssetPriority.ConfigAsset);
-            await CTask.WaitUntil(() => configObj != null);
-
-            if (configObj != null)
+            string strconfig = await Mgr.Res.LoadAsset_Config(fileName);
+            if (string.IsNullOrEmpty(strconfig))
             {
-                string  strconfig = configObj.ToString();
                 List<T> list      = JsonMapper.ToObject<List<T>>(strconfig);
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -102,15 +93,9 @@ namespace Fuse.Hotfix
         {
             loadCount += 1;
             string fileName = typeof(T).Name;
-
-            object configObj = null;
-            Mgr.Res.LoadAsset(Constant.AssetPath.Config(fileName), s => { configObj = s; },
-                              Constant.AssetPriority.ConfigAsset);
-            await CTask.WaitUntil(() => configObj != null);
-
-            if (configObj != null)
+            string strconfig = await Mgr.Res.LoadAsset_Config(fileName);
+            if (string.IsNullOrEmpty(strconfig))
             {
-                string  strconfig = configObj.ToString();
                 List<T> list      = JsonMapper.ToObject<List<T>>(strconfig);
                 if (list.Count > 0)
                     return list[0];

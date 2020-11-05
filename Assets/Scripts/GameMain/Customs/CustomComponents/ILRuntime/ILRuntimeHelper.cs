@@ -20,8 +20,11 @@ namespace Fuse
             //TODO:注册重定向方法
 
             //TODO:适配委托
-            appdomain.DelegateManager.RegisterMethodDelegate<System.String, System.Object, System.Single, System.Object>();
-            appdomain.DelegateManager.RegisterMethodDelegate<System.String, GameFramework.Resource.LoadResourceStatus, System.String, System.Object>();
+            appdomain.DelegateManager
+                     .RegisterMethodDelegate<System.String, System.Object, System.Single, System.Object>();
+            appdomain.DelegateManager
+                     .RegisterMethodDelegate<System.String, GameFramework.Resource.LoadResourceStatus, System.String,
+                         System.Object>();
             appdomain.DelegateManager.RegisterFunctionDelegate<System.Boolean>();
 
 
@@ -46,58 +49,106 @@ namespace Fuse
             appdomain.DelegateManager.RegisterFunctionDelegate<IMessageAdaptor.Adaptor>();
             appdomain.DelegateManager.RegisterMethodDelegate<IMessageAdaptor.Adaptor>();
 
+            //HotFixUI用
+            appdomain.DelegateManager.RegisterMethodDelegate<Fuse.HotfixUGuiForm, System.Object>();
+            appdomain.DelegateManager.RegisterMethodDelegate<System.Object>();
+            appdomain.DelegateManager.RegisterMethodDelegate<System.Boolean, System.Object>();
+            appdomain.DelegateManager.RegisterMethodDelegate<System.Single, System.Single>();
+            appdomain.DelegateManager.RegisterMethodDelegate<System.Int32, System.Int32>();
 
             //TODO:注册委托
             appdomain.DelegateManager.RegisterDelegateConvertor<UnityAction>((action) =>
             {
                 return new UnityAction(() =>
                 {
-                    ((Action)action)();
+                    ((Action)
+                            action
+                        )();
                 });
             });
 
             appdomain.DelegateManager.RegisterDelegateConvertor<UnityAction<float>>((action) =>
             {
-                return new UnityAction<float>((a) =>
-                {
-                    ((Action<float>)action)(a);
-                });
+                return new UnityAction<float>(
+                    (a) =>
+                    {
+                        ((Action<float>) action
+                            )(a);
+                    });
             });
 
-            appdomain.DelegateManager.RegisterDelegateConvertor<EventHandler<GameFramework.Event.GameEventArgs>>((act) =>
-            {
-                return new EventHandler<GameFramework.Event.GameEventArgs>((sender, e) =>
+            appdomain.DelegateManager.RegisterDelegateConvertor<EventHandler<GameFramework.Event.GameEventArgs>>(
+                (act) =>
                 {
-                    ((Action<object, GameFramework.Event.GameEventArgs>)act)(sender, e);
+                    return new EventHandler<GameFramework.Event.GameEventArgs>((sender, e) =>
+                    {
+                        ((Action<object,
+                            GameFramework.Event.GameEventArgs
+                        >) act)(sender, e);
+                    });
                 });
-            });
 
             appdomain.DelegateManager.RegisterDelegateConvertor<EventHandler<ILTypeInstance>>((act) =>
             {
-                return new EventHandler<ILTypeInstance>((sender, e) =>
-                {
-                    ((Action<object, ILTypeInstance>)act)(sender, e);
-                });
+                return new
+                    EventHandler<
+                        ILTypeInstance
+                    >((sender, e) =>
+                    {
+                        ((Action<
+                            object,
+                            ILTypeInstance
+                        >) act)(
+                            sender,
+                            e);
+                    });
             });
 
-          
-            appdomain.DelegateManager.RegisterDelegateConvertor<GameFramework.Resource.LoadAssetSuccessCallback>((act) =>
+
+            appdomain.DelegateManager.RegisterDelegateConvertor<GameFramework.Resource.LoadAssetSuccessCallback>(
+                (act) =>
+                {
+                    return new GameFramework.Resource.LoadAssetSuccessCallback(
+                        (assetName, asset, duration, userData) =>
+                        {
+                            ((Action<System.String, System.Object
+                                  , System.Single, System.Object>)
+                                act)(assetName, asset, duration,
+                                     userData);
+                        });
+                });
+
+            appdomain.DelegateManager.RegisterDelegateConvertor<GameFramework.Resource.LoadAssetFailureCallback>(
+                (act) =>
+                {
+                    return new GameFramework.Resource.LoadAssetFailureCallback(
+                        (assetName, status, errorMessage, userData) =>
+                        {
+                            ((Action<System.String, GameFramework.Resource.LoadResourceStatus, System.String,
+                                System.Object>) act)(assetName, status, errorMessage, userData);
+                        });
+                });
+
+            appdomain.DelegateManager.RegisterMethodDelegate<System.IAsyncResult>();
+            appdomain.DelegateManager.RegisterDelegateConvertor<System.AsyncCallback>((act) =>
             {
-                return new GameFramework.Resource.LoadAssetSuccessCallback((assetName, asset, duration, userData) =>
-                {
-                    ((Action<System.String, System.Object, System.Single, System.Object>)act)(assetName, asset, duration, userData);
-                });
+                return new System.
+                    AsyncCallback(
+                        (ar) => { ((Action<System.IAsyncResult>) act)(ar); });
             });
-
-            appdomain.DelegateManager.RegisterDelegateConvertor<GameFramework.Resource.LoadAssetFailureCallback>((act) =>
+            appdomain.DelegateManager.RegisterDelegateConvertor<System.Threading.ThreadStart>((act) =>
             {
-                return new GameFramework.Resource.LoadAssetFailureCallback((assetName, status, errorMessage, userData) =>
-                {
-                    ((Action<System.String, GameFramework.Resource.LoadResourceStatus, System.String, System.Object>)act)(assetName, status, errorMessage, userData);
-                });
+                return new System.
+                    Threading.
+                    ThreadStart(
+                        () =>
+                        {
+                            ((Action)
+                                    act
+                                )();
+                        });
             });
 
-            
             //注册CLR绑定代码
             CLRBindings.Initialize(appdomain);
 
@@ -116,4 +167,3 @@ namespace Fuse
         }
     }
 }
-

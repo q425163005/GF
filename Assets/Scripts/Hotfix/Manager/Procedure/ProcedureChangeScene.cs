@@ -59,7 +59,7 @@ namespace Fuse.Hotfix
             {
                 GameEntry.Scene.UnloadScene(loadedSceneAssetNames[i]);
             }
-
+         
             // 还原游戏速度
             GameEntry.Base.ResetNormalGameSpeed();
             //根据行数据里的场景资源名加载场景

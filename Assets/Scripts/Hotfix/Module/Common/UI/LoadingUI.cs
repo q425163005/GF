@@ -14,21 +14,24 @@ namespace Fuse.Hotfix.Common
             UIGroup = EUIGroup.Loading;
         }
 
-        protected override void Awake()
+        protected override void Awake(object userdata)
         {
-            self                  = this;
-            Slider_Progress.value = 0;
-            if (value > 0) SetValue(value);
-            Txt_Progress.text = (string) AwakeUserData;
+            SetValue(value);
+            Txt_Progress.text = (string) userdata;
         }
 
+        protected override void OnClose(bool isShutdown, object userdata)
+        {
+            base.OnClose(isShutdown, userdata);
+            self = null;
+        }
 
         /// <summary>
         /// 设置标题
         /// </summary>
         public static void SetTitle(string title)
         {
-            if (self == null || !self.isInstance) return;
+            if (self == null) return;
             self.Txt_Progress.text = title;
         }
 
@@ -39,7 +42,6 @@ namespace Fuse.Hotfix.Common
         {
             if (self == null) return;
             self.value = val;
-            if (!self.isInstance) return;
             self.Slider_Progress.DOKill(false);
             self.Slider_Progress.DOValue(val, val - self.Slider_Progress.value);
         }
@@ -57,24 +59,14 @@ namespace Fuse.Hotfix.Common
 
         public static async CTask Show(string defTitle = null)
         {
-            if (self == null) Mgr.UI.Show<LoadingUI>(defTitle);
-            await CTask.WaitUntil(() => self != null);
+            self = Mgr.UI.Show<LoadingUI>(defTitle);
+            await self.Await();
         }
 
         public static void Hide()
         {
             SetValue(1f);
-            Mgr.Timer.Once(0.3f, () =>
-            {
-                Mgr.UI.Close<LoadingUI>();
-            });
+            Mgr.Timer.Once(0.3f, () => { Mgr.UI.Close<LoadingUI>(); });
         }
-
-        protected override void Close(bool isShutdown, object userdata)
-        {
-            base.Close(isShutdown, userdata);
-            self = null;
-        }
-        
     }
 }

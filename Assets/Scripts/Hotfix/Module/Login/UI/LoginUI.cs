@@ -14,12 +14,12 @@ namespace Fuse.Hotfix.Login
             UIGroup = EUIGroup.Default;
         }
 
-        protected override void Awake()
+        protected override void Awake(object userdata)
         {
             Btn_Login.AddClick(Btn_Login_Click);
         }
 
-        public override void OnOpen(object userdata)
+        protected override void OnOpen(object userdata)
         {
             base.OnOpen(userdata);
             m_IFsm = (IFsm) userdata;
@@ -48,6 +48,7 @@ namespace Fuse.Hotfix.Login
         private async CTask EnterHome()
         {
             await m_IFsm.ChangeScene<ProcedureHotfix_Home>("Home");
+          
             enterHome = false;
         }
     }

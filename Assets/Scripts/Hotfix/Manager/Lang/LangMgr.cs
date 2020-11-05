@@ -21,10 +21,9 @@ namespace Fuse.Hotfix
         private async CTask LoadLocalizationFile()
         {
             isLoaded = false;
-            string fileName  = Constant.AssetPath.Localization(Component.Language.ToString());
-            object configObj = null;
-            Mgr.Res.LoadAsset(fileName, (a) => { configObj = a; }, Constant.AssetPriority.ConfigAsset);
-            await CTask.WaitUntil(() => configObj != null);
+            string fileName = Constant.AssetPath.Localization(Component.Language.ToString());
+
+            object configObj = await Mgr.Res.LoadAsset(fileName, Constant.AssetPriority.ConfigAsset);
             Component.ParseData(configObj.ToString());
             isLoaded = true;
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Fuse.Tasks;
 using GameFramework.Event;
 using UnityEditor;
 using UnityGameFramework.Runtime;
@@ -25,37 +26,47 @@ namespace Fuse.Hotfix.Manager
             }
         }
 
-        private void OnOpenUIFormSuccess(object sender, GameEventArgs e)
-        {
-            OpenUIFormSuccessEventArgs ne = (OpenUIFormSuccessEventArgs) e;
-            if (ne.UserData != this)
-            {
-                return;
-            }
-
-            //m_MenuForm = (MenuForm)ne.UIForm.Logic;
-        }
-
-        public void SetUIBase(BaseUI ui, string uiName)
-        {
-            if (_uiList.ContainsKey(uiName))
-            {
-                if (_uiList[uiName].SerialId == ui.SerialId)
-                {
-                    _uiList[uiName] = ui;
-                }
-            }
-        }
-
         public string GetUIAssetName<T>() where T : BaseUI
         {
-            Type   type = typeof(T);
-            string name;
-            name = type.Namespace.Substring(type.Namespace.LastIndexOf(".") + 1) + "/" + type.Name;
-            return $"Assets/Res/BundleRes/UI/{name}.prefab";
+            Type   type  = typeof(T);
+            string space = type.Namespace.Substring(type.Namespace.LastIndexOf(".", StringComparison.Ordinal) + 1);
+            return Constant.AssetPath.Ui(space, type.Name);
         }
 
-        public int Show<T>(object userData = null, bool pauseCoveredUIForm = false)
+//        public int Show<T>(object userData = null, bool pauseCoveredUIForm = false)
+//            where T : BaseUI, new()
+//        {
+//            string name = typeof(T).Name;
+//            T      ui   = null;
+//            if (_uiList.ContainsKey(name))
+//                ui = (T) _uiList[name];
+//            try
+//            {
+//                if (ui == null)
+//                {
+//                    ui = new T();
+//                    _uiList.Add(name, ui);
+//                    string uiGroupName = ui.UIGroup.ToString();
+//
+//                    baseUIAction uData = new baseUIAction
+//                    {
+//                        OnInit = ui.OnInit
+//                    };
+//
+//                    ui.SerialId = Component.OpenUIForm(GetUIAssetName<T>(), uiGroupName,
+//                                                       Constant.AssetPriority.UIFormAsset, pauseCoveredUIForm,
+//                                                       uData);
+//                }
+//            }
+//            catch (Exception ex)
+//            {
+//                Log.Error(ex.Message + ex.StackTrace);
+//            }
+//
+//            return ui.SerialId;
+//        }
+
+        public T Show<T>(object userData = null, bool pauseCoveredUIForm = false)
             where T : BaseUI, new()
         {
             string name = typeof(T).Name;
@@ -68,10 +79,9 @@ namespace Fuse.Hotfix.Manager
                 {
                     ui = new T();
                     _uiList.Add(name, ui);
-                    string uiGroupName = ui.UIGroup.ToString();
-                    ui.SerialId = Component.OpenUIForm(GetUIAssetName<T>(), uiGroupName,
+                    ui.SerialId = Component.OpenUIForm(GetUIAssetName<T>(), ui.UIGroup.ToString(),
                                                        Constant.AssetPriority.UIFormAsset, pauseCoveredUIForm,
-                                                       userData);
+                                                       ui.UiAction(userData));
                 }
             }
             catch (Exception ex)
@@ -79,8 +89,9 @@ namespace Fuse.Hotfix.Manager
                 Log.Error(ex.Message + ex.StackTrace);
             }
 
-            return ui.SerialId;
+            return ui;
         }
+
 
         /// <summary>
         /// 关闭UI

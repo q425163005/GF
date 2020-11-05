@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fuse;
 using Fuse.Hotfix.Manager;
+using Fuse.Tasks;
 
 namespace Fuse.Hotfix
 {
@@ -12,33 +13,45 @@ namespace Fuse.Hotfix
     /// </summary>
     public class BaseUI
     {
-        /// <summary>
-        /// 主工程的界面逻辑脚本
-        /// </summary>
+        /// <summary>主工程的界面逻辑脚本</summary>
         protected Fuse.HotfixUGuiForm UIFormLogic { get; private set; }
 
-        public    EUIGroup                       UIGroup    = EUIGroup.Default;
-        public    int                            SerialId   = -99;
-        protected bool                           isInstance = false;
-        protected object                         AwakeUserData;
+        /// <summary>组件列表</summary>
         protected Dictionary<string, GameObject> objectList = new Dictionary<string, GameObject>();
 
+        public EUIGroup UIGroup  = EUIGroup.Default;
+        public int      SerialId = -99;
+        public bool     isInstance { get; private set; }
+
+        public baseUIAction UiAction(object userData)
+        {
+            return new baseUIAction
+            {
+                InitUserData   = userData,
+                OnInit         = OnInit,
+                OnOpen         = OnOpen,
+                OnClose        = OnClose,
+                OnPause        = OnPause,
+                OnResume       = OnResume,
+                OnCover        = OnCover,
+                OnReveal       = OnReveal,
+                OnRefocus      = OnRefocus,
+                OnUpdate       = OnUpdate,
+                OnDepthChanged = OnDepthChanged
+            };
+        }
+        
         /// <summary>
         /// 界面初始化
         /// </summary>
-        public void OnInit(Fuse.HotfixUGuiForm uiFormLogic, object userdata)
+        public void OnInit(HotfixUGuiForm uiFormLogic, object userdata)
         {
-            UIFormLogic      = uiFormLogic;
-            SerialId         = UIFormLogic.UIForm.SerialId;
-            UIFormLogic.Name = UIFormLogic.Name.Replace("(Clone)", "");
-            Mgr.UI.SetUIBase(this, UIFormLogic.Name);
-            AwakeUserData = userdata;
-            CompCollector collector = uiFormLogic.gameObject.GetComponent<CompCollector>();
-            foreach (var variable in collector.CompCollectorInfos)
+            UIFormLogic = uiFormLogic;
+            foreach (var variable in uiFormLogic.gameObject.GetComponent<CompCollector>().CompCollectorInfos)
                 objectList.Add(variable.Name, variable.Object as GameObject);
-            isInstance = true;
             InitializeComponent();
-            Awake();
+            isInstance = true;
+            Awake(userdata);
         }
 
         /// <summary>初始化UI控件</summary>
@@ -46,36 +59,27 @@ namespace Fuse.Hotfix
         {
         }
 
-        protected virtual void Awake()
+        protected virtual void Awake(object userdata)
         {
         }
 
         /// <summary>
         /// 界面打开
         /// </summary>
-        public virtual void OnOpen(object userdata)
+        protected virtual void OnOpen(object userdata)
         {
         }
 
         /// <summary>
         /// 界面关闭
         /// </summary>
-        protected void OnClose(bool isShutdown, object userdata)
+        protected virtual void OnClose(bool isShutdown, object userdata)
         {
-            Close(isShutdown, userdata);
-            AwakeUserData = null;
             objectList    = null;
         }
 
-        /// <summary>
-        /// 界面关闭
-        /// </summary>
-        protected virtual void Close(bool isShutdown, object userdata)
-        {
-        }
-
         /// <summary>关闭当前UI</summary>
-        public virtual void CloseSelf()
+        protected void CloseSelf()
         {
             Mgr.UI.CloseForName(GetType().Name);
         }
@@ -83,52 +87,59 @@ namespace Fuse.Hotfix
         /// <summary>
         /// 界面暂停
         /// </summary>
-        public virtual void OnPause()
+        protected virtual void OnPause()
         {
         }
 
         /// <summary>
         /// 界面暂停恢复
         /// </summary>
-        public virtual void OnResume()
+        protected virtual void OnResume()
         {
         }
 
         /// <summary>
         /// 界面遮挡
         /// </summary>
-        public virtual void OnCover()
+        protected virtual void OnCover()
         {
         }
 
         /// <summary>
         /// 界面遮挡恢复
         /// </summary>
-        public virtual void OnReveal()
+        protected virtual void OnReveal()
         {
         }
 
         /// <summary>
         /// 界面激活
         /// </summary>
-        public virtual void OnRefocus(object userData)
+        protected virtual void OnRefocus(object userData)
         {
         }
 
         /// <summary>
         /// 界面轮询
         /// </summary>
-        public virtual void OnUpdate(float elapseSeconds, float realElapseSeconds)
+        protected virtual void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
         }
 
         /// <summary>
         /// 界面深度改变
         /// </summary>
-        public virtual void OnDepthChanged(int uiGroupDepth, int depthInUIGroup)
+        protected virtual void OnDepthChanged(int uiGroupDepth, int depthInUIGroup)
         {
         }
 
+        /// <summary>
+        /// 等待界面加载完成
+        /// </summary>
+        public virtual async CTask Await()
+        {
+            await CTask.WaitUntil(() => UIFormLogic!=null && UIFormLogic.gameObject != null);
+        }
 
         /// <summary>
         /// 获取控件引用对象
