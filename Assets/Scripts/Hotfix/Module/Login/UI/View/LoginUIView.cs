@@ -11,7 +11,8 @@ namespace Fuse.Hotfix.Login
 		/// <summary>初始化UI控件</summary>
 		protected override void InitializeComponent()
 		{
-			Btn_Login = Get<UnityEngine.UI.Button>("Btn_Login");
+            base.InitializeComponent();
+            Btn_Login = Get<UnityEngine.UI.Button>("Btn_Login");
 		}
 	}
 }

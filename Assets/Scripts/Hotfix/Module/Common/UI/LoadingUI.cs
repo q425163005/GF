@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using Fuse.Tasks;
 using UnityEngine;
 
@@ -11,19 +12,19 @@ namespace Fuse.Hotfix.Common
 
         public LoadingUI()
         {
-            UIGroup = EUIGroup.Loading;
+            UIGroup      = EUIGroup.Loading;
+            realeaseLock = true;
         }
 
-        protected override void Awake(object userdata)
+        protected override void Init(object userdata)
         {
             SetValue(value);
             Txt_Progress.text = (string) userdata;
         }
 
-        protected override void OnClose(bool isShutdown, object userdata)
+        protected override void Refresh(object userdata = null)
         {
-            base.OnClose(isShutdown, userdata);
-            self = null;
+            base.Refresh(userdata);
         }
 
         /// <summary>
@@ -38,12 +39,13 @@ namespace Fuse.Hotfix.Common
         /// <summary>
         /// 设置进度(0-1)
         /// </summary>
-        public static void SetValue(float val)
+        public static void SetValue(float val, Action completeAction = null)
         {
             if (self == null) return;
             self.value = val;
             self.Slider_Progress.DOKill(false);
-            self.Slider_Progress.DOValue(val, val - self.Slider_Progress.value);
+            self.Slider_Progress.DOValue(val, val - self.Slider_Progress.value)
+                .OnComplete(() => { completeAction?.Invoke(); });
         }
 
         /// <summary>
@@ -65,8 +67,15 @@ namespace Fuse.Hotfix.Common
 
         public static void Hide()
         {
-            SetValue(1f);
-            Mgr.Timer.Once(0.3f, () => { Mgr.UI.Close<LoadingUI>(); });
+            SetValue(1f, () => { Mgr.Timer.Once(0.2f, () => { Mgr.UI.Close<LoadingUI>(); }); });
+        }
+
+        protected override void Disposed()
+        {
+            self                  = null;
+            value                 = 0;
+            Slider_Progress.value = 0;
+            Txt_Progress.text     = string.Empty;
         }
     }
 }

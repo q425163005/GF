@@ -9,7 +9,7 @@ namespace Fuse
     /// </summary>
     public class UGuiGroupHelper : UIGroupHelperBase
     {
-        public const int DepthFactor = 10000;
+        public const int DepthFactor = 20;
 
         private int m_Depth = 0;
         private Canvas m_CachedCanvas = null;

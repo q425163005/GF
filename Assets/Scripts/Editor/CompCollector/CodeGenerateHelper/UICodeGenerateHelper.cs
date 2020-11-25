@@ -36,11 +36,6 @@ namespace Fuse.Editor
             AssetDatabase.Refresh();
         }
 
-        private static string getTypeName(string fullName)
-        {
-            return fullName.Substring(fullName.LastIndexOf(".", StringComparison.Ordinal) + 1);
-        }
-
         private string getUICodeStr(string modName, string uiName)
         {
             StringBuilder codeStr = new StringBuilder();
@@ -56,8 +51,14 @@ namespace Fuse.Editor
             codeStr.AppendLine("\t\t{");
             codeStr.AppendLine("\t\t\tUIGroup = EUIGroup.Default;");
             codeStr.AppendLine("\t\t}");
+            codeStr.AppendLine();
 
-            codeStr.AppendLine($"\t\tprotected override void Awake()");
+            codeStr.AppendLine($"\t\tprotected override void Init(object userdata)");
+            codeStr.AppendLine("\t\t{");
+            codeStr.AppendLine("\t\t}");
+            codeStr.AppendLine();
+
+            codeStr.AppendLine($"\t\tprotected override void Awake(object userdata)");
             codeStr.AppendLine("\t\t{");
             codeStr.AppendLine("\t\t}");
 
@@ -82,22 +83,32 @@ namespace Fuse.Editor
             codeStr.AppendLine("{");
 
             //类名
-            codeStr.AppendLine($"\tpublic partial class {uiName} : BaseUI");
+            codeStr.AppendLine($"\tpublic partial class {uiName}");
             codeStr.AppendLine("\t{");
 
+            StringBuilder compStr = new StringBuilder();
+
+            string objType;
             //组件
             foreach (var variable in collector.CompCollectorInfos)
             {
-                codeStr.AppendLine($"\t\tprivate {variable.ComponentType} {variable.Name};");
+                objType = getTypeName(variable.ComponentType);
+                codeStr.AppendLine($"\t\tprivate {objType} {variable.Name};");
+                if (objType == "GameObject")
+                {
+                    compStr.AppendLine($"\t\t\t{variable.Name} = Get(\"{variable.Name}\");");
+                }
+                else
+                {
+                    compStr.AppendLine($"\t\t\t{variable.Name} = Get<{objType}>(\"{variable.Name}\");");
+                }
             }
 
             codeStr.AppendLine("\t\t/// <summary>初始化UI控件</summary>");
             codeStr.AppendLine("\t\tprotected override void InitializeComponent()");
             codeStr.AppendLine("\t\t{");
-            foreach (var variable in collector.CompCollectorInfos)
-            {
-                codeStr.AppendLine($"\t\t\t{variable.Name} = Get<{variable.ComponentType}>(\"{variable.Name}\");");
-            }
+
+            codeStr.Append(compStr);
 
             codeStr.AppendLine("\t\t}");
 
@@ -107,5 +118,10 @@ namespace Fuse.Editor
         }
 
         #endregion
+
+        private string getTypeName(string fullName)
+        {
+            return fullName.Substring(fullName.LastIndexOf(".") + 1);
+        }
     }
 }

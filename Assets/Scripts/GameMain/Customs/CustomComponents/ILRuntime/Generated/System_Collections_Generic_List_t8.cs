@@ -14,14 +14,14 @@ using ILRuntime.CLR.Utils;
 
 namespace ILRuntime.Runtime.Generated
 {
-    unsafe class System_Collections_Generic_List_1_Fuse_CompCollector_Binding_CompCollectorInfo_Binding_Enumerator_Binding
+    unsafe class System_Collections_Generic_List_1_String_Binding_Enumerator_Binding
     {
         public static void Register(ILRuntime.Runtime.Enviorment.AppDomain app)
         {
             BindingFlags flag = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly;
             MethodBase method;
             Type[] args;
-            Type type = typeof(System.Collections.Generic.List<Fuse.CompCollector.CompCollectorInfo>.Enumerator);
+            Type type = typeof(System.Collections.Generic.List<System.String>.Enumerator);
             args = new Type[]{};
             method = type.GetMethod("get_Current", flag, null, args, null);
             app.RegisterCLRMethodRedirection(method, get_Current_0);
@@ -29,12 +29,12 @@ namespace ILRuntime.Runtime.Generated
             method = type.GetMethod("MoveNext", flag, null, args, null);
             app.RegisterCLRMethodRedirection(method, MoveNext_1);
 
-            app.RegisterCLRCreateDefaultInstance(type, () => new System.Collections.Generic.List<Fuse.CompCollector.CompCollectorInfo>.Enumerator());
+            app.RegisterCLRCreateDefaultInstance(type, () => new System.Collections.Generic.List<System.String>.Enumerator());
 
 
         }
 
-        static void WriteBackInstance(ILRuntime.Runtime.Enviorment.AppDomain __domain, StackObject* ptr_of_this_method, IList<object> __mStack, ref System.Collections.Generic.List<Fuse.CompCollector.CompCollectorInfo>.Enumerator instance_of_this_method)
+        static void WriteBackInstance(ILRuntime.Runtime.Enviorment.AppDomain __domain, StackObject* ptr_of_this_method, IList<object> __mStack, ref System.Collections.Generic.List<System.String>.Enumerator instance_of_this_method)
         {
             ptr_of_this_method = ILIntepreter.GetObjectAndResolveReference(ptr_of_this_method);
             switch(ptr_of_this_method->ObjectType)
@@ -73,7 +73,7 @@ namespace ILRuntime.Runtime.Generated
                     break;
                  case ObjectTypes.ArrayReference:
                     {
-                        var instance_of_arrayReference = __mStack[ptr_of_this_method->Value] as System.Collections.Generic.List<Fuse.CompCollector.CompCollectorInfo>.Enumerator[];
+                        var instance_of_arrayReference = __mStack[ptr_of_this_method->Value] as System.Collections.Generic.List<System.String>.Enumerator[];
                         instance_of_arrayReference[ptr_of_this_method->ValueLow] = instance_of_this_method;
                     }
                     break;
@@ -88,7 +88,7 @@ namespace ILRuntime.Runtime.Generated
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
             ptr_of_this_method = ILIntepreter.GetObjectAndResolveReference(ptr_of_this_method);
-            System.Collections.Generic.List<Fuse.CompCollector.CompCollectorInfo>.Enumerator instance_of_this_method = (System.Collections.Generic.List<Fuse.CompCollector.CompCollectorInfo>.Enumerator)typeof(System.Collections.Generic.List<Fuse.CompCollector.CompCollectorInfo>.Enumerator).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+            System.Collections.Generic.List<System.String>.Enumerator instance_of_this_method = (System.Collections.Generic.List<System.String>.Enumerator)typeof(System.Collections.Generic.List<System.String>.Enumerator).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
 
             var result_of_this_method = instance_of_this_method.Current;
 
@@ -107,7 +107,7 @@ namespace ILRuntime.Runtime.Generated
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
             ptr_of_this_method = ILIntepreter.GetObjectAndResolveReference(ptr_of_this_method);
-            System.Collections.Generic.List<Fuse.CompCollector.CompCollectorInfo>.Enumerator instance_of_this_method = (System.Collections.Generic.List<Fuse.CompCollector.CompCollectorInfo>.Enumerator)typeof(System.Collections.Generic.List<Fuse.CompCollector.CompCollectorInfo>.Enumerator).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+            System.Collections.Generic.List<System.String>.Enumerator instance_of_this_method = (System.Collections.Generic.List<System.String>.Enumerator)typeof(System.Collections.Generic.List<System.String>.Enumerator).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
 
             var result_of_this_method = instance_of_this_method.MoveNext();
 

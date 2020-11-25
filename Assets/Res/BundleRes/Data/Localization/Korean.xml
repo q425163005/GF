@@ -1,27 +1,65 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Dictionaries>
   <Dictionary Language="Korean">
-    <String Key="LoginUI.UserName" Value="사용자 이름" />
-    <String Key="LoginUI.Password" Value="암호" />
-    <String Key="LoginUI.btnLogin" Value="로그인" />
-    <String Key="LoginUI.btnStartGame" Value="게임 시작" />
-    <String Key="LoginUI.Logout" Value="로그아웃" />
-    <String Key="LoginUI.btnChangServer" Value="클릭 클릭" />
-    <String Key="LoginUI.UserName.Placeholder" Value="사용자 이름 입력하십시오!!!" />
-    <String Key="LoginUI.Password.Placeholder" Value="비밀번호를 입력하십시오!!!" />
-    <String Key="LoginUI.Tips.Connect.Failed" Value="서버 연결 실패!" />
-    <String Key="LoginVerify.Failure" Value="" />
-    <String Key="LoginVerify.ServerIdError" Value="" />
-    <String Key="LoginVerify.ChError" Value="" />
-    <String Key="LoginUI.ReLogin" Value="" />
-    <String Key="LoginUI.IOSVerLow" Value="" />
-    <String Key="LoginUI.CantLoginPlay" Value="" />
-    <String Key="LoginUI.CantBuy" Value="" />
-    <String Key="LoginUI.NoticeIsNull" Value="" />
-    <String Key="SelServerUI.SelServerTitle" Value="서버 선택" />
-    <String Key="Loading.Default" Value="" />
-    <String Key="Loading.EnterGame" Value="" />
-    <String Key="Loading.GetServerData" Value="" />
-    <String Key="RemouldUI.HomeLevel" Value="" />
+    <String Key="Pay\name\1" Value="" />
+    <String Key="Pay\name\2" Value="" />
+    <String Key="Pay\name\3" Value="" />
+    <String Key="Pay\name\4" Value="" />
+    <String Key="Pay\name\5" Value="" />
+    <String Key="Pay\name\6" Value="" />
+    <String Key="Item/name/1" Value="" />
+    <String Key="Item/name/20101" Value="" />
+    <String Key="Item/name/20102" Value="" />
+    <String Key="Item/name/20103" Value="" />
+    <String Key="Item/name/20104" Value="" />
+    <String Key="Item/name/20105" Value="" />
+    <String Key="Item/name/20106" Value="" />
+    <String Key="Item/name/20107" Value="" />
+    <String Key="Item/name/20108" Value="" />
+    <String Key="Item/name/20109" Value="" />
+    <String Key="Item/name/20110" Value="" />
+    <String Key="Item/name/20111" Value="" />
+    <String Key="Item/name/20112" Value="" />
+    <String Key="Item/name/20113" Value="" />
+    <String Key="Item/name/20114" Value="" />
+    <String Key="Item/name/20115" Value="" />
+    <String Key="Item/name/20116" Value="" />
+    <String Key="Item/name/20117" Value="" />
+    <String Key="Item/name/20118" Value="" />
+    <String Key="Item/name/20119" Value="" />
+    <String Key="Item/name/20120" Value="" />
+    <String Key="Item/name/20121" Value="" />
+    <String Key="Item/name/20122" Value="" />
+    <String Key="Item/name/20123" Value="" />
+    <String Key="Hero\name\1001" Value="" />
+    <String Key="Hero\name\1002" Value="" />
+    <String Key="Hero\name\1003" Value="" />
+    <String Key="Hero\name\1004" Value="" />
+    <String Key="Hero\name\1005" Value="" />
+    <String Key="Hero\name\1006" Value="" />
+    <String Key="Hero\name\1007" Value="" />
+    <String Key="Hero\name\1008" Value="" />
+    <String Key="Hero\name\1009" Value="" />
+    <String Key="Hero\name\1010" Value="" />
+    <String Key="Hero\name\1011" Value="" />
+    <String Key="Hero\name\1012" Value="" />
+    <String Key="Hero\name\1013" Value="" />
+    <String Key="Hero\name\1014" Value="" />
+    <String Key="Hero\name\1015" Value="" />
+    <String Key="Hero\name\1016" Value="" />
+    <String Key="Hero\name\1017" Value="" />
+    <String Key="Hero\name\1018" Value="" />
+    <String Key="Hero\name\1019" Value="" />
+    <String Key="Hero\name\1020" Value="" />
+    <String Key="Hero\name\1021" Value="" />
+    <String Key="Hero\name\1022" Value="" />
+    <String Key="Hero\name\1023" Value="" />
+    <String Key="Hero\name\1024" Value="" />
+    <String Key="Hero\name\1025" Value="" />
+    <String Key="Hero\name\1026" Value="" />
+    <String Key="Hero\name\1027" Value="" />
+    <String Key="Hero\name\1028" Value="" />
+    <String Key="Hero\name\1029" Value="" />
+    <String Key="Hero\name\1030" Value="" />
   </Dictionary>
 </Dictionaries>

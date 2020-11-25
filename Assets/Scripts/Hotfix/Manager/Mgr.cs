@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Fuse.Hotfix.Manager;
-using Fuse.Tasks;
-using UnityEditor;
 
 namespace Fuse.Hotfix
 {
@@ -28,7 +25,7 @@ namespace Fuse.Hotfix
         /// ET网络
         /// </summary>
         public static ETNetworkManager ETNetwork { get; private set; }
-
+        
         /// <summary>
         /// 定时器管理器
         /// </summary>
@@ -54,6 +51,11 @@ namespace Fuse.Hotfix
         /// 获取本地化组件。
         /// </summary>
         public static LangMgr Lang { get; private set; }
+
+        /// <summary>
+        /// 获取实体组件。
+        /// </summary>
+        public static EntityMgr Entity { get; private set; }
 
 
         //
@@ -174,6 +176,8 @@ namespace Fuse.Hotfix
         //            private set;
         //        }
 
+        /// <summary>缓存的数据管理器,用来统一清空缓存数据用</summary>
+        public static List<IDisposable> __dataMgrList = new List<IDisposable>();
 
         public static void Initialize()
         {
@@ -187,6 +191,8 @@ namespace Fuse.Hotfix
             Res    = new ResourceMgr(GameEntry.Resource);
             Config = new ConfigMgr();
             Lang   = new LangMgr(GameEntry.Localization);
+
+            Entity=new EntityMgr(GameEntry.Entity);
 
 
             //初始化ET网络
@@ -244,9 +250,12 @@ namespace Fuse.Hotfix
             Procedure?.Shutdown();
             Event?.Shutdown();
             ETNetwork?.Shutdown();
-            Timer.StopAll();
+            Timer?.StopAll();
 
             UI?.Shutdown();
+            Config?.Shutdown();
+
+            for (int i = 0; i < __dataMgrList.Count; i++) __dataMgrList[i].Dispose();
         }
     }
 }

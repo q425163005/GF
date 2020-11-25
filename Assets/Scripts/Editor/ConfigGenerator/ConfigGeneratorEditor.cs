@@ -30,11 +30,8 @@ namespace Fuse.Editor
         private const string LanguageOutPutPath  = "Assets/Res/BundleRes/Data/Localization";
 
         private Vector2 scrollPos;
-        private bool    selectAll   = true;
-        private bool    isCreateNew = false;
 
         private List<string> nameList = new List<string>();
-        private List<bool>   selList  = new List<bool>();
 
         private static int completedNum;
         private static int allNum;
@@ -62,31 +59,12 @@ namespace Fuse.Editor
             EditorGUILayout.LabelField($"  Class输出路径: {ScriptOutPutPath}");
 
             EditorGUILayout.Space();
+            
 
-            EditorGUILayout.BeginHorizontal();
-            {
-                int toggWidth = selectAll ? 100 : 380;
-                var lodSelect = selectAll;
-                selectAll = EditorGUILayout.ToggleLeft("全选/取消全选", selectAll, GUILayout.Width(toggWidth));
-
-                if (lodSelect != selectAll) SelectAll();
-                int selNum = selList.FindAll(s => s).Count;
-                if (selNum      == nameList.Count) selectAll = true;
-                else if (selNum == 0) selectAll              = false;
-
-                if (selectAll)
-                {
-                    isCreateNew = EditorGUILayout.ToggleLeft("New/Cover", isCreateNew, GUILayout.Width(280));
-                }
-
-                EditorGUILayout.LabelField($"{selNum}/{nameList.Count}");
-            }
-            EditorGUILayout.EndHorizontal();
-
-            GUI.Box(new Rect(5, 90, 415, 402), "");
+            GUI.Box(new Rect(5, 65, 415, 427), "");
 
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false, GUILayout.Width(420),
-                                                        GUILayout.Height(400));
+                                                        GUILayout.Height(425));
             for (int i = 0; i < nameList.Count; i++)
             {
                 CreatOneItem(i);
@@ -129,14 +107,12 @@ namespace Fuse.Editor
             if (string.IsNullOrEmpty(ExcelPath)) return;
 
             nameList = new List<string>();
-            selList  = new List<bool>();
             DirectoryInfo folder = new DirectoryInfo(ExcelPath);
             foreach (FileInfo file in folder.GetFiles("*.xlsx"))
             {
                 if (file.Name.StartsWith("~$") || file.Name.StartsWith("_"))
                     continue;
                 nameList.Add(file.Name);
-                selList.Add(true);
             }
         }
 
@@ -157,8 +133,7 @@ namespace Fuse.Editor
             EditorGUILayout.BeginHorizontal();
             {
                 EditorGUILayout.LabelField($"  ", GUILayout.Width(5));
-                selList[index] =
-                    EditorGUILayout.ToggleLeft($" {index + 1}.{nameList[index]}", selList[index], GUILayout.Width(360));
+                EditorGUILayout.LabelField($" {index + 1}.{nameList[index]}", GUILayout.Width(360));
                 if (GUILayout.Button("...", GUILayout.Width(25)))
                 {
                     ToolsHelper.ExecuteCommand($"start {ExcelPath}/{nameList[index]}");
@@ -167,23 +142,14 @@ namespace Fuse.Editor
             EditorGUILayout.EndHorizontal();
         }
 
-        private void SelectAll()
-        {
-            for (int i = 0; i < selList.Count; i++)
-            {
-                selList[i] = selectAll;
-            }
-        }
-
         private void OutPut()
         {
             ToolsHelper.ClearConsole();
             completedNum = 0;
             List<string[]> selFileList = new List<string[]>();
-            for (var index = 0; index < selList.Count; index++)
+            for (var index = 0; index < nameList.Count; index++)
             {
-                var variable = selList[index];
-                if (variable) selFileList.Add(new[] {nameList[index], $"{ExcelPath}/{nameList[index]}"});
+                selFileList.Add(new[] { nameList[index], $"{ExcelPath}/{nameList[index]}" });
             }
 
             ProgressWindow(selFileList);
@@ -197,7 +163,6 @@ namespace Fuse.Editor
             ExcelExportOutSetting.OutClassDir     = ScriptOutPutPath;
             ExcelExportOutSetting.OutConfigMgrDir = ScriptMgrOutPutPath;
             ExcelExportOutSetting.OutLanguageDir = LanguageOutPutPath;
-            ExcelExportOutSetting.IsCreateNew     = isCreateNew;
 
             List<ExcelSheet> clientSheet =
                 ExcelExportParse.ExcleSheetFilter(ExcelExportParse.GetExcleSheet(fileList), 'C');

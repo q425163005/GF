@@ -14,7 +14,7 @@ namespace Fuse
     public unsafe class Vector2Binder : ValueTypeBinder<Vector2>
     {
         Vector3Binder vector3Binder;
-        bool vector3BinderGot;
+        bool          vector3BinderGot;
 
         Vector3Binder Vector3Binder
         {
@@ -34,98 +34,101 @@ namespace Fuse
         public override unsafe void AssignFromStack(ref Vector2 ins, StackObject* ptr, IList<object> mStack)
         {
             var v = ILIntepreter.Minus(ptr, 1);
-            ins.x = *(float*)&v->Value;
-            v = ILIntepreter.Minus(ptr, 2);
-            ins.y = *(float*)&v->Value;
+            ins.x = *(float*) &v->Value;
+            v     = ILIntepreter.Minus(ptr, 2);
+            ins.y = *(float*) &v->Value;
         }
 
         public override unsafe void CopyValueTypeToStack(ref Vector2 ins, StackObject* ptr, IList<object> mStack)
         {
             var v = ILIntepreter.Minus(ptr, 1);
-            *(float*)&v->Value = ins.x;
-            v = ILIntepreter.Minus(ptr, 2);
-            *(float*)&v->Value = ins.y;
+            *(float*) &v->Value = ins.x;
+            v                   = ILIntepreter.Minus(ptr, 2);
+            *(float*) &v->Value = ins.y;
         }
+
         public override void RegisterCLRRedirection(ILRuntime.Runtime.Enviorment.AppDomain appdomain)
         {
-            BindingFlags flag = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly;
+            BindingFlags flag = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static |
+                                BindingFlags.DeclaredOnly;
             MethodBase method;
-            Type[] args;
-            Type type = typeof(Vector2);
-            args = new Type[] { typeof(float), typeof(float) };
+            Type[]     args;
+            Type       type = typeof(Vector2);
+            args   = new Type[] {typeof(float), typeof(float)};
             method = type.GetConstructor(flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, NewVector2);
 
-            args = new Type[] { typeof(Vector2), typeof(Vector2) };
+            args   = new Type[] {typeof(Vector2), typeof(Vector2)};
             method = type.GetMethod("op_Addition", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Vector2_Add);
 
-            args = new Type[] { typeof(Vector2), typeof(Vector2) };
+            args   = new Type[] {typeof(Vector2), typeof(Vector2)};
             method = type.GetMethod("op_Subtraction", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Vector2_Subtraction);
 
-            args = new Type[] { typeof(Vector2), typeof(float) };
+            args   = new Type[] {typeof(Vector2), typeof(float)};
             method = type.GetMethod("op_Multiply", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Vector2_Multiply);
 
-            args = new Type[] { typeof(float), typeof(Vector2) };
+            args   = new Type[] {typeof(float), typeof(Vector2)};
             method = type.GetMethod("op_Multiply", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Vector2_Multiply2);
 
-            args = new Type[] { typeof(Vector2), typeof(float) };
+            args   = new Type[] {typeof(Vector2), typeof(float)};
             method = type.GetMethod("op_Division", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Vector2_Division);
 
-            args = new Type[] { typeof(Vector2) };
+            args   = new Type[] {typeof(Vector2)};
             method = type.GetMethod("op_UnaryNegation", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Vector2_Negate);
 
-            args = new Type[] { typeof(Vector2), typeof(Vector2) };
+            args   = new Type[] {typeof(Vector2), typeof(Vector2)};
             method = type.GetMethod("op_Equality", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Vector2_Equality);
 
-            args = new Type[] { typeof(Vector2), typeof(Vector2) };
+            args   = new Type[] {typeof(Vector2), typeof(Vector2)};
             method = type.GetMethod("op_Inequality", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Vector2_Inequality);
 
-            args = new Type[] { typeof(Vector2) };
+            args   = new Type[] {typeof(Vector2)};
             method = type.GetMethod("op_Implicit", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Vector2_Implicit);
 
-            args = new Type[] { typeof(Vector3) };
+            args   = new Type[] {typeof(Vector3)};
             method = type.GetMethod("op_Implicit", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Vector2_Implicit2);
 
-            args = new Type[] { typeof(Vector2), typeof(Vector2) };
+            args   = new Type[] {typeof(Vector2), typeof(Vector2)};
             method = type.GetMethod("Dot", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Vector2_Dot);
 
-            args = new Type[] { typeof(Vector2), typeof(Vector2) };
+            args   = new Type[] {typeof(Vector2), typeof(Vector2)};
             method = type.GetMethod("Distance", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Vector2_Distance);
 
-            args = new Type[] { };
+            args   = new Type[] { };
             method = type.GetMethod("get_magnitude", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Get_Magnitude);
 
-            args = new Type[] { };
+            args   = new Type[] { };
             method = type.GetMethod("get_sqrMagnitude", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Get_SqrMagnitude);
 
-            args = new Type[] { };
+            args   = new Type[] { };
             method = type.GetMethod("get_normalized", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Get_Normalized);
 
-            args = new Type[] { };
+            args   = new Type[] { };
             method = type.GetMethod("get_one", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Get_One);
 
-            args = new Type[] { };
+            args   = new Type[] { };
             method = type.GetMethod("get_zero", flag, null, args, null);
             appdomain.RegisterCLRMethodRedirection(method, Get_Zero);
         }
 
-        StackObject* Vector2_Add(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Vector2_Add(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                 bool         isNewObj)
         {
             var ret = ILIntepreter.Minus(esp, 2);
             var ptr = ILIntepreter.Minus(esp, 1);
@@ -142,7 +145,8 @@ namespace Fuse
             return ret + 1;
         }
 
-        StackObject* Vector2_Subtraction(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Vector2_Subtraction(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                         bool         isNewObj)
         {
             var ret = ILIntepreter.Minus(esp, 2);
             var ptr = ILIntepreter.Minus(esp, 1);
@@ -159,14 +163,15 @@ namespace Fuse
             return ret + 1;
         }
 
-        StackObject* Vector2_Multiply(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Vector2_Multiply(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                      bool         isNewObj)
         {
             var ret = ILIntepreter.Minus(esp, 2);
 
             var ptr = ILIntepreter.Minus(esp, 1);
-            var b = ILIntepreter.GetObjectAndResolveReference(ptr);
+            var b   = ILIntepreter.GetObjectAndResolveReference(ptr);
 
-            float val = *(float*)&b->Value;
+            float val = *(float*) &b->Value;
 
             Vector2 vec;
 
@@ -179,9 +184,10 @@ namespace Fuse
             return ret + 1;
         }
 
-        StackObject* Vector2_Multiply2(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Vector2_Multiply2(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                       bool         isNewObj)
         {
-            var ret = ILIntepreter.Minus(esp, 2);
+            var     ret = ILIntepreter.Minus(esp, 2);
             Vector2 vec;
 
             var ptr = ILIntepreter.Minus(esp, 1);
@@ -190,7 +196,7 @@ namespace Fuse
             ptr = ILIntepreter.Minus(esp, 2);
             var b = ILIntepreter.GetObjectAndResolveReference(ptr);
 
-            float val = *(float*)&b->Value;
+            float val = *(float*) &b->Value;
 
             vec = val * vec;
             PushVector2(ref vec, intp, ret, mStack);
@@ -198,14 +204,15 @@ namespace Fuse
             return ret + 1;
         }
 
-        StackObject* Vector2_Division(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Vector2_Division(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                      bool         isNewObj)
         {
             var ret = ILIntepreter.Minus(esp, 2);
 
             var ptr = ILIntepreter.Minus(esp, 1);
-            var b = ILIntepreter.GetObjectAndResolveReference(ptr);
+            var b   = ILIntepreter.GetObjectAndResolveReference(ptr);
 
-            float val = *(float*)&b->Value;
+            float val = *(float*) &b->Value;
 
             Vector2 vec;
 
@@ -218,11 +225,12 @@ namespace Fuse
             return ret + 1;
         }
 
-        StackObject* Vector2_Negate(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Vector2_Negate(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                    bool         isNewObj)
         {
             var ret = ILIntepreter.Minus(esp, 1);
 
-            var ptr = ILIntepreter.Minus(esp, 1);
+            var     ptr = ILIntepreter.Minus(esp, 1);
             Vector2 vec;
 
             ptr = ILIntepreter.Minus(esp, 1);
@@ -234,11 +242,12 @@ namespace Fuse
             return ret + 1;
         }
 
-        StackObject* Vector2_Implicit(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Vector2_Implicit(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                      bool         isNewObj)
         {
             var ret = ILIntepreter.Minus(esp, 1);
 
-            var ptr = ILIntepreter.Minus(esp, 1);
+            var     ptr = ILIntepreter.Minus(esp, 1);
             Vector2 vec;
 
             ptr = ILIntepreter.Minus(esp, 1);
@@ -250,11 +259,12 @@ namespace Fuse
             return ret + 1;
         }
 
-        StackObject* Vector2_Implicit2(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Vector2_Implicit2(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                       bool         isNewObj)
         {
             var ret = ILIntepreter.Minus(esp, 1);
 
-            var ptr = ILIntepreter.Minus(esp, 1);
+            var     ptr = ILIntepreter.Minus(esp, 1);
             Vector3 vec;
 
             ptr = ILIntepreter.Minus(esp, 1);
@@ -266,7 +276,8 @@ namespace Fuse
             return ret + 1;
         }
 
-        StackObject* Vector2_Equality(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Vector2_Equality(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                      bool         isNewObj)
         {
             var ret = ILIntepreter.Minus(esp, 2);
             var ptr = ILIntepreter.Minus(esp, 1);
@@ -280,11 +291,12 @@ namespace Fuse
             var res = left == right;
 
             ret->ObjectType = ObjectTypes.Integer;
-            ret->Value = res ? 1 : 0;
+            ret->Value      = res ? 1 : 0;
             return ret + 1;
         }
 
-        StackObject* Vector2_Inequality(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Vector2_Inequality(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                        bool         isNewObj)
         {
             var ret = ILIntepreter.Minus(esp, 2);
             var ptr = ILIntepreter.Minus(esp, 1);
@@ -298,11 +310,12 @@ namespace Fuse
             var res = left != right;
 
             ret->ObjectType = ObjectTypes.Integer;
-            ret->Value = res ? 1 : 0;
+            ret->Value      = res ? 1 : 0;
             return ret + 1;
         }
 
-        StackObject* Vector2_Dot(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Vector2_Dot(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                 bool         isNewObj)
         {
             var ret = ILIntepreter.Minus(esp, 2);
             var ptr = ILIntepreter.Minus(esp, 1);
@@ -315,12 +328,13 @@ namespace Fuse
 
             var res = Vector3.Dot(left, right);
 
-            ret->ObjectType = ObjectTypes.Float;
-            *(float*)&ret->Value = res;
+            ret->ObjectType       = ObjectTypes.Float;
+            *(float*) &ret->Value = res;
             return ret + 1;
         }
 
-        StackObject* Vector2_Distance(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Vector2_Distance(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                      bool         isNewObj)
         {
             var ret = ILIntepreter.Minus(esp, 2);
             var ptr = ILIntepreter.Minus(esp, 1);
@@ -333,22 +347,23 @@ namespace Fuse
 
             var res = Vector3.Distance(left, right);
 
-            ret->ObjectType = ObjectTypes.Float;
-            *(float*)&ret->Value = res;
+            ret->ObjectType       = ObjectTypes.Float;
+            *(float*) &ret->Value = res;
             return ret + 1;
         }
 
-        StackObject* NewVector2(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* NewVector2(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                bool         isNewObj)
         {
             StackObject* ret;
             if (isNewObj)
             {
                 ret = ILIntepreter.Minus(esp, 1);
                 Vector2 vec;
-                var ptr = ILIntepreter.Minus(esp, 1);
-                vec.y = *(float*)&ptr->Value;
-                ptr = ILIntepreter.Minus(esp, 2);
-                vec.x = *(float*)&ptr->Value;
+                var     ptr = ILIntepreter.Minus(esp, 1);
+                vec.y = *(float*) &ptr->Value;
+                ptr   = ILIntepreter.Minus(esp, 2);
+                vec.x = *(float*) &ptr->Value;
 
                 PushVector2(ref vec, intp, ptr, mStack);
             }
@@ -356,52 +371,56 @@ namespace Fuse
             {
                 ret = ILIntepreter.Minus(esp, 3);
                 var instance = ILIntepreter.GetObjectAndResolveReference(ret);
-                var dst = *(StackObject**)&instance->Value;
-                var f = ILIntepreter.Minus(dst, 1);
-                var v = ILIntepreter.Minus(esp, 2);
+                var dst      = *(StackObject**) &instance->Value;
+                var f        = ILIntepreter.Minus(dst, 1);
+                var v        = ILIntepreter.Minus(esp, 2);
                 *f = *v;
 
-                f = ILIntepreter.Minus(dst, 2);
-                v = ILIntepreter.Minus(esp, 1);
+                f  = ILIntepreter.Minus(dst, 2);
+                v  = ILIntepreter.Minus(esp, 1);
                 *f = *v;
             }
+
             return ret;
         }
 
-        StackObject* Get_Magnitude(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Get_Magnitude(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                   bool         isNewObj)
         {
             var ret = ILIntepreter.Minus(esp, 1);
 
-            var ptr = ILIntepreter.Minus(esp, 1);
+            var     ptr = ILIntepreter.Minus(esp, 1);
             Vector2 vec;
             ParseVector2(out vec, intp, ptr, mStack);
 
             float res = vec.magnitude;
 
-            ret->ObjectType = ObjectTypes.Float;
-            *(float*)&ret->Value = res;
+            ret->ObjectType       = ObjectTypes.Float;
+            *(float*) &ret->Value = res;
             return ret + 1;
         }
 
-        StackObject* Get_SqrMagnitude(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Get_SqrMagnitude(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                      bool         isNewObj)
         {
             var ret = ILIntepreter.Minus(esp, 1);
 
-            var ptr = ILIntepreter.Minus(esp, 1);
+            var     ptr = ILIntepreter.Minus(esp, 1);
             Vector2 vec;
             ParseVector2(out vec, intp, ptr, mStack);
 
             float res = vec.sqrMagnitude;
 
-            ret->ObjectType = ObjectTypes.Float;
-            *(float*)&ret->Value = res;
+            ret->ObjectType       = ObjectTypes.Float;
+            *(float*) &ret->Value = res;
             return ret + 1;
         }
 
-        StackObject* Get_Normalized(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Get_Normalized(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                                    bool         isNewObj)
         {
-            var ret = ILIntepreter.Minus(esp, 1);
-            var ptr = ILIntepreter.Minus(esp, 1);
+            var     ret = ILIntepreter.Minus(esp, 1);
+            var     ptr = ILIntepreter.Minus(esp, 1);
             Vector2 vec;
             ParseVector2(out vec, intp, ptr, mStack);
 
@@ -419,7 +438,8 @@ namespace Fuse
             return ret + 1;
         }
 
-        StackObject* Get_Zero(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method, bool isNewObj)
+        StackObject* Get_Zero(ILIntepreter intp, StackObject* esp, IList<object> mStack, CLRMethod method,
+                              bool         isNewObj)
         {
             var ret = esp;
             var res = Vector2.zero;
@@ -432,14 +452,14 @@ namespace Fuse
             var a = ILIntepreter.GetObjectAndResolveReference(ptr);
             if (a->ObjectType == ObjectTypes.ValueTypeObjectReference)
             {
-                var src = *(StackObject**)&a->Value;
-                vec.x = *(float*)&ILIntepreter.Minus(src, 1)->Value;
-                vec.y = *(float*)&ILIntepreter.Minus(src, 2)->Value;
+                var src = *(StackObject**) &a->Value;
+                vec.x = *(float*) &ILIntepreter.Minus(src, 1)->Value;
+                vec.y = *(float*) &ILIntepreter.Minus(src, 2)->Value;
                 intp.FreeStackValueType(ptr);
             }
             else
             {
-                vec = (Vector2)StackObject.ToObject(a, intp.AppDomain, mStack);
+                vec = (Vector2) StackObject.ToObject(a, intp.AppDomain, mStack);
                 intp.Free(ptr);
             }
         }
@@ -447,7 +467,7 @@ namespace Fuse
         public void PushVector2(ref Vector2 vec, ILIntepreter intp, StackObject* ptr, IList<object> mStack)
         {
             intp.AllocValueType(ptr, CLRType);
-            var dst = *((StackObject**)&ptr->Value);
+            var dst = *((StackObject**) &ptr->Value);
             CopyValueTypeToStack(ref vec, dst, mStack);
         }
 
@@ -461,4 +481,3 @@ namespace Fuse
         }
     }
 }
-

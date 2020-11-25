@@ -14,26 +14,26 @@ namespace Fuse.Editor
 
         #region 辅助器选择框相关
 
-        private string[] s_AssemblyNames = { "Fuse.Editor" };
+        private string[] s_AssemblyNames = {"Fuse.Editor"};
 
-        private string[] m_HelperTypeNames;
-        private int      m_HelperTypeIndex;
+        private string[]            m_HelperTypeNames;
+        private int                 m_HelperTypeIndex;
         private IAutoBindRuleHelper RuleHelper;
-        
-        private string[] m_CodeTypeNames;
-        private int   m_CodeTypeIndex;
+
+        private string[]            m_CodeTypeNames;
+        private int                 m_CodeTypeIndex;
         private ICodeGenerateHelper CodeHelper;
 
-        private string[] m_SearchTypeNames;
-        private int   m_SearchTypeIndex;
-        private string[] m_SearchTypeCustomNames;
+        private string[]          m_SearchTypeNames;
+        private int               m_SearchTypeIndex;
+        private string[]          m_SearchTypeCustomNames;
         private ICompSearchHelper SearchHelper;
 
         private string m_PrefixesShowStr; //命名前缀与类型的映射提示
         private string m_SearchInput;
 
         #endregion
-        
+
         private bool error_haveEmptyName    = false; //存在空名
         private bool error_haveRepeatedName = false; //存在重复命名
         private bool error_haveEmptyObject  = false; //存在空对象
@@ -65,7 +65,7 @@ namespace Fuse.Editor
 
             m_HelperTypeNames = GetTypeNames(typeof(IAutoBindRuleHelper), s_AssemblyNames);
             m_CodeTypeNames   = GetTypeNames(typeof(ICodeGenerateHelper), s_AssemblyNames);
-            m_SearchTypeNames = GetTypeNames(typeof(ICompSearchHelper), s_AssemblyNames);
+            m_SearchTypeNames = GetTypeNames(typeof(ICompSearchHelper),   s_AssemblyNames);
 
             m_SearchTypeCustomNames = new string[m_SearchTypeNames.Length];
             for (var index = 0; index < m_SearchTypeNames.Length; index++)
@@ -143,7 +143,7 @@ namespace Fuse.Editor
         }
 
         #endregion
-        
+
         #region 绘制辅助器选择框
 
         /// <summary>
@@ -159,14 +159,16 @@ namespace Fuse.Editor
             m_HelperTypeIndex = m_HelperTypeNames.ToList().IndexOf(m_Target.m_SelRuleName);
             if (m_HelperTypeIndex < 0) m_HelperTypeIndex = 0;
             m_Target.m_SelRuleName = m_HelperTypeNames[m_HelperTypeIndex];
-            RuleHelper = (IAutoBindRuleHelper) CreateHelperInstance(m_Target.m_SelRuleName, s_AssemblyNames);
+            RuleHelper =
+                (IAutoBindRuleHelper) CreateHelperInstance(m_Target.m_SelRuleName, s_AssemblyNames);
 
             int selectedIndex = EditorGUILayout.Popup(m_HelperTypeIndex, m_HelperTypeNames);
             if (selectedIndex != m_HelperTypeIndex)
             {
-                m_HelperTypeIndex = selectedIndex;
+                m_HelperTypeIndex      = selectedIndex;
                 m_Target.m_SelRuleName = m_HelperTypeNames[selectedIndex];
-                RuleHelper = (IAutoBindRuleHelper) CreateHelperInstance(m_Target.m_SelRuleName, s_AssemblyNames);
+                RuleHelper =
+                    (IAutoBindRuleHelper) CreateHelperInstance(m_Target.m_SelRuleName, s_AssemblyNames);
             }
 
             if (string.IsNullOrEmpty(m_PrefixesShowStr))
@@ -188,14 +190,28 @@ namespace Fuse.Editor
             m_CodeTypeIndex = m_CodeTypeNames.ToList().IndexOf(m_Target.m_SelCodeName);
             if (m_CodeTypeIndex < 0) m_CodeTypeIndex = 0;
             m_Target.m_SelCodeName = m_CodeTypeNames[m_CodeTypeIndex];
-            CodeHelper = (ICodeGenerateHelper)CreateHelperInstance(m_Target.m_SelCodeName, s_AssemblyNames);
+            CodeHelper =
+                (ICodeGenerateHelper) CreateHelperInstance(m_Target.m_SelCodeName, s_AssemblyNames);
 
             int selectedIndex = EditorGUILayout.Popup(m_CodeTypeIndex, m_CodeTypeNames);
             if (selectedIndex != m_CodeTypeIndex)
             {
-                m_CodeTypeIndex = selectedIndex;
+                m_CodeTypeIndex        = selectedIndex;
                 m_Target.m_SelCodeName = m_CodeTypeNames[selectedIndex];
-                CodeHelper = (ICodeGenerateHelper)CreateHelperInstance(m_Target.m_SelCodeName, s_AssemblyNames);
+                CodeHelper =
+                    (ICodeGenerateHelper) CreateHelperInstance(m_Target.m_SelCodeName, s_AssemblyNames);
+            }
+
+            //Entity
+            if (CodeHelper != null)
+            {
+                if (CodeHelper.GetType().Name.Contains("Entity"))
+                {
+                    EditorGUILayout.LabelField("EntityName: ", GUILayout.Width(70f));
+                    m_Target.m_EntityName =
+                        EditorGUILayout.TextField(new GUIContent(""), m_Target.m_EntityName,
+                                                  GUILayout.Width(100f));
+                }
             }
         }
 
@@ -212,14 +228,16 @@ namespace Fuse.Editor
             m_SearchTypeIndex = m_SearchTypeNames.ToList().IndexOf(m_Target.m_SelSearchName);
             if (m_SearchTypeIndex < 0) m_SearchTypeIndex = 0;
             m_Target.m_SelSearchName = m_SearchTypeNames[m_SearchTypeIndex];
-            SearchHelper = (ICompSearchHelper)CreateHelperInstance(m_Target.m_SelSearchName, s_AssemblyNames);
+            SearchHelper =
+                (ICompSearchHelper) CreateHelperInstance(m_Target.m_SelSearchName, s_AssemblyNames);
 
             int selectedIndex = EditorGUILayout.Popup(m_SearchTypeIndex, m_SearchTypeCustomNames);
             if (selectedIndex != m_SearchTypeIndex)
             {
-                m_SearchTypeIndex = selectedIndex;
+                m_SearchTypeIndex        = selectedIndex;
                 m_Target.m_SelSearchName = m_SearchTypeNames[selectedIndex];
-                SearchHelper = (ICompSearchHelper)CreateHelperInstance(m_Target.m_SelSearchName, s_AssemblyNames);
+                SearchHelper =
+                    (ICompSearchHelper) CreateHelperInstance(m_Target.m_SelSearchName, s_AssemblyNames);
             }
         }
 
@@ -329,6 +347,7 @@ namespace Fuse.Editor
 
             GUILayout.BeginHorizontal();
             DrawHelperSelect();
+
             DrawCodeSelect();
             GUILayout.EndHorizontal();
 

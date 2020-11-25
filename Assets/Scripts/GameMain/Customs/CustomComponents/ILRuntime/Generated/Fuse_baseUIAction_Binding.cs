@@ -68,6 +68,10 @@ namespace ILRuntime.Runtime.Generated
             app.RegisterCLRFieldGetter(field, get_OnDepthChanged_10);
             app.RegisterCLRFieldSetter(field, set_OnDepthChanged_10);
             app.RegisterCLRFieldBinding(field, CopyToStack_OnDepthChanged_10, AssignFromStack_OnDepthChanged_10);
+            field = type.GetField("OnDestroy", flag);
+            app.RegisterCLRFieldGetter(field, get_OnDestroy_11);
+            app.RegisterCLRFieldSetter(field, set_OnDestroy_11);
+            app.RegisterCLRFieldBinding(field, CopyToStack_OnDestroy_11, AssignFromStack_OnDestroy_11);
 
             args = new Type[]{};
             method = type.GetConstructor(flag, null, args, null);
@@ -119,13 +123,13 @@ namespace ILRuntime.Runtime.Generated
 
         static void set_OnInit_1(ref object o, object v)
         {
-            ((Fuse.baseUIAction)o).OnInit = (System.Action<Fuse.HotfixUGuiForm, System.Object>)v;
+            ((Fuse.baseUIAction)o).OnInit = (System.Action<UnityEngine.GameObject, System.Object>)v;
         }
 
         static StackObject* AssignFromStack_OnInit_1(ref object o, ILIntepreter __intp, StackObject* ptr_of_this_method, IList<object> __mStack)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
-            System.Action<Fuse.HotfixUGuiForm, System.Object> @OnInit = (System.Action<Fuse.HotfixUGuiForm, System.Object>)typeof(System.Action<Fuse.HotfixUGuiForm, System.Object>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+            System.Action<UnityEngine.GameObject, System.Object> @OnInit = (System.Action<UnityEngine.GameObject, System.Object>)typeof(System.Action<UnityEngine.GameObject, System.Object>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
             ((Fuse.baseUIAction)o).OnInit = @OnInit;
             return ptr_of_this_method;
         }
@@ -143,13 +147,13 @@ namespace ILRuntime.Runtime.Generated
 
         static void set_OnOpen_2(ref object o, object v)
         {
-            ((Fuse.baseUIAction)o).OnOpen = (System.Action<System.Object>)v;
+            ((Fuse.baseUIAction)o).OnOpen = (System.Action<UnityEngine.GameObject, System.Object>)v;
         }
 
         static StackObject* AssignFromStack_OnOpen_2(ref object o, ILIntepreter __intp, StackObject* ptr_of_this_method, IList<object> __mStack)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
-            System.Action<System.Object> @OnOpen = (System.Action<System.Object>)typeof(System.Action<System.Object>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+            System.Action<UnityEngine.GameObject, System.Object> @OnOpen = (System.Action<UnityEngine.GameObject, System.Object>)typeof(System.Action<UnityEngine.GameObject, System.Object>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
             ((Fuse.baseUIAction)o).OnOpen = @OnOpen;
             return ptr_of_this_method;
         }
@@ -343,6 +347,30 @@ namespace ILRuntime.Runtime.Generated
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
             System.Action<System.Int32, System.Int32> @OnDepthChanged = (System.Action<System.Int32, System.Int32>)typeof(System.Action<System.Int32, System.Int32>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
             ((Fuse.baseUIAction)o).OnDepthChanged = @OnDepthChanged;
+            return ptr_of_this_method;
+        }
+
+        static object get_OnDestroy_11(ref object o)
+        {
+            return ((Fuse.baseUIAction)o).OnDestroy;
+        }
+
+        static StackObject* CopyToStack_OnDestroy_11(ref object o, ILIntepreter __intp, StackObject* __ret, IList<object> __mStack)
+        {
+            var result_of_this_method = ((Fuse.baseUIAction)o).OnDestroy;
+            return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
+        }
+
+        static void set_OnDestroy_11(ref object o, object v)
+        {
+            ((Fuse.baseUIAction)o).OnDestroy = (System.Action)v;
+        }
+
+        static StackObject* AssignFromStack_OnDestroy_11(ref object o, ILIntepreter __intp, StackObject* ptr_of_this_method, IList<object> __mStack)
+        {
+            ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
+            System.Action @OnDestroy = (System.Action)typeof(System.Action).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+            ((Fuse.baseUIAction)o).OnDestroy = @OnDestroy;
             return ptr_of_this_method;
         }
 

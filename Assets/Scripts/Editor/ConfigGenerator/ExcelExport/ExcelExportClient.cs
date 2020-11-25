@@ -99,8 +99,7 @@ namespace ExcelExport
         {
             ExcelUtil.CheckCreateDirectory(ExcelExportOutSetting.OutConfigMgrDir);
             string savePath = $"{ExcelExportOutSetting.OutConfigMgrDir}/ConfigMgr.cs";
-
-            StringBuilder dicStrs_H = new StringBuilder();
+            
             StringBuilder dicStrs_V = new StringBuilder();
             StringBuilder funStrs_H = new StringBuilder();
             StringBuilder funStrs_V = new StringBuilder();
@@ -108,19 +107,16 @@ namespace ExcelExport
             foreach (var sheet in configList)
             {
                 if (sheet.Name.Equals("Language")) continue;
-                if (!sheet.IsVert)
-                {
-                    dicStrs_H.AppendLine($"\t\t/// <summary> {sheet.NameDes} </summary>");
-                    dicStrs_H.AppendLine(
-                        $"\t\tpublic readonly Dictionary<object, {sheet.ConfigName}> dic{sheet.Name} = new Dictionary<object, {sheet.ConfigName}>();");
-                    funStrs_H.AppendLine($"\t\t\treadConfig(dic{sheet.Name}).Run();");
-                }
-                else
+                if (sheet.IsVert)
                 {
                     dicStrs_V.AppendLine($"\t\t/// <summary> {sheet.NameDes} </summary>");
                     dicStrs_V.AppendLine($"\t\tpublic {sheet.ConfigName} {ExcelUtil.ToFirstLower(sheet.ConfigName)};");
                     funStrs_V.AppendLine(
                         $"\t\t\t{ExcelUtil.ToFirstLower(sheet.ConfigName)} = await readConfigV<{sheet.ConfigName}>();");
+                }
+                else
+                {
+                    funStrs_H.AppendLine($"\t\t\treadConfig<{sheet.Name}Config>().Run();//{sheet.NameDes}");
                 }
             }
 
@@ -139,8 +135,6 @@ namespace ExcelExport
                 fieldStrs.AppendLine("\tpublic partial class ConfigMgr");
                 fieldStrs.AppendLine("\t{");
                 {
-                    fieldStrs.AppendLine(dicStrs_H.ToString());
-                    fieldStrs.AppendLine();
                     fieldStrs.AppendLine(dicStrs_V.ToString());
                     fieldStrs.AppendLine();
 
@@ -210,7 +204,7 @@ namespace ExcelExport
             xml.AppendChild(root);
             xml.Save(localPath); //保存xml到路径位置
 
-            Debug.Log("创建XML成功！");
+            //Debug.Log("创建XML成功！");
         }
     }
 }

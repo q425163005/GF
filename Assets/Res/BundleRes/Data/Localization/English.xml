@@ -1,27 +1,65 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Dictionaries>
   <Dictionary Language="English">
-    <String Key="LoginUI.UserName" Value="Account: " />
-    <String Key="LoginUI.Password" Value="Password: " />
-    <String Key="LoginUI.btnLogin" Value="Login" />
-    <String Key="LoginUI.btnStartGame" Value="Start" />
-    <String Key="LoginUI.Logout" Value="Logout" />
-    <String Key="LoginUI.btnChangServer" Value="Tap Server" />
-    <String Key="LoginUI.UserName.Placeholder" Value="Enter Username" />
-    <String Key="LoginUI.Password.Placeholder" Value="Enter Password" />
-    <String Key="LoginUI.Tips.Connect.Failed" Value="Server connection failed!" />
-    <String Key="LoginVerify.Failure" Value="Authentication failed" />
-    <String Key="LoginVerify.ServerIdError" Value="Server ID error" />
-    <String Key="LoginVerify.ChError" Value="Channel not available" />
-    <String Key="LoginUI.ReLogin" Value="Retry" />
-    <String Key="LoginUI.IOSVerLow" Value="Please upgrade your system for Apple login" />
-    <String Key="LoginUI.CantLoginPlay" Value="Daily from 10pm to 8am next day, \nAdults only/Alias login" />
-    <String Key="LoginUI.CantBuy" Value="Adults only/Alias top-up" />
-    <String Key="LoginUI.NoticeIsNull" Value="No announcement now!" />
-    <String Key="SelServerUI.SelServerTitle" Value="Select Server" />
-    <String Key="Loading.Default" Value="Loading..." />
-    <String Key="Loading.EnterGame" Value="Loading game data..." />
-    <String Key="Loading.GetServerData" Value="Accessing server data..." />
-    <String Key="RemouldUI.HomeLevel" Value="Upgrade &lt;color=#ffd108&gt;Stronghold&lt;/color&gt; to &lt;color=#ffd108&gt;Lv.{0}&lt;/color&gt; to convert!" />
+    <String Key="Pay\name\1" Value="" />
+    <String Key="Pay\name\2" Value="" />
+    <String Key="Pay\name\3" Value="" />
+    <String Key="Pay\name\4" Value="" />
+    <String Key="Pay\name\5" Value="" />
+    <String Key="Pay\name\6" Value="" />
+    <String Key="Item/name/1" Value="" />
+    <String Key="Item/name/20101" Value="" />
+    <String Key="Item/name/20102" Value="" />
+    <String Key="Item/name/20103" Value="" />
+    <String Key="Item/name/20104" Value="" />
+    <String Key="Item/name/20105" Value="" />
+    <String Key="Item/name/20106" Value="" />
+    <String Key="Item/name/20107" Value="" />
+    <String Key="Item/name/20108" Value="" />
+    <String Key="Item/name/20109" Value="" />
+    <String Key="Item/name/20110" Value="" />
+    <String Key="Item/name/20111" Value="" />
+    <String Key="Item/name/20112" Value="" />
+    <String Key="Item/name/20113" Value="" />
+    <String Key="Item/name/20114" Value="" />
+    <String Key="Item/name/20115" Value="" />
+    <String Key="Item/name/20116" Value="" />
+    <String Key="Item/name/20117" Value="" />
+    <String Key="Item/name/20118" Value="" />
+    <String Key="Item/name/20119" Value="" />
+    <String Key="Item/name/20120" Value="" />
+    <String Key="Item/name/20121" Value="" />
+    <String Key="Item/name/20122" Value="" />
+    <String Key="Item/name/20123" Value="" />
+    <String Key="Hero\name\1001" Value="" />
+    <String Key="Hero\name\1002" Value="" />
+    <String Key="Hero\name\1003" Value="" />
+    <String Key="Hero\name\1004" Value="" />
+    <String Key="Hero\name\1005" Value="" />
+    <String Key="Hero\name\1006" Value="" />
+    <String Key="Hero\name\1007" Value="" />
+    <String Key="Hero\name\1008" Value="" />
+    <String Key="Hero\name\1009" Value="" />
+    <String Key="Hero\name\1010" Value="" />
+    <String Key="Hero\name\1011" Value="" />
+    <String Key="Hero\name\1012" Value="" />
+    <String Key="Hero\name\1013" Value="" />
+    <String Key="Hero\name\1014" Value="" />
+    <String Key="Hero\name\1015" Value="" />
+    <String Key="Hero\name\1016" Value="" />
+    <String Key="Hero\name\1017" Value="" />
+    <String Key="Hero\name\1018" Value="" />
+    <String Key="Hero\name\1019" Value="" />
+    <String Key="Hero\name\1020" Value="" />
+    <String Key="Hero\name\1021" Value="" />
+    <String Key="Hero\name\1022" Value="" />
+    <String Key="Hero\name\1023" Value="" />
+    <String Key="Hero\name\1024" Value="" />
+    <String Key="Hero\name\1025" Value="" />
+    <String Key="Hero\name\1026" Value="" />
+    <String Key="Hero\name\1027" Value="" />
+    <String Key="Hero\name\1028" Value="" />
+    <String Key="Hero\name\1029" Value="" />
+    <String Key="Hero\name\1030" Value="" />
   </Dictionary>
 </Dictionaries>

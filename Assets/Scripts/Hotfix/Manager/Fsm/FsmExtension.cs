@@ -56,6 +56,7 @@ namespace Fuse.Hotfix
         public static async CTask ChangeScene(this IFsm fsm, string sceneName, string procedure)
         {
             await LoadingUI.Show();
+            Mgr.UI.CloseAllOpenUi();
             fsm.SetData<VarString>("SceneName", sceneName);
             fsm.SetData<VarString>("TargetProcedure", procedure);
             Fsm fsmImplement = (Fsm)fsm;
@@ -69,6 +70,7 @@ namespace Fuse.Hotfix
         public static async CTask ChangeScene<TState>(this IFsm fsm, string sceneName) where TState : FsmState
         {
             await LoadingUI.Show();
+            Mgr.UI.CloseAllOpenUi();
             fsm.SetData<VarString>("SceneName", sceneName);
             fsm.SetData<VarString>("TargetProcedure", typeof(TState).Name);
             Fsm fsmImplement = (Fsm)fsm;

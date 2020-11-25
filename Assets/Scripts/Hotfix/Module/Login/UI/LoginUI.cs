@@ -1,42 +1,31 @@
 ﻿using Fuse.Tasks;
 using GameFramework.Localization;
+using UnityEngine;
 using UnityGameFramework.Runtime;
 
 namespace Fuse.Hotfix.Login
 {
     public partial class LoginUI : BaseUI
     {
-        private IFsm m_IFsm;
-        private bool enterHome = false;
+        public ProcedureHotfix_Login procedure;
 
         public LoginUI()
         {
             UIGroup = EUIGroup.Default;
         }
 
-        protected override void Awake(object userdata)
+        protected override void Refresh(object userData = null)
         {
+            UpdateResourceForm.Close();
+
             Btn_Login.AddClick(Btn_Login_Click);
         }
-
-        protected override void OnOpen(object userdata)
-        {
-            base.OnOpen(userdata);
-            m_IFsm = (IFsm) userdata;
-            UpdateResourceForm.Close();
-            if (m_IFsm == null)
-            {
-                Log.Warning("ProcedureMenu is invalid when open MenuForm.");
-                return;
-            }
-        }
+        
 
         private void Btn_Login_Click()
         {
-            if (enterHome) return;
-            enterHome = true;
-            EnterHome().Run();
-
+            procedure.Login();
+            VirtualServer.Start();
 //            GameEntry.Setting.SetString(Constant.Setting.Language,
 //                                        GameEntry.Localization.Language == Language.ChineseSimplified
 //                                            ? Language.English.ToString()
@@ -44,12 +33,6 @@ namespace Fuse.Hotfix.Login
 //            GameEntry.Setting.Save();
 //            UnityGameFramework.Runtime.GameEntry.Shutdown(ShutdownType.Restart);
         }
-
-        private async CTask EnterHome()
-        {
-            await m_IFsm.ChangeScene<ProcedureHotfix_Home>("Home");
-          
-            enterHome = false;
-        }
+        
     }
 }

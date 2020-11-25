@@ -10,37 +10,48 @@ using System;
 
 namespace Fuse
 {
-    public class baseUIAction
+    public sealed class baseUIAction
     {
-        public object                 InitUserData;
-        public Action<HotfixUGuiForm, object> OnInit;
-        public Action<object>         OnOpen;
-        public Action<bool, object>   OnClose;
-        public Action                 OnPause;
-        public Action                 OnResume;
-        public Action                 OnCover;
-        public Action                 OnReveal;
-        public Action<object>         OnRefocus;
-        public Action<float, float>   OnUpdate;
-        public Action<int, int>       OnDepthChanged;
+        public object                     InitUserData;
+        public Action<GameObject, object> OnInit;
+        public Action<GameObject, object> OnOpen;
+        public Action<bool, object>       OnClose;
+        public Action                     OnPause;
+        public Action                     OnResume;
+        public Action                     OnCover;
+        public Action                     OnReveal;
+        public Action<object>             OnRefocus;
+        public Action<float, float>       OnUpdate;
+        public Action<int, int>           OnDepthChanged;
+        public Action                     OnDestroy;
     }
 
+    [RequireComponent(typeof(CompCollector))]
     public class HotfixUGuiForm : UIFormLogic
     {
         private baseUIAction BaseUiAction;
 
         protected override void OnInit(object userData)
         {
+            RectTransform rectTransform = transform.GetComponent<RectTransform>();
+            rectTransform.anchorMin        = Vector2.zero;
+            rectTransform.anchorMax        = Vector2.one;
+            rectTransform.anchoredPosition = Vector2.zero;
+            rectTransform.sizeDelta        = Vector2.zero;
+
             Name = Name.Replace("(Clone)", string.Empty);
+            gameObject.SetLayerRecursively(5);
+
             base.OnInit(userData);
             BaseUiAction = (baseUIAction) userData;
-            BaseUiAction?.OnInit?.Invoke(this, BaseUiAction.InitUserData);
+            BaseUiAction?.OnInit?.Invoke(gameObject, BaseUiAction.InitUserData);
         }
 
         protected override void OnOpen(object userData)
         {
             base.OnOpen(userData);
-            BaseUiAction?.OnOpen?.Invoke(BaseUiAction.InitUserData);
+            BaseUiAction = (baseUIAction) userData;
+            BaseUiAction?.OnOpen?.Invoke(gameObject, BaseUiAction.InitUserData);
         }
 
         protected override void OnClose(bool isShutdown, object userData)
@@ -89,6 +100,11 @@ namespace Fuse
         {
             base.OnDepthChanged(uiGroupDepth, depthInUIGroup);
             BaseUiAction?.OnDepthChanged?.Invoke(uiGroupDepth, depthInUIGroup);
+        }
+
+        private void OnDestroy()
+        {
+            BaseUiAction?.OnDestroy?.Invoke();
         }
     }
 }

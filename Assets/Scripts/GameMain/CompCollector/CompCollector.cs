@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Fuse
 {
@@ -10,9 +12,10 @@ namespace Fuse
     public class CompCollector : MonoBehaviour
     {
 #if UNITY_EDITOR
-        [SerializeField] public string m_SelRuleName   { get; set; }
-        [SerializeField] public string m_SelCodeName   { get; set; }
-        [SerializeField] public string m_SelSearchName { get; set; }
+        public string m_SelRuleName   = "";
+        public string m_SelCodeName   = "";
+        public string m_SelSearchName = "";
+        public string m_EntityName    = "";
 #endif
 
         [System.Serializable]

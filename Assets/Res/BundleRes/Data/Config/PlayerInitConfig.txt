@@ -1,0 +1,1 @@
+﻿[{"initHero":1001,"initWeapon":202001}]

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +10,7 @@ namespace Fuse.Editor
 {
     public class CodeGeneratorEditor : EditorWindow
     {
-        private string path_procedure  = "Assets/Scripts/Hotfix/Manager/Procedure";
+        private string path_procedure  = "Assets/Scripts/Hotfix/Library/Procedure";
         private string input_procedure = string.Empty;
 
         public static void ShowWindow()
@@ -23,6 +24,7 @@ namespace Fuse.Editor
 
         private void OnGUI()
         {
+            //ProcedureHotfix
             EditorGUILayout.Space();
             {
                 EditorGUILayout.BeginHorizontal();
@@ -45,7 +47,7 @@ namespace Fuse.Editor
             if (string.IsNullOrEmpty(input_procedure)) return;
 
             string outPath = Path.GetFullPath($"{path_procedure}/ProcedureHotfix_{input_procedure}.cs");
-            
+
             StringBuilder codeStr = new StringBuilder();
             codeStr.AppendLine("using ProcedureOwner = Fuse.Hotfix.IFsm;");
             codeStr.AppendLine();
@@ -62,26 +64,28 @@ namespace Fuse.Editor
                     codeStr.AppendLine("\t\t\tbase.OnEnter(procedureOwner);");
                     codeStr.AppendLine("\t\t}");
 
-                    codeStr.AppendLine("\t\tprotected internal override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds,");
-                    codeStr.AppendLine("\t\t                                          float          realElapseSeconds)");
+                    codeStr.AppendLine(
+                        "\t\tprotected internal override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds,");
+                    codeStr.AppendLine(
+                        "\t\t                                          float          realElapseSeconds)");
                     codeStr.AppendLine("\t\t{");
                     codeStr.AppendLine("\t\t\tbase.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);");
                     codeStr.AppendLine("\t\t}");
 
-                    codeStr.AppendLine("\t\tprotected internal override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)");
+                    codeStr.AppendLine(
+                        "\t\tprotected internal override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)");
                     codeStr.AppendLine("\t\t{");
                     codeStr.AppendLine("\t\t\tbase.OnLeave(procedureOwner, isShutdown);");
                     codeStr.AppendLine("\t\t}");
-
                 }
                 codeStr.AppendLine("\t}");
             }
             codeStr.AppendLine("}");
-      
+
             CreateFile(outPath, codeStr.ToString());
         }
-
-        private void CreateFile(string outPath,string content)
+        
+        private void CreateFile(string outPath, string content)
         {
             outPath = GameFramework.Utility.Path.GetRegularPath(outPath);
 

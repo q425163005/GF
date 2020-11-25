@@ -6,9 +6,12 @@
         
         Main = 1,
 
+        Window=10,
 
+        Popup = 20,
 
+        Tip = 30,
 
-        Loading=999,
+        Loading =999,
     }
 }

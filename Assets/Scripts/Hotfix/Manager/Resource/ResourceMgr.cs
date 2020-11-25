@@ -77,11 +77,11 @@ namespace Fuse.Hotfix
             object obj =
                 await LoadAsset(Constant.AssetPath.Config(configName), Constant.AssetPriority.ConfigAsset);
             string config_str = string.Empty;
+          
             if (obj != null)
             {
                 config_str = obj.ToString();
             }
-
             return config_str;
         }
     }

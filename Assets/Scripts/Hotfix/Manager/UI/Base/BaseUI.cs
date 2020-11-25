@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using Fuse;
-using Fuse.Hotfix.Manager;
 using Fuse.Tasks;
 
 namespace Fuse.Hotfix
@@ -11,17 +7,16 @@ namespace Fuse.Hotfix
     /// <summary>
     /// 热更新层UGUI界面
     /// </summary>
-    public class BaseUI
+    public class BaseUI : BaseObject
     {
         /// <summary>主工程的界面逻辑脚本</summary>
         protected Fuse.HotfixUGuiForm UIFormLogic { get; private set; }
 
-        /// <summary>组件列表</summary>
-        protected Dictionary<string, GameObject> objectList = new Dictionary<string, GameObject>();
+        public EUIGroup UIGroup = EUIGroup.Default;
+        public bool     realeaseLock { get; protected set; } = false;
 
-        public EUIGroup UIGroup  = EUIGroup.Default;
-        public int      SerialId = -99;
-        public bool     isInstance { get; private set; }
+        public int  SerialId { get; private set; } = -99;
+        public bool isOpen   { get; private set; } = false;
 
         public baseUIAction UiAction(object userData)
         {
@@ -37,100 +32,9 @@ namespace Fuse.Hotfix
                 OnReveal       = OnReveal,
                 OnRefocus      = OnRefocus,
                 OnUpdate       = OnUpdate,
-                OnDepthChanged = OnDepthChanged
+                OnDepthChanged = OnDepthChanged,
+                OnDestroy      = OnDestroy
             };
-        }
-        
-        /// <summary>
-        /// 界面初始化
-        /// </summary>
-        public void OnInit(HotfixUGuiForm uiFormLogic, object userdata)
-        {
-            UIFormLogic = uiFormLogic;
-            foreach (var variable in uiFormLogic.gameObject.GetComponent<CompCollector>().CompCollectorInfos)
-                objectList.Add(variable.Name, variable.Object as GameObject);
-            InitializeComponent();
-            isInstance = true;
-            Awake(userdata);
-        }
-
-        /// <summary>初始化UI控件</summary>
-        protected virtual void InitializeComponent()
-        {
-        }
-
-        protected virtual void Awake(object userdata)
-        {
-        }
-
-        /// <summary>
-        /// 界面打开
-        /// </summary>
-        protected virtual void OnOpen(object userdata)
-        {
-        }
-
-        /// <summary>
-        /// 界面关闭
-        /// </summary>
-        protected virtual void OnClose(bool isShutdown, object userdata)
-        {
-            objectList    = null;
-        }
-
-        /// <summary>关闭当前UI</summary>
-        protected void CloseSelf()
-        {
-            Mgr.UI.CloseForName(GetType().Name);
-        }
-
-        /// <summary>
-        /// 界面暂停
-        /// </summary>
-        protected virtual void OnPause()
-        {
-        }
-
-        /// <summary>
-        /// 界面暂停恢复
-        /// </summary>
-        protected virtual void OnResume()
-        {
-        }
-
-        /// <summary>
-        /// 界面遮挡
-        /// </summary>
-        protected virtual void OnCover()
-        {
-        }
-
-        /// <summary>
-        /// 界面遮挡恢复
-        /// </summary>
-        protected virtual void OnReveal()
-        {
-        }
-
-        /// <summary>
-        /// 界面激活
-        /// </summary>
-        protected virtual void OnRefocus(object userData)
-        {
-        }
-
-        /// <summary>
-        /// 界面轮询
-        /// </summary>
-        protected virtual void OnUpdate(float elapseSeconds, float realElapseSeconds)
-        {
-        }
-
-        /// <summary>
-        /// 界面深度改变
-        /// </summary>
-        protected virtual void OnDepthChanged(int uiGroupDepth, int depthInUIGroup)
-        {
         }
 
         /// <summary>
@@ -138,35 +42,105 @@ namespace Fuse.Hotfix
         /// </summary>
         public virtual async CTask Await()
         {
-            await CTask.WaitUntil(() => UIFormLogic!=null && UIFormLogic.gameObject != null);
+            await CTask.WaitUntil(() => isInstance && isOpen);
         }
 
-        /// <summary>
-        /// 获取控件引用对象
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="name">控件名</param>
-        /// <returns></returns>
-        protected T Get<T>(string name) where T : Component
+        #region UILogic生命周期
+
+        /// <summary>界面初始化</summary>
+        private void OnInit(GameObject uiFormObj, object userData)
         {
-            GameObject obj = Get(name);
-            if (obj == null)
-                return null;
-            return obj.GetComponent<T>();
+            UIFormLogic = uiFormObj.GetComponent<HotfixUGuiForm>();
+            Mgr.UI.SetUIInstanceLocked(UIFormLogic.UIForm, realeaseLock);
+            InitCollect(UIFormLogic.gameObject);
+            Init(userData);
         }
 
-        /// <summary>
-        /// 获取引用对象
-        /// </summary>
-        protected GameObject Get(string name)
+        /// <summary>界面打开</summary>
+        private void OnOpen(GameObject uiFormObj, object userData)
         {
-            GameObject obj;
-            if (!objectList.TryGetValue(name, out obj))
-            {
-                Log.Error($"未找到GameObject对象,请在CompCollector中设置:{name}");
-            }
+            SerialId = UIFormLogic.UIForm.SerialId;
+            isOpen   = true;
+            Refresh(userData);
+        }
 
-            return obj;
+        /// <summary>界面关闭</summary>
+        private void OnClose(bool isShutdown, object userData)
+        {
+            isOpen = false;
+            Disposed();
+        }
+
+        /// <summary>界面销毁</summary>
+        private void OnDestroy()
+        {
+            m_isDispose = true;
+            Disposed();
+            objectList.Clear();
+            Mgr.UI.DeatroyUI(GetType().Name);
+            UIFormLogic = null;
+        }
+
+        /// <summary>界面暂停</summary>
+        protected virtual void OnPause()
+        {
+        }
+
+        /// <summary>界面暂停恢复</summary>
+        protected virtual void OnResume()
+        {
+        }
+
+        /// <summary>界面遮挡</summary>
+        protected virtual void OnCover()
+        {
+        }
+
+        /// <summary>界面遮挡恢复</summary>
+        protected virtual void OnReveal()
+        {
+        }
+
+        /// <summary>界面激活</summary>
+        protected virtual void OnRefocus(object userData)
+        {
+        }
+
+        /// <summary>界面轮询</summary>
+        protected virtual void OnUpdate(float elapseSeconds, float realElapseSeconds)
+        {
+        }
+
+        /// <summary>界面深度改变</summary>
+        protected virtual void OnDepthChanged(int uiGroupDepth, int depthInUIGroup)
+        {
+        }
+
+        #endregion
+
+        #region BaseUI
+
+        /// <summary>界面初始化</summary>
+        protected virtual void Init(object userdata)
+        {
+        }
+
+        /// <summary>界面刷新</summary>
+        protected virtual void Refresh(object userdata = null)
+        {
+        }
+
+        /// <summary>界面释放</summary>
+        protected virtual void Disposed()
+        {
+        }
+
+        #endregion
+
+        /// <summary>关闭当前UI</summary>
+        protected void CloseSelf()
+        {
+            Mgr.UI.CloseForName(GetType().Name);
         }
     }
 }
