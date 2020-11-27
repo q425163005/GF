@@ -21,12 +21,18 @@ namespace Fuse.Hotfix.Home
 
         protected override void Init(object userdata)
         {
+            Btn_Start.AddClick(Start_Click);
         }
-
+        
         protected override void Refresh(object userdata)
         {
         }
 
+        private void Start_Click()
+        {
+            procedure.StartGame();
+        }
+        
         protected override void Disposed()
         {
         }

@@ -40,7 +40,11 @@ namespace Fuse.Hotfix
 
         private async CTask ShowWarUI(ProcedureOwner procedureOwner)
         {
-            warUi           = Mgr.UI.Show<WarUI>();
+            WarData wardata=new WarData();
+            wardata.half_Width = 5;
+            wardata.half_Height = 10;
+
+            warUi           = Mgr.UI.Show<WarUI>(wardata);
             warUi.procedure = this;
             await warUi.Await();
             LoadingUI.Hide();
