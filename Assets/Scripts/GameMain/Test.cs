@@ -6,16 +6,12 @@ namespace Fuse
 {
     public class Test : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
+        public int power;
 
-        // Update is called once per frame
-        void Update()
+        [ContextMenu("123")]
+        void TTT()
         {
-        
+           Debug.Log(Mathf.Pow(2, power));
         }
     }
 }

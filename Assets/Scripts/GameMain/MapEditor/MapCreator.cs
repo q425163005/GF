@@ -137,10 +137,7 @@ namespace Fuse
                 }
             }
 
-            float _width  = (num_x - 1)        * CellSpace.x + 0.5f * CellSize.x;
-            float _height = (num_y - 1) * 0.5f * CellSpace.y + 0.5f * CellSize.y;
-
-            content.sizeDelta = new Vector2(_width * 2, _height * 2);
+         
         }
 
         private bool GetPos(int i, int j, out Vector2 retVec2)
