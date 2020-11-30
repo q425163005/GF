@@ -23,8 +23,10 @@ namespace Fuse.Hotfix.War
             Refresh();
         }
 
-        private void Refresh()
+        public void Refresh()
         {
+            if (Data==null)return;
+            
             Txt_Num.text = Data.Number.ToString();
             Img_This.color = Data.GetColor;
         }
