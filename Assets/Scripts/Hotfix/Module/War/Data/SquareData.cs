@@ -6,13 +6,11 @@ namespace Fuse.Hotfix
 {
     public class SquareData
     {
-        
+        public int Power { private set; get; } = 0;
 
-        public int Power = 0;
+        public Vector2Int Pos;
 
-        public Vector2 Pos;
-
-        public int Number => (int)Mathf.Pow(2, Power);
+        public int Number => (int) Mathf.Pow(2, Power);
 
 
         public SquareData(int power)
@@ -21,5 +19,10 @@ namespace Fuse.Hotfix
         }
 
         public Color GetColor => WarUtils.GetSquareColor(Power);
+
+        public void AddPower()
+        {
+            Power += 2;
+        }
     }
 }

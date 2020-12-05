@@ -28,6 +28,7 @@ namespace Fuse
             appdomain.DelegateManager.RegisterMethodDelegate<Vector3>();
             appdomain.DelegateManager.RegisterMethodDelegate<Vector2>();
             appdomain.DelegateManager.RegisterMethodDelegate<Vector2Int>();
+            appdomain.DelegateManager.RegisterFunctionDelegate<UnityEngine.Vector2Int, System.Boolean>();
             appdomain.DelegateManager.RegisterFunctionDelegate<UnityEngine.Vector2, System.Single>();
 
             appdomain.DelegateManager
@@ -36,6 +37,8 @@ namespace Fuse
                      .RegisterMethodDelegate<System.String, GameFramework.Resource.LoadResourceStatus, System.String,
                          System.Object>();
             appdomain.DelegateManager.RegisterFunctionDelegate<System.Boolean>();
+          
+
 
 
             //GF用
@@ -67,6 +70,8 @@ namespace Fuse
             appdomain.DelegateManager.RegisterMethodDelegate<System.Single, System.Single>();
             appdomain.DelegateManager.RegisterMethodDelegate<System.Int32, System.Int32>();
             appdomain.DelegateManager.RegisterFunctionDelegate<ILRuntime.Runtime.Intepreter.ILTypeInstance, System.Boolean>();
+            appdomain.DelegateManager.RegisterFunctionDelegate<UnityEngine.Vector2, System.Boolean>();
+
 
             appdomain.DelegateManager.RegisterDelegateConvertor<UnityEngine.Events.UnityAction<UnityEngine.Vector2>>((act) =>
             {
@@ -75,6 +80,21 @@ namespace Fuse
                     ((Action<UnityEngine.Vector2>)act)(arg0);
                 });
             });
+            appdomain.DelegateManager.RegisterDelegateConvertor<System.Predicate<UnityEngine.Vector2>>((act) =>
+            {
+                return new System.Predicate<UnityEngine.Vector2>((obj) =>
+                {
+                    return ((Func<UnityEngine.Vector2, System.Boolean>)act)(obj);
+                });
+            });
+            appdomain.DelegateManager.RegisterDelegateConvertor<System.Predicate<UnityEngine.Vector2Int>>((act) =>
+            {
+                return new System.Predicate<UnityEngine.Vector2Int>((obj) =>
+                {
+                    return ((Func<UnityEngine.Vector2Int, System.Boolean>)act)(obj);
+                });
+            });
+
 
 
             //HotFixEntity用

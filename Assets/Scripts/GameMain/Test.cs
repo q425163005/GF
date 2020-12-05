@@ -1,49 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Fuse
 {
     public class Test : MonoBehaviour
     {
-        class RemoveData
+        public Transform obj;
+        private List<Vector3> PathList = new List<Vector3>();
+
+        private void Start()
         {
-            public Vector2 mianPos;
-
-            public int power;
-
-            public List<Vector2> AllList = new List<Vector2>();
+           
         }
 
+        [ContextMenu("Collect")]
+        void Collect()
+        {
+            foreach (Transform variable in transform)
+            {
+                PathList.Add(variable.localPosition);
+            }
+        }
 
-        [ContextMenu("123")]
+        [ContextMenu("RestPos")]
+        void RestPos()
+        {
+            obj.localPosition = PathList.First();
+        }
+
+        [ContextMenu("DOPath")]
         void TTT()
         {
-            List<RemoveData> list1 = new List<RemoveData>
-            {
-                new RemoveData {mianPos = new Vector2(0, 0)},
-                new RemoveData {mianPos = new Vector2(0, 1)},
-                new RemoveData {mianPos = new Vector2(0, 2)},
-                new RemoveData {mianPos = new Vector2(0, 3)},
-                new RemoveData {mianPos = new Vector2(0, 4)},
-            };
-
-            List<Vector2> list2=new List<Vector2>
-            {
-                new Vector2(0, 0),
-                new Vector2(0, 3),
-                new Vector2(0, 4)
-            };
-
-            for (int i = 0; i < list2.Count; i++)
-            {
-                list1.RemoveAll(s => list2.Contains(s.mianPos));
-            }
-
-            for (int i = 0; i < list1.Count; i++)
-            {
-                Debug.Log(list1[i].mianPos);
-            }
+            obj.DOLocalPath(PathList.ToArray(), 1).SetEase(Ease.InSine);
         }
     }
 }

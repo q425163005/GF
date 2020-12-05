@@ -6,9 +6,9 @@ namespace Fuse.Hotfix.War
 {
     public partial class FrameItem : BaseItem
     {
-        public bool    isNull = true;
+        //public bool    isNull = true;
         public Action<FrameItem>  OnClick;
-        public Vector2 Pos;
+        public Vector2Int Pos;
 
         protected override void Awake()
         {
@@ -21,7 +21,7 @@ namespace Fuse.Hotfix.War
             base.Disposed();
         }
 
-        public void SetData(Vector2 pos)
+        public void SetData(Vector2Int pos)
         {
             Pos             = pos;
             gameObject.name = $"{Pos.x}_{Pos.y}";
