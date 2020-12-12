@@ -8,7 +8,7 @@ namespace Fuse.Hotfix
     {
         public int Power { private set; get; } = 0;
 
-        public Vector2Int Pos;
+        public Vector3Int Pos;
 
         public int Number => (int) Mathf.Pow(2, Power);
 

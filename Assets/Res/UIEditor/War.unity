@@ -230,6 +230,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SquareItem
       objectReference: {fileID: 0}
+    - target: {fileID: 8714952402004451140, guid: 23f768555312b6143be766c0fc616638, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23f768555312b6143be766c0fc616638, type: 3}
 --- !u!1 &834070428
@@ -317,6 +321,10 @@ PrefabInstance:
     - target: {fileID: 836105801091905327, guid: 738835491c88f304fadaceab944ebcf9, type: 3}
       propertyPath: m_Name
       value: SquareContent
+      objectReference: {fileID: 0}
+    - target: {fileID: 836105801091905327, guid: 738835491c88f304fadaceab944ebcf9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4755515326000316549, guid: 738835491c88f304fadaceab944ebcf9, type: 3}
       propertyPath: m_LocalPosition.x

@@ -28,6 +28,7 @@ namespace Fuse
             appdomain.DelegateManager.RegisterMethodDelegate<Vector3>();
             appdomain.DelegateManager.RegisterMethodDelegate<Vector2>();
             appdomain.DelegateManager.RegisterMethodDelegate<Vector2Int>();
+            appdomain.DelegateManager.RegisterFunctionDelegate<UnityEngine.Vector3Int, System.Boolean>();
             appdomain.DelegateManager.RegisterFunctionDelegate<UnityEngine.Vector2Int, System.Boolean>();
             appdomain.DelegateManager.RegisterFunctionDelegate<UnityEngine.Vector2, System.Single>();
 
@@ -37,7 +38,8 @@ namespace Fuse
                      .RegisterMethodDelegate<System.String, GameFramework.Resource.LoadResourceStatus, System.String,
                          System.Object>();
             appdomain.DelegateManager.RegisterFunctionDelegate<System.Boolean>();
-          
+           
+
 
 
 
@@ -94,6 +96,14 @@ namespace Fuse
                     return ((Func<UnityEngine.Vector2Int, System.Boolean>)act)(obj);
                 });
             });
+            appdomain.DelegateManager.RegisterDelegateConvertor<System.Predicate<UnityEngine.Vector3Int>>((act) =>
+            {
+                return new System.Predicate<UnityEngine.Vector3Int>((obj) =>
+                {
+                    return ((Func<UnityEngine.Vector3Int, System.Boolean>)act)(obj);
+                });
+            });
+
 
 
 

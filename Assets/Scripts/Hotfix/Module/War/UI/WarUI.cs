@@ -4,6 +4,7 @@ using System.Linq;
 using DG.Tweening;
 using Fuse.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fuse.Hotfix.War
 {
@@ -11,24 +12,34 @@ namespace Fuse.Hotfix.War
     {
         public ProcedureHotfix_War procedure;
 
-        private WarData                        warData;
-        private Vector2                        CellSpace;
-        private Dictionary<Vector2, FrameItem> frameDic      = new Dictionary<Vector2, FrameItem>();
-        private Queue<FrameItem>               FreeFrameList = new Queue<FrameItem>();
+        #region 参数
 
-        private Dictionary<Vector2, SquareItem> squareDic      = new Dictionary<Vector2, SquareItem>();
-        private Queue<SquareItem>               FreeSquareList = new Queue<SquareItem>();
-        private Queue<SquareItem>               NewCreateList  = new Queue<SquareItem>();
+        private const float squareDropTime = 0.3f;
+        private const float squareZoomTime = 0.2f;
+        private       float squareMoveTime(int num) => Mathf.Clamp(0.6f * num, 0.6f, 0.3f);
 
-        private int moveNum = 1;
+        #endregion
 
-        private SquareItem       SelSquare  = null;
-        private List<Vector2Int> allPosList = new List<Vector2Int>();
+        private WarData                           warData;
+        private Vector2                           CellSpace;
+        private Dictionary<Vector3Int, FrameItem> frameDic      = new Dictionary<Vector3Int, FrameItem>();
+        private Queue<FrameItem>                  FreeFrameList = new Queue<FrameItem>();
 
-        private List<Vector2Int> MatchList  = new List<Vector2Int>();
-        private int              dropNum    = 0;
-        private bool             isdrop     = false;
-        private bool             isFreeStep = false;
+        private Dictionary<Vector3Int, SquareItem> squareDic      = new Dictionary<Vector3Int, SquareItem>();
+        private Queue<SquareItem>                  FreeSquareList = new Queue<SquareItem>();
+        private Queue<SquareItem>                  NewCreateList  = new Queue<SquareItem>();
+
+        private bool canMove = false;
+
+        private SquareItem SelSquare = null;
+        private Dictionary<Vector3Int, Node> allNodes = new Dictionary<Vector3Int, Node>();
+
+        private bool isdrop     = false;
+        private bool isFreeStep = false;
+
+        private int              dropNum   = 0;
+        private List<Vector3Int> MatchList = new List<Vector3Int>();
+
 
         public WarUI()
         {
@@ -67,7 +78,8 @@ namespace Fuse.Hotfix.War
             frameDic.Clear();
             FreeFrameList.Clear();
 
-            allPosList.Clear();
+            allNodes.Clear();
+            //allPosList.Clear();
         }
 
         protected override void Refresh(object userData = null)
@@ -99,19 +111,28 @@ namespace Fuse.Hotfix.War
                 {
                     if (GetPos(i, j, out Vector2 retVec2))
                     {
-                        FrameItem  item = GetOneFrame();
-                        Vector2Int pos  = new Vector2Int(i, j);
-                        allPosList.Add(pos);
+                        Vector3Int pos  = new Vector3Int(i, (j + i) / 2, (j - i) / 2);
+                        Node       node = new Node();
+                        node.pos = pos;
+                        allNodes.Add(pos, node);
 
+                        FrameItem item = GetOneFrame();
                         item.rectTransform.anchoredPosition = retVec2;
                         item.SetData(pos);
                         frameDic.Add(pos, item);
+
+                        item.gameObject.GetComponentInChildren<Text>().text = $"{pos.x},{pos.y},{pos.z}";
                     }
                 }
             }
 
-//            CreateDropList();
-//            DropToMap();
+            foreach (var variable in allNodes)
+            {
+                variable.Value.around = AroundList(variable.Key);
+            }
+
+            CreateDropList();
+            DropToMap();
         }
 
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
@@ -123,7 +144,7 @@ namespace Fuse.Hotfix.War
 //                if (MatchList.Count == dropNum)
 //                {
 //                    dropNum = 0;
-//                    StartMatch(MatchList).Run();
+//                    StartMatchSquare();
 //                }
 //            }
         }
@@ -139,48 +160,43 @@ namespace Fuse.Hotfix.War
         /// <summary>选择区域</summary>
         private void FrameClick(FrameItem item)
         {
-            if (moveNum   <= 0) return;
+            if (!canMove) return;
             if (SelSquare == null) return;
 
-
-            Stopwatch s = Stopwatch.StartNew();
-            s.Start();
-            if (!FindPath(SelSquare.Data.Pos, item.Pos, out var path))
+            if (!FindPath(SelSquare.Data.Pos, item.Pos, out var path) || squareDic.ContainsKey(item.Pos))
             {
                 Log.Error("can not move");
                 return;
             }
 
-            s.Stop();
-            Log.Info($"time:{s.Elapsed}");
+            canMove = false;
+            isdrop  = false;
 
             //TODO : find path to move
             SelSquare.SetSel(false);
-            Vector2 po = SelSquare.Data.Pos;
+            Vector3Int po = SelSquare.Data.Pos;
             SelSquare.Data.Pos = item.Pos;
             squareDic.Add(item.Pos, SelSquare);
             squareDic.Remove(po);
 
-            float aniTime = 0.1f * path.Count;
-            aniTime = Mathf.Clamp(aniTime, 0.1f, 0.5f);
-            SelSquare.rectTransform.DOLocalPath(path.ToArray(), aniTime).SetEase(Ease.Linear);
-            return;
+            MatchList = new List<Vector3Int> {SelSquare.Data.Pos};
+            Transform transform = SelSquare.transform;
+            transform.DOLocalPath(path.ToArray(), squareMoveTime(path.Count))
+                     .SetEase(Ease.Linear)
+                     .OnStart(() => { transform.localScale = Vector3.one * 0.5f; })
+                     .OnComplete(() =>
+                     {
+                         transform.DOScale(1, 0.2f).SetEase(Ease.OutBack);
+                         StartMatchSquare().Run();
+                     });
 
-            if (squareDic.ContainsKey(item.Pos)) return;
-
-            isdrop = false;
-            MatchList.Clear();
-            MatchList.Add(item.Pos);
-            SquareMove(SelSquare, item.rectTransform.anchoredPosition);
             SelSquare = null;
-            moveNum   = 0;
         }
 
         /// <summary>方块区域</summary>
         private void SquareClick(SquareItem item)
         {
-            if (moveNum <= 0) return;
-            Log.Info(item.Data.Pos);
+            if (!canMove) return;
             SelSquare?.SetSel(false);
 
             SelSquare = item;
@@ -191,7 +207,7 @@ namespace Fuse.Hotfix.War
         private void CreateDropList()
         {
             int createNum                      = 4;
-            int lastNum                        = allPosList.Count - squareDic.Count;
+            int lastNum                        = allNodes.Count - squareDic.Count;
             if (lastNum < createNum) createNum = lastNum;
             if (createNum == 0)
             {
@@ -223,18 +239,31 @@ namespace Fuse.Hotfix.War
 
         private void DropToMap()
         {
-            List<Vector2Int> nullList = allPosList.FindAll(s => !squareDic.ContainsKey(s));
+            canMove = false;
+
+            List<Vector3Int> nullList = allNodes.Keys.ToList();
+            nullList  = nullList.FindAll(s => !squareDic.ContainsKey(s));
             MatchList = RandomHelper.RandomGetNum(nullList, NewCreateList.Count);
             isdrop    = true;
+
+            Sequence sequence = DOTween.Sequence();
             for (int i = 0; i < MatchList.Count; i++)
             {
-                Vector2Int pos  = MatchList[i];
+                Vector3Int pos  = MatchList[i];
                 SquareItem item = NewCreateList.Dequeue();
                 squareDic.Add(pos, item);
                 item.Data.Pos = pos;
                 item.OnClick  = SquareClick;
-                SquareMove(item, frameDic[pos].rectTransform.anchoredPosition);
+                Sequence sequence1 = SquareMove(item, frameDic[pos].rectTransform.anchoredPosition);
+                sequence.Insert(0, sequence1);
             }
+
+            sequence.OnComplete(() =>
+            {
+                CreateDropList();
+                StartMatchSquare().Run();
+            });
+            sequence.Play();
         }
 
         #region FrameItem
@@ -275,30 +304,6 @@ namespace Fuse.Hotfix.War
             return true;
         }
 
-        private List<Vector2Int> GetAroundFreePoint(Vector2Int pos)
-        {
-            List<Vector2Int> retList = new List<Vector2Int>();
-            Vector2Int       temp    = pos + new Vector2Int(1, 1);
-            if (allPosList.Contains(temp) && !squareDic.ContainsKey(temp))
-                retList.Add(temp);
-            temp = pos + new Vector2Int(1, -1);
-            if (allPosList.Contains(temp) && !squareDic.ContainsKey(temp))
-                retList.Add(temp);
-            temp = pos + new Vector2Int(0, 2);
-            if (allPosList.Contains(temp) && !squareDic.ContainsKey(temp))
-                retList.Add(temp);
-            temp = pos + new Vector2Int(0, -2);
-            if (allPosList.Contains(temp) && !squareDic.ContainsKey(temp))
-                retList.Add(temp);
-            temp = pos + new Vector2Int(-1, 1);
-            if (allPosList.Contains(temp) && !squareDic.ContainsKey(temp))
-                retList.Add(temp);
-            temp = pos + new Vector2Int(-1, -1);
-            if (allPosList.Contains(temp) && !squareDic.ContainsKey(temp))
-                retList.Add(temp);
-            return retList;
-        }
-
         #endregion
 
         #region SquareItem
@@ -320,7 +325,7 @@ namespace Fuse.Hotfix.War
             return item;
         }
 
-        private void RecycleSquare(Vector2 pos)
+        private void RecycleSquare(Vector3Int pos)
         {
             if (!squareDic.ContainsKey(pos)) return;
             SquareItem item = squareDic[pos];
@@ -329,250 +334,303 @@ namespace Fuse.Hotfix.War
             squareDic.Remove(pos);
         }
 
-        private void SquareMove(SquareItem item, Vector2 endPos)
+        private Sequence SquareMove(SquareItem item, Vector2 endPos)
         {
             Sequence sequence = DOTween.Sequence();
-            sequence.Append(item.rectTransform.DOAnchorPos(endPos, 0.3f));
-            sequence.Append(item.rectTransform.DOScale(0.8f, 0.1f).SetLoops(2, LoopType.Yoyo));
-            sequence.OnComplete(() => { dropNum++; });
+            sequence.Insert(0, item.rectTransform.DOScale(0.8f, 0.1f));
+            sequence.Append(item.rectTransform.DOAnchorPos(endPos, squareDropTime));
+            sequence.Append(item.rectTransform.DOScale(1f, squareZoomTime).SetEase(Ease.OutBack));
             sequence.Play();
+            return sequence;
         }
 
-        private List<Vector2Int> GetSquareAround(Vector2Int pos, int targetPower)
+        private List<Node> GetSquareAround(Node node, int targetPower)
         {
-            List<Vector2Int> retList = new List<Vector2Int>();
-            Vector2Int       temp    = pos + new Vector2Int(1, 1);
-            if (allPosList.Contains(temp) && squareDic.ContainsKey(temp))
-                if (squareDic[temp].Data.Power == targetPower)
-                    retList.Add(temp);
-            temp = pos + new Vector2Int(1, -1);
-            if (allPosList.Contains(temp) && squareDic.ContainsKey(temp))
-                if (squareDic[temp].Data.Power == targetPower)
-                    retList.Add(temp);
-            temp = pos + new Vector2Int(0, 2);
-            if (allPosList.Contains(temp) && squareDic.ContainsKey(temp))
-                if (squareDic[temp].Data.Power == targetPower)
-                    retList.Add(temp);
-            temp = pos + new Vector2Int(0, -2);
-            if (allPosList.Contains(temp) && squareDic.ContainsKey(temp))
-                if (squareDic[temp].Data.Power == targetPower)
-                    retList.Add(temp);
-            temp = pos + new Vector2Int(-1, 1);
-            if (allPosList.Contains(temp) && squareDic.ContainsKey(temp))
-                if (squareDic[temp].Data.Power == targetPower)
-                    retList.Add(temp);
-            temp = pos + new Vector2Int(-1, -1);
-            if (allPosList.Contains(temp) && squareDic.ContainsKey(temp))
-                if (squareDic[temp].Data.Power == targetPower)
-                    retList.Add(temp);
-            return retList;
+            List<Node> retNodes = new List<Node>();
+            foreach (var variable in node.around)
+            {
+                if (squareDic.TryGetValue(variable.pos, out var value))
+                {
+                    if (value.Data.Power == targetPower)
+                    {
+                        retNodes.Add(variable);
+                    }
+                }
+            }
+
+            return retNodes;
         }
 
         #endregion
 
-        private List<Vector2Int> GetLinkSquare(Vector2Int pos)
-        {
-            List<Vector2Int>  linkList  = new List<Vector2Int>();
-            Queue<Vector2Int> linkQueue = new Queue<Vector2Int>();
-            linkQueue.Enqueue(pos);
-            int power = squareDic[pos].Data.Power;
+        #region Match
 
-            while (linkQueue.Count > 0)
+        private async CTask StartMatchSquare()
+        {
+            int matchNum = await MatchSquareList();
+
+            canMove = true;
+
+            if (!isdrop)
             {
-                Vector2Int vec2 = linkQueue.Dequeue();
-                if (!linkList.Contains(vec2))
+                if (matchNum == 0)
                 {
-                    linkList.Add(vec2);
-                    List<Vector2Int> around = GetSquareAround(vec2, power);
+                    DropToMap();
+                }
+            }
+        }
+
+        private async CTask<int> MatchSquareList()
+        {
+            Sequence         sequence     = DOTween.Sequence();
+            List<Vector3Int> newCheckList = new List<Vector3Int>();
+            for (var index = 0; index < MatchList.Count; index++)
+            {
+                var variable = MatchList[index];
+                if (MatchSquare(variable, out Sequence value))
+                {
+                    sequence.Insert(0, value);
+                    newCheckList.Add(variable);
+                }
+            }
+
+            sequence.Play();
+            MatchList = newCheckList;
+            int matchNum = MatchList.Count;
+            if (matchNum > 0)
+            {
+                await CTask.WaitUntil(() => sequence.IsComplete());
+                matchNum += await MatchSquareList();
+            }
+
+            return matchNum;
+        }
+
+        private bool MatchSquare(Vector3Int pos, out Sequence sequence)
+        {
+            sequence = DOTween.Sequence();
+            if (!squareDic.ContainsKey(pos)) return false;
+            if (!GetMatchList(pos, out var _list)) return false;
+
+            SquareItem mainItem = squareDic[pos];
+            foreach (var variable in _list)
+            {
+                if (variable.matchPath.Count == 0) continue;
+                if (!squareDic.ContainsKey(variable.pos)) continue;
+
+                SquareItem moveItem = squareDic[variable.pos];
+                squareDic.Remove(variable.pos);
+                Tweener tween = moveItem
+                                .transform.DOLocalPath(variable.matchPath.ToArray(),
+                                                       squareMoveTime(variable.matchPath.Count))
+                                .SetEase(Ease.Linear)
+                                .OnStart(() => { moveItem.transform.localScale = Vector3.one * 0.5f; })
+                                .OnComplete(() =>
+                                {
+                                    moveItem.SetActive(false);
+                                    moveItem.transform.localScale = Vector3.one;
+                                    FreeSquareList.Enqueue(moveItem);
+                                });
+                sequence.Insert(0, tween);
+            }
+
+            sequence.OnComplete(() =>
+            {
+                mainItem.Data.AddPower();
+                mainItem.Refresh();
+                //dropNum++;
+            });
+            sequence.Play();
+            return true;
+        }
+
+        private bool GetMatchList(Vector3Int startPos, out List<Node> matchList)
+        {
+            List<Node> chekList = new List<Node>();
+            matchList = new List<Node>();
+
+            int  targetPower = squareDic[startPos].Data.Power;
+            Node startNode   = allNodes[startPos];
+            startNode.parent = null;
+            startNode.matchPath.Clear();
+            chekList.Add(startNode);
+
+            while (chekList.Count > 0)
+            {
+                List<Node> tempList = new List<Node>();
+                foreach (var up in chekList)
+                {
+                    List<Node> around = GetSquareAround(up, targetPower);
+                    if (around.Count == 0) continue;
                     foreach (var variable in around)
                     {
-                        if (!linkList.Contains(variable))
-                        {
-                            linkQueue.Enqueue(variable);
-                        }
+                        if (matchList.Contains(variable) || chekList.Contains(variable)) continue;
+
+                        variable.parent    = up;
+                        variable.matchPath = up.matchPath.ToList();
+                        variable.matchPath.Add(frameDic[up.pos].transform.localPosition);
+                        variable.matchPath.Reverse();
+                        tempList.Add(variable);
                     }
+
+                    matchList.Add(up);
                 }
+
+                chekList = tempList;
             }
 
-            return linkList;
+            Log.Info($"match : {startPos}\ncount : {matchList.Count}");
+            return matchList.Count >= 4;
         }
 
-        private async CTask<int> MatchSquare(List<Vector2Int> m_list)
-        {
-            int              Num       = 0;
-            List<Vector2Int> checkList = new List<Vector2Int>();
-
-            for (int i = 0; i < m_list.Count; i++)
-            {
-                if (squareDic.TryGetValue(m_list[i], out var item))
-                {
-                    List<Vector2Int> linkList = GetLinkSquare(m_list[i]);
-                    if (linkList.Count >= 4)
-                    {
-                        foreach (var variable in linkList)
-                        {
-                            if (!variable.Equals(m_list[i]))
-                            {
-                                Log.Info($"回收：{variable}");
-                                squareDic[variable]
-                                    .rectTransform
-                                    .DOAnchorPos(squareDic[m_list[i]].rectTransform.anchoredPosition, 0.5f);
-                                RecycleSquare(variable);
-                            }
-                        }
-
-                        Num++;
-                        item.Data.AddPower();
-                        checkList.Add(m_list[i]);
-                    }
-                }
-            }
-
-            if (Num > 0)
-            {
-                await CTask.WaitForSeconds(0.5f);
-                List<Vector2Int> list = new List<Vector2Int>();
-                foreach (var variable in checkList)
-                {
-                    if (squareDic.TryGetValue(variable, out var item))
-                    {
-                        if (item.Data.Number > 2048)
-                        {
-                            //TODO boom
-                            RecycleSquare(variable);
-                        }
-                        else
-                        {
-                            item.Refresh();
-                            list.Add(variable);
-                        }
-                    }
-                }
-
-                int matchNum = await MatchSquare(list);
-                return Num + matchNum;
-            }
-
-            return 0;
-        }
-
-        private async CTask StartMatch(List<Vector2Int> m_list)
-        {
-            int matchNum = await MatchSquare(m_list);
-            Txt_FreeMove.SetActive(isFreeStep);
-            if (!isFreeStep)
-            {
-                if (isdrop)
-                {
-                    CreateDropList();
-                    await CTask.WaitForSeconds(0.6f);
-                }
-                else
-                {
-                    if (matchNum == 0)
-                    {
-                        DropToMap();
-                    }
-                }
-            }
-
-            moveNum = 1;
-        }
-
+        #endregion
 
         #region A*
 
         class Node
         {
-            public Vector2Int pos;
-            public List<Node> parent = new List<Node>();
-            public int        weight = 0;
+            public Vector3Int pos;
+            public Node       parent;
 
-            public List<Vector2Int> around = new List<Vector2Int>();
+            // 与起点的长度
+            public int gCost;
+
+            // 与目标点的长度
+            public int hCost;
+
+            // 总的路径长度
+            public int fCost
+            {
+                get { return gCost + hCost; }
+            }
+
+            public List<Node> around = new List<Node>();
+
+            public List<Vector3> matchPath = new List<Vector3>();
+
+            public void SetParent(Node node, int g)
+            {
+                parent = node;
+                gCost  = g;
+            }
+
+            public void SetHCost(Vector3Int target)
+            {
+                int len = Mathf.Abs(target.x - pos.x) + Mathf.Abs(target.y - pos.y) + Mathf.Abs(target.z - pos.z);
+                hCost = len / 2;
+            }
         }
 
-        private bool FindPath(Vector2Int startPos, Vector2Int endPos, out List<Vector3> path)
+        private bool FindPath(Vector3Int startPos, Vector3Int endPos, out List<Vector3> path)
         {
-            Dictionary<Vector2Int, Node> openList  = new Dictionary<Vector2Int, Node>();
-            List<Vector2Int>             closeList = new List<Vector2Int>();
+            List<Node> openList  = new List<Node>();
+            List<Node> closeList = new List<Node>();
 
-            Node startNode = new Node();
-            startNode.pos = startPos;
-            openList.Add(startPos, startNode);
+            Node nowNode = allNodes[startPos];
+            nowNode.parent = null;
+            nowNode.gCost  = 0;
+            openList.Add(nowNode);
 
-            Node endNode = null;
-
-            while (openList.Count > 0 || endNode == null)
+            bool finded = false;
+            while (!finded)
             {
-                Dictionary<Vector2Int, Node> allAround = new Dictionary<Vector2Int, Node>();
-                foreach (var up in openList)
+                nowNode = GetMinOfList(openList);
+
+                openList.Remove(nowNode);
+                closeList.Add(nowNode);
+
+                for (int i = 0; i < nowNode.around.Count; i++)
                 {
-                    List<Vector2Int> around = AroundList(up.Key);
-                    foreach (var variable in around)
+                    Node neighbor = nowNode.around[i];
+
+                    if (neighbor.pos == endPos)
                     {
-                        if (!openList.ContainsKey(variable)
-                         && !closeList.Contains(variable)
-                         && !allAround.ContainsKey(variable))
-                        {
-                            if (squareDic.ContainsKey(variable)) continue;
-                            Node node = new Node
-                            {
-                                pos    = variable,
-                                weight = up.Value.weight + 1
-                            };
-                            node.parent.Add(up.Value);
-                            allAround.Add(variable, node);
-                            if (endPos.Equals(variable)) endNode = node;
-                        }
+                        //TODO finded
+                        finded = true;
+                        neighbor.SetParent(nowNode, nowNode.gCost + 1);
                     }
 
-                    closeList.Add(up.Key);
+                    if (closeList.Contains(neighbor) || squareDic.ContainsKey(neighbor.pos))
+                    {
+                        continue;
+                    }
+
+                    if (!openList.Contains(neighbor))
+                    {
+                        neighbor.SetParent(nowNode, nowNode.gCost + 1);
+                        neighbor.SetHCost(endPos);
+                        openList.Add(neighbor);
+                    }
+                    else
+                    {
+                        if (nowNode.gCost + 1 < neighbor.gCost)
+                        {
+                            neighbor.SetParent(nowNode, nowNode.gCost + 1);
+                        }
+                    }
                 }
 
-                openList = allAround;
+                if (openList.Count <= 0)
+                {
+                    Log.Error("无法到达该目标");
+                    break;
+                }
             }
 
             path = new List<Vector3>();
-            if (endNode != null)
+            if (finded)
             {
-                Vector3 vec3;
-                while (endNode.parent.Count > 0)
+                Node endNode = allNodes[endPos];
+                while (endNode.parent != null)
                 {
-                    vec3 = frameDic[endNode.pos].transform.localPosition;
-                    path.Add(vec3);
-                    endNode = endNode.parent.First();
+                    path.Add(frameDic[endNode.pos].transform.localPosition);
+                    endNode = endNode.parent;
                 }
 
-                vec3 = frameDic[startPos].transform.localPosition;
-                path.Add(vec3);
                 path.Reverse();
             }
 
-            return endNode != null;
+            return finded;
         }
 
-        private List<Vector2Int> AroundList(Vector2Int pos)
+        private List<Node> AroundList(Vector3Int pos)
         {
-            List<Vector2Int> retList = new List<Vector2Int>();
-            Vector2Int       temp    = pos + new Vector2Int(1, 1);
-            if (allPosList.Contains(temp))
-                retList.Add(temp);
-            temp = pos + new Vector2Int(1, -1);
-            if (allPosList.Contains(temp))
-                retList.Add(temp);
-            temp = pos + new Vector2Int(0, 2);
-            if (allPosList.Contains(temp))
-                retList.Add(temp);
-            temp = pos + new Vector2Int(0, -2);
-            if (allPosList.Contains(temp))
-                retList.Add(temp);
-            temp = pos + new Vector2Int(-1, 1);
-            if (allPosList.Contains(temp))
-                retList.Add(temp);
-            temp = pos + new Vector2Int(-1, -1);
-            if (allPosList.Contains(temp))
-                retList.Add(temp);
+            List<Node> retList = new List<Node>();
+            Vector3Int temp    = pos + new Vector3Int(0, 1, 1);
+            if (allNodes.ContainsKey(temp))
+                retList.Add(allNodes[temp]);
+            temp = pos + new Vector3Int(1, 1, 0);
+            if (allNodes.ContainsKey(temp))
+                retList.Add(allNodes[temp]);
+            temp = pos + new Vector3Int(1, 0, -1);
+            if (allNodes.ContainsKey(temp))
+                retList.Add(allNodes[temp]);
+            temp = pos + new Vector3Int(0, -1, -1);
+            if (allNodes.ContainsKey(temp))
+                retList.Add(allNodes[temp]);
+            temp = pos + new Vector3Int(-1, -1, 0);
+            if (allNodes.ContainsKey(temp))
+                retList.Add(allNodes[temp]);
+            temp = pos + new Vector3Int(-1, 0, 1);
+            if (allNodes.ContainsKey(temp))
+                retList.Add(allNodes[temp]);
             return retList;
+        }
+
+        private Node GetMinOfList(List<Node> list)
+        {
+            int  min  = int.MaxValue;
+            Node node = null;
+            foreach (Node p in list)
+            {
+                if (p.fCost < min)
+                {
+                    min  = p.fCost;
+                    node = p;
+                }
+            }
+
+            return node;
         }
 
         #endregion

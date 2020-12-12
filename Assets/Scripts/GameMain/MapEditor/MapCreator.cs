@@ -16,6 +16,8 @@ namespace Fuse
             public List<Node> parent = new List<Node>();
 
             public int weight = 0;
+
+            public Vector3Int vec3;
         }
 
 
@@ -45,6 +47,11 @@ namespace Fuse
                 {
                     if (GetPos(i, j, out Vector2 retVec2))
                     {
+                        Vector3Int vec3Int = new Vector3Int();
+                        vec3Int.x = i;
+                        vec3Int.y = (j + i) / 2;
+                        vec3Int.z = (j-i) / 2;
+
                         Vector2Int pos = new Vector2Int(i, j);
 
                         RectTransform obj = GameObject.Instantiate(obj_Frame, content).GetComponent<RectTransform>();
@@ -53,6 +60,9 @@ namespace Fuse
                         objList.Add(obj);
 
                         obj.GetComponent<Button>().onClick.AddListener(() => { FrameClick(pos); });
+
+                        int len = Math.Abs(vec3Int.x) + Math.Abs(vec3Int.y) + Math.Abs(vec3Int.z);
+                        obj.GetComponentInChildren<Text>().text = $"{vec3Int.x},{vec3Int.y},{vec3Int.z}\n{len / 2}";
                     }
                 }
             }
@@ -90,7 +100,7 @@ namespace Fuse
             openList.Add(startNode);
 
             Node endNode = null;
-            
+
             while (openList.Count > 0 || endNode == null)
             {
                 List<Node> allAround = new List<Node>();
@@ -131,7 +141,7 @@ namespace Fuse
 
                     path.Add(endNode.pos);
                     endNode = endNode.parent.First();
-                    if (endNode.parent.Count==0)
+                    if (endNode.parent.Count == 0)
                     {
                         dic[endNode.pos].text = endNode.weight.ToString();
                     }
@@ -143,7 +153,7 @@ namespace Fuse
         private void FrameClick(Vector2Int pos)
         {
             Vector2Int target = new Vector2Int(3, 5);
-       
+
             FindPath(pos, target);
             return;
 
