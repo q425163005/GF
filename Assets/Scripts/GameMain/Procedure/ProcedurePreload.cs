@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using GameFramework.Procedure;
+using UnityEngine;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
 namespace Fuse
@@ -18,9 +19,9 @@ namespace Fuse
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
+            ChangeState<ProcedureLua>(procedureOwner);
             
-            GameEntry.ILRuntime.LoadHotfixDLL();
-            GameEntry.Fsm.DestroyFsm<IProcedureManager>();
+           
         }
     }
 }

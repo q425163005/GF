@@ -17,27 +17,18 @@ namespace Fuse
         public static BuiltinDataComponent BuiltinData { get; private set; }
 
         /// <summary>
-        /// ET网络组件
-        /// </summary>
-        public static ETNetworkComponent ETNetwork { get; private set; }
-
-        /// <summary>
-        /// ILRuntime组件
-        /// </summary>
-        public static ILRuntimeComponent ILRuntime { get; private set; }
-
-        /// <summary>
         /// CTask组件
         /// </summary>
         public static CTaskComponent CTask { get; private set; }
+
+        public static LuaComponent Lua { get; private set; }
 
 
         private static void InitCustomComponents()
         {
             BuiltinData = UnityGameFramework.Runtime.GameEntry.GetComponent<BuiltinDataComponent>();
-            ETNetwork   = UnityGameFramework.Runtime.GameEntry.GetComponent<ETNetworkComponent>();
-            ILRuntime   = UnityGameFramework.Runtime.GameEntry.GetComponent<ILRuntimeComponent>();
             CTask       = UnityGameFramework.Runtime.GameEntry.GetComponent<CTaskComponent>();
+            Lua         = UnityGameFramework.Runtime.GameEntry.GetComponent<LuaComponent>();
         }
     }
 }

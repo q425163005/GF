@@ -575,7 +575,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    1: ENABLE_LOG;DEBUG
+    1: DEBUG;ENABLE_LOG
     4: ENABLE_LOG
     7: ENABLE_LOG
     13: ENABLE_LOG

@@ -3,8 +3,7 @@
     "rootNamespace": "Fuse",
     "references": [
         "UnityGameFramework.Runtime",
-        "Fuse.Libraries",
-        "ILRuntime"
+        "Fuse.Libraries"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
