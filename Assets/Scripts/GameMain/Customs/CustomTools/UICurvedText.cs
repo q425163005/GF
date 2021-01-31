@@ -6,15 +6,15 @@ using UnityEngine.UI;
 namespace Fuse
 {
     /// <summary>
-    /// Curved text.ÈÃÎÄ±¾°´ÕÕÇúÏß½øĞĞÏÔÊ¾ ¡¾×¢Òâ¶ÔImageµÄ±äĞÎ Ò²ÊÇ¿ÉÒÔµÄ¡¿
-    /// ËµÃ÷£º ¶ÔTextµÄ²Ù×÷¾ÍºÍ shadow ºÍ outline ×é¼şÀàËÆ¡£
+    /// Curved text.è®©æ–‡æœ¬æŒ‰ç…§æ›²çº¿è¿›è¡Œæ˜¾ç¤º ã€æ³¨æ„å¯¹Imageçš„å˜å½¢ ä¹Ÿæ˜¯å¯ä»¥çš„ã€‘
+    /// è¯´æ˜ï¼š å¯¹Textçš„æ“ä½œå°±å’Œ shadow å’Œ outline ç»„ä»¶ç±»ä¼¼ã€‚
     /// </summary>
     public class UICurvedText : BaseMeshEffect
     {
-        // ÇúÏßÀàĞÍ
+        // æ›²çº¿ç±»å‹
         public AnimationCurve curveForText = AnimationCurve.Linear(0, 0, 1, 10);
 
-        // ÇúÏß³Ì¶È
+        // æ›²çº¿ç¨‹åº¦
         public  float         curveMultiplier = 1;
         private RectTransform rectTrans;
 
@@ -51,7 +51,7 @@ namespace Fuse
         }
 
         /// <summary>
-        /// Modifies the mesh. ×îÖØÒªµÄÖØÔØº¯Êı
+        /// Modifies the mesh. æœ€é‡è¦çš„é‡è½½å‡½æ•°
         /// </summary>
         /// <param name="mesh">Mesh.</param>
         public override void ModifyMesh(VertexHelper vh)
@@ -59,13 +59,13 @@ namespace Fuse
             if (!IsActive())
                 return;
 
-            // ´Ómesh µÃµ½ ¶¥µã¼¯
+            // ä»mesh å¾—åˆ° é¡¶ç‚¹é›†
             List<UIVertex> verts = new List<UIVertex>();
 
             vh.GetUIVertexStream(verts);
 
 
-            // ¶¥µãµÄ yÖµ°´ÇúÏß±ä»»
+            // é¡¶ç‚¹çš„ yå€¼æŒ‰æ›²çº¿å˜æ¢
             for (int index = 0; index < verts.Count; index++)
             {
                 var uiVertex = verts[index];
@@ -76,7 +76,7 @@ namespace Fuse
                 verts[index] = uiVertex;
             }
 
-            // ÔÚºÏ³Émesh
+            // åœ¨åˆæˆmesh
 
             vh.AddUIVertexTriangleStream(verts);
         }

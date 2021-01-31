@@ -1,12 +1,12 @@
 namespace Fuse.Hotfix
 {
     /// <summary>
-    /// 配置文件基类
+    /// 閰嶇疆鏂囦欢鍩虹被
     /// </summary>
     public abstract class BaseConfig
     {
         /// <summary>
-        /// 唯一ID
+        /// 鍞竴ID
         /// </summary>
         public virtual object UniqueID {
             get {

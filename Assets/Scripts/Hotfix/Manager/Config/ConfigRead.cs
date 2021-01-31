@@ -10,8 +10,8 @@ namespace Fuse.Hotfix
         private Dictionary<string, Dictionary<object, BaseConfig>> dicConfig =
             new Dictionary<string, Dictionary<object, BaseConfig>>();
 
-        public int loadCount   = 0; //¼ÓÔØ×ÊÔ´Êı
-        public int loadedCount = 0; //ÒÑ¾­¼ÓÔØ×ÊÔ´Êı
+        public int loadCount   = 0; //åŠ è½½èµ„æºæ•°
+        public int loadedCount = 0; //å·²ç»åŠ è½½èµ„æºæ•°
 
         public bool isAllLoaded => loadCount <= loadedCount;
 
@@ -24,7 +24,7 @@ namespace Fuse.Hotfix
         #region ReadConfig
 
         /// <summary>
-        /// ¶ÁÈ¡ÅäÖÃ±í
+        /// è¯»å–é…ç½®è¡¨
         /// </summary>
         /// <typeparam name="T"></typeparam>
         private async CTask readConfig<T>() where T : BaseConfig, new()
@@ -39,7 +39,7 @@ namespace Fuse.Hotfix
                 for (int i = 0; i < list.Count; i++)
                 {
                     if (dic.ContainsKey(list[i].UniqueID))
-                        Log.Error($"±í[{fileName}]ÖĞÓĞÏàÍ¬¼ü({list[i].UniqueID})");
+                        Log.Error($"è¡¨[{fileName}]ä¸­æœ‰ç›¸åŒé”®({list[i].UniqueID})");
                     else
                         dic.Add(list[i].UniqueID, list[i]);
                 }
@@ -48,14 +48,14 @@ namespace Fuse.Hotfix
             }
             else
             {
-                Log.Error($"ÅäÖÃÎÄ¼ş²»´æÔÚ{fileName}");
+                Log.Error($"é…ç½®æ–‡ä»¶ä¸å­˜åœ¨{fileName}");
             }
 
             loadedCount += 1;
         }
 
         /// <summary>
-        /// ÖØĞÂ¼ÓÔØÅäÖÃ±í
+        /// é‡æ–°åŠ è½½é…ç½®è¡¨
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -64,7 +64,7 @@ namespace Fuse.Hotfix
             string fileName = typeof(T).Name;
             if (!dicConfig.TryGetValue(fileName, out var dic))
             {
-                Log.Error($"Î´ÕÒµ½ĞèÒª¼ÓÔØµÄ±íÅäÖÃ£º{fileName}");
+                Log.Error($"æœªæ‰¾åˆ°éœ€è¦åŠ è½½çš„è¡¨é…ç½®ï¼š{fileName}");
                 return;
             }
 
@@ -78,19 +78,19 @@ namespace Fuse.Hotfix
                 for (int i = 0; i < list.Count; i++)
                 {
                     if (dic.ContainsKey(list[i].UniqueID))
-                        Log.Error($"±í[{fileName}]ÖĞÓĞÏàÍ¬¼ü({list[i].UniqueID})");
+                        Log.Error($"è¡¨[{fileName}]ä¸­æœ‰ç›¸åŒé”®({list[i].UniqueID})");
                     else
                         dic.Add(list[i].UniqueID, list[i]);
                 }
             }
             else
             {
-                Log.Error($"ÅäÖÃÎÄ¼ş²»´æÔÚ{fileName}");
+                Log.Error($"é…ç½®æ–‡ä»¶ä¸å­˜åœ¨{fileName}");
             }
         }
 
         /// <summary>
-        /// ¶ÁÈ¡Êú±í
+        /// è¯»å–ç«–è¡¨
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
@@ -110,7 +110,7 @@ namespace Fuse.Hotfix
             }
             else
             {
-                Log.Error($"ÅäÖÃÎÄ¼ş²»´æÔÚ{fileName}");
+                Log.Error($"é…ç½®æ–‡ä»¶ä¸å­˜åœ¨{fileName}");
             }
 
             loadedCount += 1;
@@ -121,7 +121,7 @@ namespace Fuse.Hotfix
         #endregion
 
         /// <summary>
-        /// »ñÈ¡config
+        /// è·å–config
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -129,7 +129,7 @@ namespace Fuse.Hotfix
         {
             if (!GetDic<T>().TryGetValue(id, out var config))
             {
-                Log.Error($"Î´ÕÒµ½{typeof(T).Name}±íÅäÖÃ,ID:{id}");
+                Log.Error($"æœªæ‰¾åˆ°{typeof(T).Name}è¡¨é…ç½®,ID:{id}");
             }
 
             return (T) config;
@@ -162,7 +162,7 @@ namespace Fuse.Hotfix
             Dictionary<object, BaseConfig> dic        = new Dictionary<object, BaseConfig>();
             if (!dicConfig.TryGetValue(configName, out dic))
             {
-                Log.Error($"Î´¼ÓÔØÅäÖÃ£º{configName}");
+                Log.Error($"æœªåŠ è½½é…ç½®ï¼š{configName}");
             }
 
             return dic;

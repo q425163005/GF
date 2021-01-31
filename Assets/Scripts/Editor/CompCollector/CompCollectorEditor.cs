@@ -12,7 +12,7 @@ namespace Fuse.Editor
     {
         private CompCollector m_Target;
 
-        #region ¸¨ÖúÆ÷Ñ¡Ôñ¿òÏà¹Ø
+        #region è¾…åŠ©å™¨é€‰æ‹©æ¡†ç›¸å…³
 
         private string[] s_AssemblyNames = {"Fuse.Editor"};
 
@@ -29,15 +29,15 @@ namespace Fuse.Editor
         private string[]          m_SearchTypeCustomNames;
         private ICompSearchHelper SearchHelper;
 
-        private string m_PrefixesShowStr; //ÃüÃûÇ°×ºÓëÀàĞÍµÄÓ³ÉäÌáÊ¾
+        private string m_PrefixesShowStr; //å‘½åå‰ç¼€ä¸ç±»å‹çš„æ˜ å°„æç¤º
         private string m_SearchInput;
 
         #endregion
 
-        private bool error_haveEmptyName    = false; //´æÔÚ¿ÕÃû
-        private bool error_haveRepeatedName = false; //´æÔÚÖØ¸´ÃüÃû
-        private bool error_haveEmptyObject  = false; //´æÔÚ¿Õ¶ÔÏó
-        private bool error_haveRepeatedComp = false; //´æÔÚÍ¬¶ÔÏóÖØ¸´×é¼ş
+        private bool error_haveEmptyName    = false; //å­˜åœ¨ç©ºå
+        private bool error_haveRepeatedName = false; //å­˜åœ¨é‡å¤å‘½å
+        private bool error_haveEmptyObject  = false; //å­˜åœ¨ç©ºå¯¹è±¡
+        private bool error_haveRepeatedComp = false; //å­˜åœ¨åŒå¯¹è±¡é‡å¤ç»„ä»¶
 
         private static Dictionary<GameObject, List<string>>
             _cachedCompInfo = new Dictionary<GameObject, List<string>>();
@@ -89,7 +89,7 @@ namespace Fuse.Editor
             serializedObject.ApplyModifiedProperties();
         }
 
-        #region Hierarchy¸ßÁÁ
+        #region Hierarchyé«˜äº®
 
         private static void HierarchyItemCB(int instanceid, Rect selectionrect)
         {
@@ -144,10 +144,10 @@ namespace Fuse.Editor
 
         #endregion
 
-        #region »æÖÆ¸¨ÖúÆ÷Ñ¡Ôñ¿ò
+        #region ç»˜åˆ¶è¾…åŠ©å™¨é€‰æ‹©æ¡†
 
         /// <summary>
-        /// °ó¶¨×é¼ş¸¨ÖúÆ÷Ñ¡Ôñ¿ò
+        /// ç»‘å®šç»„ä»¶è¾…åŠ©å™¨é€‰æ‹©æ¡†
         /// </summary>
         private void DrawHelperSelect()
         {
@@ -178,7 +178,7 @@ namespace Fuse.Editor
         }
 
         /// <summary>
-        /// »æÖÆ´úÂë¸¨ÖúÆ÷Ñ¡Ôñ¿ò
+        /// ç»˜åˆ¶ä»£ç è¾…åŠ©å™¨é€‰æ‹©æ¡†
         /// </summary>
         private void DrawCodeSelect()
         {
@@ -216,7 +216,7 @@ namespace Fuse.Editor
         }
 
         /// <summary>
-        /// ËÑË÷ÀàĞÍ¸¨ÖúÆ÷Ñ¡Ôñ¿ò
+        /// æœç´¢ç±»å‹è¾…åŠ©å™¨é€‰æ‹©æ¡†
         /// </summary>
         private void DrawSearchSelect()
         {
@@ -242,7 +242,7 @@ namespace Fuse.Editor
         }
 
         /// <summary>
-        /// ´´½¨¸¨ÖúÆ÷ÊµÀı
+        /// åˆ›å»ºè¾…åŠ©å™¨å®ä¾‹
         /// </summary>
         private object CreateHelperInstance(string helperTypeName, string[] assemblyNames)
         {
@@ -296,17 +296,17 @@ namespace Fuse.Editor
 
         #endregion
 
-        #region ¸¨Öú¹¤¾ßÀ¸
+        #region è¾…åŠ©å·¥å…·æ 
 
         private void DrawToolsMenu()
         {
             GUILayout.Space(10);
             GUILayout.BeginHorizontal();
-            //ÍÏ×§Ìí¼Ó
+            //æ‹–æ‹½æ·»åŠ 
             var aEvent   = Event.current;
             var dragArea = GUILayoutUtility.GetRect(100, 85);
-            //ÔÚInspector ´°¿ÚÉÏ´´½¨ÇøÓò£¬ÏòÇøÓòÍÏ×§×ÊÔ´¶ÔÏó£¬»ñÈ¡µ½ÍÏ×§µ½ÇøÓòµÄ¶ÔÏó
-            GUI.Box(dragArea, "\n\nÍÏ×§Ìí¼Ó");
+            //åœ¨Inspector çª—å£ä¸Šåˆ›å»ºåŒºåŸŸï¼Œå‘åŒºåŸŸæ‹–æ‹½èµ„æºå¯¹è±¡ï¼Œè·å–åˆ°æ‹–æ‹½åˆ°åŒºåŸŸçš„å¯¹è±¡
+            GUI.Box(dragArea, "\n\næ‹–æ‹½æ·»åŠ ");
 
             switch (aEvent.type)
             {
@@ -364,12 +364,12 @@ namespace Fuse.Editor
             GUILayout.Space(3);
             GUILayout.BeginHorizontal();
 
-            if (GUILayout.Button(new GUIContent("×Ô¶¯°ó¶¨") {tooltip = m_PrefixesShowStr}, GUILayout.Height(35)))
+            if (GUILayout.Button(new GUIContent("è‡ªåŠ¨ç»‘å®š") {tooltip = m_PrefixesShowStr}, GUILayout.Height(35)))
             {
                 AutoBindComponent();
             }
 
-            if (GUILayout.Button("ÇåÀí¿ÕÏî", GUILayout.Height(35)))
+            if (GUILayout.Button("æ¸…ç†ç©ºé¡¹", GUILayout.Height(35)))
             {
                 if (m_Target.CompCollectorInfos != null && m_Target.CompCollectorInfos.Count > 0)
                 {
@@ -378,7 +378,7 @@ namespace Fuse.Editor
                 }
             }
 
-            if (GUILayout.Button("Éú³É´úÂë", GUILayout.Height(35)))
+            if (GUILayout.Button("ç”Ÿæˆä»£ç ", GUILayout.Height(35)))
             {
                 GenerateCode();
             }
@@ -411,10 +411,10 @@ namespace Fuse.Editor
         {
             GUILayout.Space(5);
 
-            error_haveEmptyName    = false; //´æÔÚ¿ÕÃû
-            error_haveRepeatedName = false; //´æÔÚÖØ¸´ÃüÃû
-            error_haveEmptyObject  = false; //´æÔÚ¿Õ¶ÔÏó
-            error_haveRepeatedComp = false; //´æÔÚÍ¬¶ÔÏóÖØ¸´×é¼ş
+            error_haveEmptyName    = false; //å­˜åœ¨ç©ºå
+            error_haveRepeatedName = false; //å­˜åœ¨é‡å¤å‘½å
+            error_haveEmptyObject  = false; //å­˜åœ¨ç©ºå¯¹è±¡
+            error_haveRepeatedComp = false; //å­˜åœ¨åŒå¯¹è±¡é‡å¤ç»„ä»¶
             string[]                        typesOptions;
             int                             currentTypeIndex;
             CompCollector.CompCollectorInfo outletInfo;
@@ -426,7 +426,7 @@ namespace Fuse.Editor
                 typesOptions     = new string[0];
                 currentTypeIndex = -1;
 
-                //×Ô¶¯Ñ¡Ôñ×é¼şÀàĞÍ
+                //è‡ªåŠ¨é€‰æ‹©ç»„ä»¶ç±»å‹
                 if (outletInfo.Object != null)
                 {
                     if (outletInfo.Object is GameObject)
@@ -437,7 +437,7 @@ namespace Fuse.Editor
                         if (components.Length == 1)
                             currentTypeIndex = 0;
                         else
-                            currentTypeIndex = components.Length; // ÉèÖÃÄ¬ÈÏÀàĞÍ,Ä¬ÈÏÑ¡ÖĞ×îºóÒ»¸ö
+                            currentTypeIndex = components.Length; // è®¾ç½®é»˜è®¤ç±»å‹,é»˜è®¤é€‰ä¸­æœ€åä¸€ä¸ª
                         string objTypeName = "";
 
                         typesOptions    = new string[components.Length + 1];
@@ -474,12 +474,12 @@ namespace Fuse.Editor
                 }
 
 
-                #region ´íÎóÌáÊ¾
+                #region é”™è¯¯æç¤º
 
-                //ÎŞĞ§Ïî ==> Name==null || Object==null || repeated comp type || repeated Name
-                bool allError  = outletInfo.Object == null || string.IsNullOrEmpty(outletInfo.Name); //¿ÕÃû||¿ÕÎïÌå
-                bool nameError = false;                                                              //ÖØÃû
-                bool objError  = false;                                                              //Í¬Ò»ÎïÌåÏàÍ¬×é¼ş
+                //æ— æ•ˆé¡¹ ==> Name==null || Object==null || repeated comp type || repeated Name
+                bool allError  = outletInfo.Object == null || string.IsNullOrEmpty(outletInfo.Name); //ç©ºå||ç©ºç‰©ä½“
+                bool nameError = false;                                                              //é‡å
+                bool objError  = false;                                                              //åŒä¸€ç‰©ä½“ç›¸åŒç»„ä»¶
                 if (outletInfo.Object != null)
                 {
                     foreach (var variable in m_Target.CompCollectorInfos)
@@ -504,11 +504,11 @@ namespace Fuse.Editor
 
                 #endregion
 
-                #region µ¥Ïî
+                #region å•é¡¹
 
                 EditorGUILayout.BeginHorizontal();
 
-                //ËÑË÷Ö¸ÕëProfiler.NextFrame
+                //æœç´¢æŒ‡é’ˆProfiler.NextFrame
                 if (!string.IsNullOrEmpty(m_SearchInput))
                 {
                     if (SearchHelper.IsAccord(m_SearchInput, outletInfo.Name))
@@ -601,18 +601,18 @@ namespace Fuse.Editor
                 !error_haveRepeatedComp)
                 return;
 
-            string errorStr                      = "\n" + "***´íÎóÌáÊ¾***" + "\n";
-            if (error_haveEmptyName) errorStr    += "=> ´æÔÚ¿ÕÃüÃû"  + "\n";
-            if (error_haveRepeatedName) errorStr += "=> ´æÔÚÖØ¸´ÃüÃû" + "\n";
-            if (error_haveEmptyObject) errorStr  += "=> ´æÔÚ¿Õ¶ÔÏó"  + "\n";
-            if (error_haveRepeatedComp) errorStr += "=> Í¬Ò»¶ÔÏóÒıÓÃ×é¼şÖØ¸´";
+            string errorStr                      = "\n" + "***é”™è¯¯æç¤º***" + "\n";
+            if (error_haveEmptyName) errorStr    += "=> å­˜åœ¨ç©ºå‘½å"  + "\n";
+            if (error_haveRepeatedName) errorStr += "=> å­˜åœ¨é‡å¤å‘½å" + "\n";
+            if (error_haveEmptyObject) errorStr  += "=> å­˜åœ¨ç©ºå¯¹è±¡"  + "\n";
+            if (error_haveRepeatedComp) errorStr += "=> åŒä¸€å¯¹è±¡å¼•ç”¨ç»„ä»¶é‡å¤";
 
             EditorGUILayout.HelpBox(errorStr, MessageType.Error);
         }
 
         #endregion
 
-        /// <summary>×Ô¶¯°ó¶¨×é¼ş</summary>
+        /// <summary>è‡ªåŠ¨ç»‘å®šç»„ä»¶</summary>
         private void AutoBindComponent()
         {
             List<string> m_TempFiledNames         = new List<string>();
@@ -667,7 +667,7 @@ namespace Fuse.Editor
                 error_haveEmptyObject  ||
                 error_haveRepeatedComp)
             {
-                Debug.LogError("ÇëÏÈÇåÀíÍê´íÎóĞÅÏ¢£¡");
+                Debug.LogError("è¯·å…ˆæ¸…ç†å®Œé”™è¯¯ä¿¡æ¯ï¼");
                 return;
             }
 

@@ -8,10 +8,10 @@ namespace Fuse.Hotfix
 {
     public class EntityMgr
     {
-        // ¹ØÓÚ EntityId µÄÔ¼¶¨£º
-        // 0 ÎªÎŞĞ§
-        // ÕıÖµÓÃÓÚºÍ·şÎñÆ÷Í¨ĞÅµÄÊµÌå£¨ÈçÍæ¼Ò½ÇÉ«¡¢NPC¡¢¹ÖµÈ£¬·şÎñÆ÷Ö»²úÉúÕıÖµ£©
-        // ¸ºÖµÓÃÓÚ±¾µØÉú³ÉµÄÁÙÊ±ÊµÌå£¨ÈçÌØĞ§¡¢FakeObjectµÈ£©
+        // å…³äº EntityId çš„çº¦å®šï¼š
+        // 0 ä¸ºæ— æ•ˆ
+        // æ­£å€¼ç”¨äºå’ŒæœåŠ¡å™¨é€šä¿¡çš„å®ä½“ï¼ˆå¦‚ç©å®¶è§’è‰²ã€NPCã€æ€ªç­‰ï¼ŒæœåŠ¡å™¨åªäº§ç”Ÿæ­£å€¼ï¼‰
+        // è´Ÿå€¼ç”¨äºæœ¬åœ°ç”Ÿæˆçš„ä¸´æ—¶å®ä½“ï¼ˆå¦‚ç‰¹æ•ˆã€FakeObjectç­‰ï¼‰
         private static int s_SerialId = 0;
         public static  int GenerateSerialId => --s_SerialId;
 
@@ -42,87 +42,87 @@ namespace Fuse.Hotfix
         }
         
         /// <summary>
-        /// Òş²ØÊµÌå¡£
+        /// éšè—å®ä½“ã€‚
         /// </summary>
-        /// <param name="entityId">ÊµÌå±àºÅ¡£</param>
+        /// <param name="entityId">å®ä½“ç¼–å·ã€‚</param>
         public void Hide(int entityId)
         {
             Component.HideEntity(entityId);
         }
 
         /// <summary>
-        /// Òş²ØÊµÌå¡£
+        /// éšè—å®ä½“ã€‚
         /// </summary>
-        /// <param name="entity">ÊµÌå¡£</param>
-        /// <param name="userData">ÓÃ»§×Ô¶¨ÒåÊı¾İ¡£</param>
+        /// <param name="entity">å®ä½“ã€‚</param>
+        /// <param name="userData">ç”¨æˆ·è‡ªå®šä¹‰æ•°æ®ã€‚</param>
         public void Hide(Entity entity, object userData)
         {
             Component.HideEntity(entity, userData);
         }
 
         /// <summary>
-        /// ÊÇ·ñ´æÔÚÊµÌå¡£
+        /// æ˜¯å¦å­˜åœ¨å®ä½“ã€‚
         /// </summary>
-        /// <param name="entityId">ÊµÌå±àºÅ¡£</param>
-        /// <returns>ÊÇ·ñ´æÔÚÊµÌå¡£</returns>
+        /// <param name="entityId">å®ä½“ç¼–å·ã€‚</param>
+        /// <returns>æ˜¯å¦å­˜åœ¨å®ä½“ã€‚</returns>
         public bool HasEntity(int entityId)
         {
             return Component.HasEntity(entityId);
         }
 
         /// <summary>
-        /// »ñÈ¡ÊµÌå¡£
+        /// è·å–å®ä½“ã€‚
         /// </summary>
-        /// <param name="entityId">ÊµÌå±àºÅ¡£</param>
-        /// <returns>ÊµÌå¡£</returns>
+        /// <param name="entityId">å®ä½“ç¼–å·ã€‚</param>
+        /// <returns>å®ä½“ã€‚</returns>
         public Entity GetEntity(int entityId)
         {
             return Component.GetEntity(entityId);
         }
 
         /// <summary>
-        /// »ñÈ¡ÊµÌå¡£
+        /// è·å–å®ä½“ã€‚
         /// </summary>
-        /// <param name="entityAssetName">ÊµÌå×ÊÔ´Ãû³Æ¡£</param>
-        /// <returns>Òª»ñÈ¡µÄÊµÌå¡£</returns>
+        /// <param name="entityAssetName">å®ä½“èµ„æºåç§°ã€‚</param>
+        /// <returns>è¦è·å–çš„å®ä½“ã€‚</returns>
         public Entity[] GetEntities(string entityAssetName)
         {
             return Component.GetEntities(entityAssetName);
         }
 
         /// <summary>
-        /// »ñÈ¡ËùÓĞÒÑ¼ÓÔØµÄÊµÌå¡£
+        /// è·å–æ‰€æœ‰å·²åŠ è½½çš„å®ä½“ã€‚
         /// </summary>
-        /// <returns>ËùÓĞÒÑ¼ÓÔØµÄÊµÌå¡£</returns>
+        /// <returns>æ‰€æœ‰å·²åŠ è½½çš„å®ä½“ã€‚</returns>
         public Entity[] GetAllLoadedEntities()
         {
             return Component.GetAllLoadedEntities();
         }
 
         /// <summary>
-        /// »ñÈ¡ËùÓĞÕıÔÚ¼ÓÔØÊµÌåµÄ±àºÅ¡£
+        /// è·å–æ‰€æœ‰æ­£åœ¨åŠ è½½å®ä½“çš„ç¼–å·ã€‚
         /// </summary>
-        /// <returns>ËùÓĞÕıÔÚ¼ÓÔØÊµÌåµÄ±àºÅ¡£</returns>
+        /// <returns>æ‰€æœ‰æ­£åœ¨åŠ è½½å®ä½“çš„ç¼–å·ã€‚</returns>
         public int[] GetAllLoadingEntityIds()
         {
             return Component.GetAllLoadingEntityIds();
         }
 
         /// <summary>
-        /// ÊÇ·ñÕıÔÚ¼ÓÔØÊµÌå¡£
+        /// æ˜¯å¦æ­£åœ¨åŠ è½½å®ä½“ã€‚
         /// </summary>
-        /// <param name="entityId">ÊµÌå±àºÅ¡£</param>
-        /// <returns>ÊÇ·ñÕıÔÚ¼ÓÔØÊµÌå¡£</returns>
+        /// <param name="entityId">å®ä½“ç¼–å·ã€‚</param>
+        /// <returns>æ˜¯å¦æ­£åœ¨åŠ è½½å®ä½“ã€‚</returns>
         public bool IsLoadingEntity(int entityId)
         {
             return Component.IsLoadingEntity(entityId);
         }
 
         /// <summary>
-        /// ÊÇ·ñÊÇºÏ·¨µÄÊµÌå¡£
+        /// æ˜¯å¦æ˜¯åˆæ³•çš„å®ä½“ã€‚
         /// </summary>
-        /// <param name="entity">ÊµÌå¡£</param>
-        /// <returns>ÊµÌåÊÇ·ñºÏ·¨¡£</returns>
+        /// <param name="entity">å®ä½“ã€‚</param>
+        /// <returns>å®ä½“æ˜¯å¦åˆæ³•ã€‚</returns>
         public bool IsValidEntity(Entity entity)
         {
             return Component.IsValidEntity(entity);

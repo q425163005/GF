@@ -16,7 +16,7 @@ namespace Fuse.Editor
             string entityName = collector.m_EntityName;
             if (string.IsNullOrEmpty(entityName))
             {
-                Debug.LogError("Entity²»ÄÜÎª¿Õ£¡");
+                Debug.LogError("Entityä¸èƒ½ä¸ºç©ºï¼");
                 return;
             }
             CreateLogic(entityName);
@@ -24,7 +24,7 @@ namespace Fuse.Editor
             CreateData(entityName);
         }
 
-        #region Éú³É´úÂë
+        #region ç”Ÿæˆä»£ç 
 
         private void CreateLogic(string entityName)
         {
@@ -56,7 +56,7 @@ namespace Fuse.Editor
         private string getLogicCodeStr(string entityName)
         {
             StringBuilder codeStr = new StringBuilder();
-            //ÃüÃû¿Õ¼ä
+            //å‘½åç©ºé—´
             codeStr.AppendLine("namespace Fuse.Hotfix");
             codeStr.AppendLine("{");
             {
@@ -78,24 +78,24 @@ namespace Fuse.Editor
         {
             StringBuilder codeStr = new StringBuilder();
 
-            //ÒıÓÃ
-            codeStr.AppendLine("//¹¤¾ßÉú³É²»ÒªĞŞ¸Ä");
-            codeStr.AppendLine($"//Éú³ÉÊ±¼ä£º{DateTime.Now}");
+            //å¼•ç”¨
+            codeStr.AppendLine("//å·¥å…·ç”Ÿæˆä¸è¦ä¿®æ”¹");
+            codeStr.AppendLine($"//ç”Ÿæˆæ—¶é—´ï¼š{DateTime.Now}");
             codeStr.AppendLine("using UnityEngine;");
             codeStr.AppendLine("");
 
-            //ÃüÃû¿Õ¼ä
+            //å‘½åç©ºé—´
             codeStr.AppendLine("namespace Fuse.Hotfix");
             codeStr.AppendLine("{");
 
-            //ÀàÃû
+            //ç±»å
             codeStr.AppendLine($"\tpublic partial class EntityLogic_{entityName}");
             codeStr.AppendLine("\t{");
 
             StringBuilder compStr = new StringBuilder();
 
             string objType;
-            //×é¼ş
+            //ç»„ä»¶
             foreach (var variable in collector.CompCollectorInfos)
             {
                 objType = getTypeName(variable.ComponentType);
@@ -110,7 +110,7 @@ namespace Fuse.Editor
                 }
             }
 
-            codeStr.AppendLine("\t\t/// <summary>³õÊ¼»¯Entity¿Ø¼ş</summary>");
+            codeStr.AppendLine("\t\t/// <summary>åˆå§‹åŒ–Entityæ§ä»¶</summary>");
             codeStr.AppendLine("\t\tprotected override void InitializeComponent()");
             codeStr.AppendLine("\t\t{");
 
@@ -126,7 +126,7 @@ namespace Fuse.Editor
         private string getDataCodeStr(string entityName)
         {
             StringBuilder codeStr = new StringBuilder();
-            //ÃüÃû¿Õ¼ä
+            //å‘½åç©ºé—´
             codeStr.AppendLine("namespace Fuse.Hotfix");
             codeStr.AppendLine("{");
             {

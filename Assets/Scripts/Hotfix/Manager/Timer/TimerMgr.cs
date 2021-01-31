@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Fuse.Hotfix
 {
     /// <summary>
-    /// ¶¨Ê±Æ÷¹ÜÀíÆ÷
+    /// å®šæ—¶å™¨ç®¡ç†å™¨
     /// </summary>
     public class TimerMgr
     {
@@ -13,12 +13,12 @@ namespace Fuse.Hotfix
         private List<int>              runListIds = new List<int>();
 
         /// <summary>
-        /// Ñ­»·¶¨Ê±Æ÷
+        /// å¾ªç¯å®šæ—¶å™¨
         /// </summary>
-        /// <param name="interval">¼ä¸ôÊ±¼ä</param>
+        /// <param name="interval">é—´éš”æ—¶é—´</param>
         /// <param name="action"></param>
-        /// <param name="isStartExecute">ÊÇ·ñÆô¶¯Ê±¾ÍÔËĞĞÒ»´Î</param>
-        /// <param name="num">ÔËĞĞ´ÎÊı -1ÎŞ´ÎÊıÏŞÖÆ</param>
+        /// <param name="isStartExecute">æ˜¯å¦å¯åŠ¨æ—¶å°±è¿è¡Œä¸€æ¬¡</param>
+        /// <param name="num">è¿è¡Œæ¬¡æ•° -1æ— æ¬¡æ•°é™åˆ¶</param>
         /// <returns></returns>
         public int Loop(float interval, Action action, bool isStartExecute = true, int num = -1)
         {
@@ -32,9 +32,9 @@ namespace Fuse.Hotfix
         }
 
         /// <summary>
-        /// ÔËĞĞÒ»´Î
+        /// è¿è¡Œä¸€æ¬¡
         /// </summary>
-        /// <param name="interval">ÑÓÊ±Ê±¼ä</param>
+        /// <param name="interval">å»¶æ—¶æ—¶é—´</param>
         /// <param name="action"></param>
         /// <returns></returns>
         public int Once(float interval, Action action)
@@ -47,9 +47,9 @@ namespace Fuse.Hotfix
         }
 
         /// <summary>
-        /// Ã¿Ö¡ÔËĞĞ
+        /// æ¯å¸§è¿è¡Œ
         /// </summary>
-        /// <param name="action">·µ»ØTime.deltaTime</param>
+        /// <param name="action">è¿”å›Time.deltaTime</param>
         /// <returns></returns>
         public int Update(Action<float> action)
         {
@@ -62,7 +62,7 @@ namespace Fuse.Hotfix
 
 
         /// <summary>
-        /// Í£Ö¹Ò»¸ö¶¨Ê±Æ÷
+        /// åœæ­¢ä¸€ä¸ªå®šæ—¶å™¨
         /// </summary>
         /// <param name="id"></param>
         public void Stop(int id)
@@ -78,7 +78,7 @@ namespace Fuse.Hotfix
         }
 
         /// <summary>
-        /// Í£Ö¹È«²¿¶¨Ê±Æ÷
+        /// åœæ­¢å…¨éƒ¨å®šæ—¶å™¨
         /// </summary>
         public void StopAll()
         {
@@ -93,7 +93,7 @@ namespace Fuse.Hotfix
         }
 
         /// <summary>
-        /// »ñÈ¡Ò»¸ö¶¨Ê±Æ÷
+        /// è·å–ä¸€ä¸ªå®šæ—¶å™¨
         /// </summary>
         /// <returns></returns>
         private Timer getTimer()

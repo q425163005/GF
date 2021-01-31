@@ -18,37 +18,37 @@ namespace Fuse.Hotfix
         }
 
         /// <summary>
-        /// Òì²½¼ÓÔØ×ÊÔ´
+        /// å¼‚æ­¥åŠ è½½èµ„æº
         /// </summary>
-        /// <param name="assetName">×ÊÔ´Ãû</param>
-        /// <param name="priority">ÓÅÏÈ¼¶</param>
-        /// <param name="successCallBack">³É¹¦»Øµ÷£¨×ÊÔ´£©</param>
+        /// <param name="assetName">èµ„æºå</param>
+        /// <param name="priority">ä¼˜å…ˆçº§</param>
+        /// <param name="successCallBack">æˆåŠŸå›è°ƒï¼ˆèµ„æºï¼‰</param>
         public void LoadAsset(string assetName, Action<object> successCallBack, int priority = 0)
         {
             LoadAsset(assetName, (a, b) => { successCallBack(a); }, priority);
         }
 
         /// <summary>
-        /// Òì²½¼ÓÔØ×ÊÔ´
+        /// å¼‚æ­¥åŠ è½½èµ„æº
         /// </summary>
-        /// <param name="assetName">×ÊÔ´Ãû</param>
-        /// <param name="priority">ÓÅÏÈ¼¶</param>
-        /// <param name="successCallBack">³É¹¦»Øµ÷£¨×ÊÔ´£¬×Ô¶¨ÒåÊı¾İ£©</param>
+        /// <param name="assetName">èµ„æºå</param>
+        /// <param name="priority">ä¼˜å…ˆçº§</param>
+        /// <param name="successCallBack">æˆåŠŸå›è°ƒï¼ˆèµ„æºï¼Œè‡ªå®šä¹‰æ•°æ®ï¼‰</param>
         public void LoadAsset(string assetName, Action<object, object> successCallBack, int priority = 0)
         {
             Component.LoadAsset(assetName, priority, new LoadAssetCallbacks(
                                     (backAssetName, asset, duration, userData) => { successCallBack(asset, userData); },
                                     (backAssetName, status, errorMessage, userData) =>
                                     {
-                                        Log.Error($"×ÊÔ´ £º{assetName}  ¼ÓÔØÊ§°Ü£¬errorMessage£º{errorMessage}");
+                                        Log.Error($"èµ„æº ï¼š{assetName}  åŠ è½½å¤±è´¥ï¼ŒerrorMessageï¼š{errorMessage}");
                                     }));
         }
 
         /// <summary>
-        /// Òì²½¼ÓÔØ×ÊÔ´
+        /// å¼‚æ­¥åŠ è½½èµ„æº
         /// </summary>
-        /// <param name="assetName">×ÊÔ´Ãû</param>
-        /// <param name="priority">ÓÅÏÈ¼¶</param>
+        /// <param name="assetName">èµ„æºå</param>
+        /// <param name="priority">ä¼˜å…ˆçº§</param>
         public async CTask<object> LoadAsset(string assetName, int priority = 0)
         {
             bool   isSuccess = false;
@@ -61,7 +61,7 @@ namespace Fuse.Hotfix
                                     },
                                     (backAssetName, status, errorMessage, userData) =>
                                     {
-                                        Log.Error($"×ÊÔ´ £º{assetName}  ¼ÓÔØÊ§°Ü£¬errorMessage£º{errorMessage}");
+                                        Log.Error($"èµ„æº ï¼š{assetName}  åŠ è½½å¤±è´¥ï¼ŒerrorMessageï¼š{errorMessage}");
                                         isSuccess = false;
                                     }));
             await CTask.WaitUntil(() => isSuccess);
@@ -69,9 +69,9 @@ namespace Fuse.Hotfix
         }
 
         /// <summary>
-        /// Òì²½¼ÓÔØconfig
+        /// å¼‚æ­¥åŠ è½½config
         /// </summary>
-        /// <param name="assetName">×ÊÔ´Ãû</param>
+        /// <param name="assetName">èµ„æºå</param>
         public async CTask<string> LoadAsset_Config(string configName)
         {
             object obj =

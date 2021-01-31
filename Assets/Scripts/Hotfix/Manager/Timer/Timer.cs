@@ -47,7 +47,7 @@ namespace Fuse.Hotfix
             m_TimeTotal = 0;
         }
 
-        //¹ÜÀíÆ÷½øĞĞµ÷ÓÃ
+        //ç®¡ç†å™¨è¿›è¡Œè°ƒç”¨
         public void Update(float deltaTime, float realElapseSeconds)
         {
             if (!isStart)

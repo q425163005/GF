@@ -7,18 +7,18 @@ using GameFramework;
 namespace Fuse.Editor
 {
     /// <summary>
-    /// ¿ò¼Ü¹¤¾ß²Ëµ¥
+    /// æ¡†æ¶å·¥å…·èœå•
     /// </summary>
     public class FuseToolsMenu
     {
-        #region ¿ì½İ¼ü       
+        #region å¿«æ·é”®       
 
         private const string LastScenePrefKey = "CSF.LastSceneOpen";
 
         /// <summary>
-        /// ´ò¿ªÖ÷³¡¾°Ö®Ç°µÄÒ»¸ö³¡¾°
+        /// æ‰“å¼€ä¸»åœºæ™¯ä¹‹å‰çš„ä¸€ä¸ªåœºæ™¯
         /// </summary>
-        [MenuItem("¡ï¹¤¾ß¡ï/¿ì½İ¼ü/´ò¿ªÉÏ¸ö³¡¾° _F4", false, -20)]
+        [MenuItem("â˜…å·¥å…·â˜…/å¿«æ·é”®/æ‰“å¼€ä¸Šä¸ªåœºæ™¯ _F4", false, -20)]
         public static void OpenLastScene()
         {
             var lastScene = EditorPrefs.GetString(LastScenePrefKey);
@@ -29,9 +29,9 @@ namespace Fuse.Editor
         }
 
         /// <summary>
-        /// ´ò¿ªÖ÷³¡¾°
+        /// æ‰“å¼€ä¸»åœºæ™¯
         /// </summary>
-        [MenuItem("¡ï¹¤¾ß¡ï/¿ì½İ¼ü/¿ªÊ¼ÓÎÏ· _F5", false, -10)]
+        [MenuItem("â˜…å·¥å…·â˜…/å¿«æ·é”®/å¼€å§‹æ¸¸æˆ _F5", false, -10)]
         public static void OpenMainScene()
         {
             var currentScene = EditorSceneManager.GetActiveScene().path;
@@ -45,7 +45,7 @@ namespace Fuse.Editor
                 EditorApplication.isPlaying = true;
         }
 
-        //[MenuItem("¡ï¹¤¾ß¡ï/¹Ø¿¨±à¼­Æ÷")]
+        //[MenuItem("â˜…å·¥å…·â˜…/å…³å¡ç¼–è¾‘å™¨")]
         //public static void OpenEdtiroScene()
         //{
         //    var currentScene = EditorSceneManager.GetActiveScene().path;
@@ -57,7 +57,7 @@ namespace Fuse.Editor
         //    if (!EditorApplication.isPlaying)
         //        EditorApplication.isPlaying = true;
 
-        //    //ÉèÖÃ¹Ø¿¨±à¼­·Ö±æÂÊ
+        //    //è®¾ç½®å…³å¡ç¼–è¾‘åˆ†è¾¨ç‡
         //    var type = typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.GameView");
         //    var window = EditorWindow.GetWindow(type);
         //    var SizeSelectionCallback = type.GetMethod("SizeSelectionCallback",
@@ -68,26 +68,26 @@ namespace Fuse.Editor
 
         #endregion
 
-        [MenuItem("¡ï¹¤¾ß¡ï/¿½±´ÈÈ¸üĞÂDLL",false,1)]
+        [MenuItem("â˜…å·¥å…·â˜…/æ‹·è´çƒ­æ›´æ–°DLL",false,1)]
         public static void BuildHotfixDLL()
         {
             BuildHotfixEditor.BuildHotfixDLL();
         }
 
-        [MenuItem("¡ï¹¤¾ß¡ï/Excel×ªConfig¹¤¾ß", false, 2)]
+        [MenuItem("â˜…å·¥å…·â˜…/Excelè½¬Configå·¥å…·", false, 2)]
         public static void Excel2Config()
         {
             ConfigGeneratorEditor.ShowWindow();
         }
 
-        [MenuItem("¡ï¹¤¾ß¡ï/´úÂëÄ£°åÉú³É¹¤¾ß", false, 3)]
+        [MenuItem("â˜…å·¥å…·â˜…/ä»£ç æ¨¡æ¿ç”Ÿæˆå·¥å…·", false, 3)]
         public static void CodeGenerator()
         {
             CodeGeneratorEditor.ShowWindow();
         }
 
 
-        [MenuItem("¡ï¹¤¾ß¡ï/ILRuntime/Generate ILRuntime CLR Binding Code by Analysis")]
+        [MenuItem("â˜…å·¥å…·â˜…/ILRuntime/Generate ILRuntime CLR Binding Code by Analysis")]
         public static void GenerateCLRBindingByAnalysis()
         {
             ILRuntimeCLRBinding.GenerateCLRBindingByAnalysis();

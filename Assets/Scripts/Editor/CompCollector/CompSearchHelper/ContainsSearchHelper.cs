@@ -4,7 +4,7 @@ namespace Fuse.Editor
     {
         public string CustomName()
         {
-            return "°üº¬ËÑË÷";
+            return "åŒ…å«æœç´¢";
         }
 
         public bool IsAccord(string inputStr, string targetStr)

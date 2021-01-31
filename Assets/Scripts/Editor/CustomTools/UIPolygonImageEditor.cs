@@ -28,7 +28,7 @@ namespace Fuse.Editor
                 return;
             }
 
-            // ¹Ø±ÕÔ­À´buttonµÄÉäÏß¼ì²â
+            // å…³é—­åŸæ¥buttonçš„å°„çº¿æ£€æµ‹
             var graphics = goRoot.GetComponentsInChildren<Graphic>();
             foreach (var graphic in graphics)
             {

@@ -15,11 +15,11 @@ namespace Fuse.Editor
         public static void ShowWindow()
         {
             ConfigGeneratorEditor myWindow =
-                (ConfigGeneratorEditor) EditorWindow.GetWindow(typeof(ConfigGeneratorEditor), true, "Excel转Config工具",
-                                                               true); //创建窗口
+                (ConfigGeneratorEditor) EditorWindow.GetWindow(typeof(ConfigGeneratorEditor), true, "Excel杞珻onfig宸ュ叿",
+                                                               true); //鍒涘缓绐楀彛
             myWindow.minSize = new Vector2(425, 540);
             myWindow.maxSize = new Vector2(425, 540);
-            myWindow.Show(); //展示
+            myWindow.Show(); //灞曠ず
         }
 
         private       string ExcelPath           = string.Empty;
@@ -46,7 +46,7 @@ namespace Fuse.Editor
         {
             EditorGUILayout.BeginHorizontal();
             {
-                EditorGUILayout.LabelField("Excel存放路径: ", GUILayout.Width(85f));
+                EditorGUILayout.LabelField("Excel瀛樻斁璺緞: ", GUILayout.Width(85f));
                 ExcelPath = EditorGUILayout.TextField(ExcelPath);
                 if (GUILayout.Button("Browse...", GUILayout.Width(80f)))
                 {
@@ -55,8 +55,8 @@ namespace Fuse.Editor
             }
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.LabelField($"Config输出路径: {ConfigOutPutPath}");
-            EditorGUILayout.LabelField($"  Class输出路径: {ScriptOutPutPath}");
+            EditorGUILayout.LabelField($"Config杈撳嚭璺緞: {ConfigOutPutPath}");
+            EditorGUILayout.LabelField($"  Class杈撳嚭璺緞: {ScriptOutPutPath}");
 
             EditorGUILayout.Space();
             
@@ -89,10 +89,10 @@ namespace Fuse.Editor
             }
             EditorGUILayout.EndHorizontal();
 
-            //进度
+            //杩涘害
             if (allNum > 0)
             {
-                if (EditorUtility.DisplayCancelableProgressBar("当前进度", $"{completedNum}/{allNum}",
+                if (EditorUtility.DisplayCancelableProgressBar("褰撳墠杩涘害", $"{completedNum}/{allNum}",
                                                                (float) completedNum / allNum))
                 {
                     EditorUtility.ClearProgressBar();
@@ -169,7 +169,7 @@ namespace Fuse.Editor
             allNum = clientSheet.Count;
 
             List<Task> list = new List<Task>();
-            Debug.Log($"开始导出Config和Class 数量 : {clientSheet.Count}");
+            Debug.Log($"寮�濮嬪鍑篊onfig鍜孋lass 鏁伴噺 : {clientSheet.Count}");
             for (int i = 0; i < clientSheet.Count; i++)
             {
                 int        index = i;
@@ -196,7 +196,7 @@ namespace Fuse.Editor
             {
                 completedNum = 0;
                 allNum       = 0;
-                Debug.Log($"Config生成完毕");
+                Debug.Log($"Config鐢熸垚瀹屾瘯");
                 AssetDatabase.Refresh();
             }));
         }

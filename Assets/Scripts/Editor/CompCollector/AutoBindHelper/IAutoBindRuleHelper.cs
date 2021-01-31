@@ -4,14 +4,14 @@ using UnityEngine;
 namespace Fuse.Editor
 {
     /// <summary>
-    /// ×Ô¶¯°ó¶¨¹æÔò¸¨ÖúÆ÷½Ó¿Ú
+    /// è‡ªåŠ¨ç»‘å®šè§„åˆ™è¾…åŠ©å™¨æ¥å£
     /// </summary>
     public interface IAutoBindRuleHelper
     {
-        /// <summary>ÊÇ·ñÎªÓĞĞ§°ó¶¨</summary>
+        /// <summary>æ˜¯å¦ä¸ºæœ‰æ•ˆç»‘å®š</summary>
         bool IsValidBind(Transform target, List<string> filedNames, List<string> componentTypeNames);
 
-        /// <summary>»ñÈ¡°ó¶¨Ë÷Òı±í</summary>
+        /// <summary>è·å–ç»‘å®šç´¢å¼•è¡¨</summary>
         string GetBindTips();
     }
 }

@@ -1,11 +1,11 @@
 namespace Fuse.Editor
 {
     /// <summary>
-    /// 自动生成绑定代码接口
+    /// 鑷姩鐢熸垚缁戝畾浠ｇ爜鎺ュ彛
     /// </summary>
     public interface ICodeGenerateHelper
     {
-        /// <summary>生成绑定代码</summary>
+        /// <summary>鐢熸垚缁戝畾浠ｇ爜</summary>
         void GenerateCode(CompCollector collector);
     }
 }

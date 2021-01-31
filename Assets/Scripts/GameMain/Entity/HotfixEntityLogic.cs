@@ -27,9 +27,9 @@ namespace Fuse
         [HideInInspector] public GameObject       ins_obj;
 
         /// <summary>
-        /// ÊµÌå³õÊ¼»¯¡£
+        /// å®ä½“åˆå§‹åŒ–ã€‚
         /// </summary>
-        /// <param name="userData">ÓÃ»§×Ô¶¨ÒåÊı¾İ¡£</param>
+        /// <param name="userData">ç”¨æˆ·è‡ªå®šä¹‰æ•°æ®ã€‚</param>
         protected override void OnInit(object userData)
         {
             Name    = Name.Replace("(Clone)", string.Empty);
@@ -40,9 +40,9 @@ namespace Fuse
         }
 
         /// <summary>
-        /// ÊµÌåÏÔÊ¾¡£
+        /// å®ä½“æ˜¾ç¤ºã€‚
         /// </summary>
-        /// <param name="userData">ÓÃ»§×Ô¶¨ÒåÊı¾İ¡£</param>
+        /// <param name="userData">ç”¨æˆ·è‡ªå®šä¹‰æ•°æ®ã€‚</param>
         protected override void OnShow(object userData)
         {
             base.OnShow(userData);
@@ -51,10 +51,10 @@ namespace Fuse
         }
 
         /// <summary>
-        /// ÊµÌåÒş²Ø¡£
+        /// å®ä½“éšè—ã€‚
         /// </summary>
-        /// <param name="isShutdown">ÊÇ·ñÊÇ¹Ø±ÕÊµÌå¹ÜÀíÆ÷Ê±´¥·¢¡£</param>
-        /// <param name="userData">ÓÃ»§×Ô¶¨ÒåÊı¾İ¡£</param>
+        /// <param name="isShutdown">æ˜¯å¦æ˜¯å…³é—­å®ä½“ç®¡ç†å™¨æ—¶è§¦å‘ã€‚</param>
+        /// <param name="userData">ç”¨æˆ·è‡ªå®šä¹‰æ•°æ®ã€‚</param>
         protected override void OnHide(bool isShutdown, object userData)
         {
             base.OnHide(isShutdown, userData);
@@ -62,7 +62,7 @@ namespace Fuse
         }
 
         /// <summary>
-        /// ÊµÌå»ØÊÕ¡£
+        /// å®ä½“å›æ”¶ã€‚
         /// </summary>
         protected override void OnRecycle()
         {
@@ -71,10 +71,10 @@ namespace Fuse
         }
 
         /// <summary>
-        /// ÊµÌåÂÖÑ¯¡£
+        /// å®ä½“è½®è¯¢ã€‚
         /// </summary>
-        /// <param name="elapseSeconds">Âß¼­Á÷ÊÅÊ±¼ä£¬ÒÔÃëÎªµ¥Î»¡£</param>
-        /// <param name="realElapseSeconds">ÕæÊµÁ÷ÊÅÊ±¼ä£¬ÒÔÃëÎªµ¥Î»¡£</param>
+        /// <param name="elapseSeconds">é€»è¾‘æµé€æ—¶é—´ï¼Œä»¥ç§’ä¸ºå•ä½ã€‚</param>
+        /// <param name="realElapseSeconds">çœŸå®æµé€æ—¶é—´ï¼Œä»¥ç§’ä¸ºå•ä½ã€‚</param>
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(elapseSeconds, realElapseSeconds);
@@ -82,11 +82,11 @@ namespace Fuse
         }
 
         /// <summary>
-        /// ÊµÌå¸½¼Ó×ÓÊµÌå¡£
+        /// å®ä½“é™„åŠ å­å®ä½“ã€‚
         /// </summary>
-        /// <param name="childEntity">¸½¼ÓµÄ×ÓÊµÌå¡£</param>
-        /// <param name="parentTransform">±»¸½¼Ó¸¸ÊµÌåµÄÎ»ÖÃ¡£</param>
-        /// <param name="userData">ÓÃ»§×Ô¶¨ÒåÊı¾İ¡£</param>
+        /// <param name="childEntity">é™„åŠ çš„å­å®ä½“ã€‚</param>
+        /// <param name="parentTransform">è¢«é™„åŠ çˆ¶å®ä½“çš„ä½ç½®ã€‚</param>
+        /// <param name="userData">ç”¨æˆ·è‡ªå®šä¹‰æ•°æ®ã€‚</param>
         protected override void OnAttached(EntityLogic childEntity, Transform parentTransform, object userData)
         {
             base.OnAttached(childEntity, parentTransform, userData);
@@ -94,10 +94,10 @@ namespace Fuse
         }
 
         /// <summary>
-        /// ÊµÌå½â³ı×ÓÊµÌå¡£
+        /// å®ä½“è§£é™¤å­å®ä½“ã€‚
         /// </summary>
-        /// <param name="childEntity">½â³ıµÄ×ÓÊµÌå¡£</param>
-        /// <param name="userData">ÓÃ»§×Ô¶¨ÒåÊı¾İ¡£</param>
+        /// <param name="childEntity">è§£é™¤çš„å­å®ä½“ã€‚</param>
+        /// <param name="userData">ç”¨æˆ·è‡ªå®šä¹‰æ•°æ®ã€‚</param>
         protected override void OnDetached(EntityLogic childEntity, object userData)
         {
             base.OnDetached(childEntity, userData);
@@ -105,11 +105,11 @@ namespace Fuse
         }
 
         /// <summary>
-        /// ÊµÌå¸½¼Ó×ÓÊµÌå¡£
+        /// å®ä½“é™„åŠ å­å®ä½“ã€‚
         /// </summary>
-        /// <param name="parentEntity">±»¸½¼ÓµÄ¸¸ÊµÌå¡£</param>
-        /// <param name="parentTransform">±»¸½¼Ó¸¸ÊµÌåµÄÎ»ÖÃ¡£</param>
-        /// <param name="userData">ÓÃ»§×Ô¶¨ÒåÊı¾İ¡£</param>
+        /// <param name="parentEntity">è¢«é™„åŠ çš„çˆ¶å®ä½“ã€‚</param>
+        /// <param name="parentTransform">è¢«é™„åŠ çˆ¶å®ä½“çš„ä½ç½®ã€‚</param>
+        /// <param name="userData">ç”¨æˆ·è‡ªå®šä¹‰æ•°æ®ã€‚</param>
         protected override void OnAttachTo(EntityLogic parentEntity, Transform parentTransform, object userData)
         {
             base.OnAttachTo(parentEntity, parentTransform, userData);
@@ -117,10 +117,10 @@ namespace Fuse
         }
 
         /// <summary>
-        /// ÊµÌå½â³ı×ÓÊµÌå¡£
+        /// å®ä½“è§£é™¤å­å®ä½“ã€‚
         /// </summary>
-        /// <param name="parentEntity">±»½â³ıµÄ¸¸ÊµÌå¡£</param>
-        /// <param name="userData">ÓÃ»§×Ô¶¨ÒåÊı¾İ¡£</param>
+        /// <param name="parentEntity">è¢«è§£é™¤çš„çˆ¶å®ä½“ã€‚</param>
+        /// <param name="userData">ç”¨æˆ·è‡ªå®šä¹‰æ•°æ®ã€‚</param>
         protected override void OnDetachFrom(EntityLogic parentEntity, object userData)
         {
             base.OnDetachFrom(parentEntity, userData);

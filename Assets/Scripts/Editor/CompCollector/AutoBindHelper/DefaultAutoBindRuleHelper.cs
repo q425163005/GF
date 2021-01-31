@@ -4,11 +4,11 @@ using UnityEngine;
 namespace Fuse.Editor
 {
     /// <summary>
-    /// Ä¬ÈÏ×Ô¶¯°ó¶¨¹æÔò¸¨ÖúÆ÷
+    /// é»˜è®¤è‡ªåŠ¨ç»‘å®šè§„åˆ™è¾…åŠ©å™¨
     /// </summary>
     public class DefaultAutoBindRuleHelper : IAutoBindRuleHelper
     {
-        /// <summary>ÃüÃûÇ°×ºÓëÀàĞÍµÄÓ³Éä</summary>
+        /// <summary>å‘½åå‰ç¼€ä¸ç±»å‹çš„æ˜ å°„</summary>
         private Dictionary<string, string> m_PrefixesDict = new Dictionary<string, string>()
         {
             {"Trans", "Transform"},
@@ -70,13 +70,13 @@ namespace Fuse.Editor
                     }
                     else
                     {
-                        Debug.LogError($"{target.name}ÉÏ²»´æÔÚ{comName}µÄ×é¼ş");
+                        Debug.LogError($"{target.name}ä¸Šä¸å­˜åœ¨{comName}çš„ç»„ä»¶");
                         return false;
                     }
                 }
                 else
                 {
-                    Debug.LogError($"{target.name}µÄÃüÃûÖĞ{str}²»´æÔÚ¶ÔÓ¦µÄ×é¼şÀàĞÍ£¬°ó¶¨Ê§°Ü");
+                    Debug.LogError($"{target.name}çš„å‘½åä¸­{str}ä¸å­˜åœ¨å¯¹åº”çš„ç»„ä»¶ç±»å‹ï¼Œç»‘å®šå¤±è´¥");
                     return false;
                 }
             }
@@ -86,8 +86,8 @@ namespace Fuse.Editor
 
         public string GetBindTips()
         {
-            string str = "ÃüÃûÓ³Éä±í" + "\n";
-            str += "_Îª·Ö¸ô·û" + "\n\n";
+            string str = "å‘½åæ˜ å°„è¡¨" + "\n";
+            str += "_ä¸ºåˆ†éš”ç¬¦" + "\n\n";
             foreach (var variable in m_PrefixesDict)
             {
                 str += $"{variable.Key}=>{variable.Value}\n";

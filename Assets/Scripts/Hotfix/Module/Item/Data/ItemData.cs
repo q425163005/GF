@@ -5,46 +5,46 @@ using UnityEngine;
 namespace Fuse.Hotfix.Item
 {
     /// <summary>
-    /// Item数据基类
+    /// Item鏁版嵁鍩虹被
     /// </summary>
     public class ItemData
     {
-        /// <summary>模板ID</summary>
+        /// <summary>妯℃澘ID</summary>
         public int TempId => Config.id;
 
-        /// <summary>物品配置</summary>
+        /// <summary>鐗╁搧閰嶇疆</summary>
         public ItemConfig Config;
 
-        /// <summary>物品大类</summary>
+        /// <summary>鐗╁搧澶х被</summary>
         public EItemType Type => (EItemType) Config.type;
 
-        /// <summary>物品品质</summary>
+        /// <summary>鐗╁搧鍝佽川</summary>
         public EQuality Quality => (EQuality) Config.quality;
 
-        /// <summary>数量</summary>
+        /// <summary>鏁伴噺</summary>
         public int Num { get; protected set; } = 0;
         
-        /// <summary>名称</summary>
+        /// <summary>鍚嶇О</summary>
         public string ItemName => Config.name.Value;
 
-        /// <summary>图片</summary>
+        /// <summary>鍥剧墖</summary>
         public string Icon => Config.icon;
 
-        /// <summary>描述</summary>
+        /// <summary>鎻忚堪</summary>
         public string Des => Config.des.Value;
 
-        /// <summary>物品子类</summary>
+        /// <summary>鐗╁搧瀛愮被</summary>
         public int subType => Config.subType;
 
         /// <summary></summary>
-        /// <param name="tempId">物品模板ID</param>
+        /// <param name="tempId">鐗╁搧妯℃澘ID</param>
         public ItemData(int tempId)
         {
             Config = Mgr.Config.Get<ItemConfig>(tempId);
         }
 
         /// <summary>
-        /// 用于商品显示数量
+        /// 鐢ㄤ簬鍟嗗搧鏄剧ず鏁伴噺
         /// </summary>
         /// <param name="tempId"></param>
         /// <param name="Count"></param>
