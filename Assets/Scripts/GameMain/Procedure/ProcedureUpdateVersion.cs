@@ -35,10 +35,10 @@ namespace Fuse
 
             m_UpdateVersionComplete = false;
 
-            GameEntry.Resource.UpdateVersionList(procedureOwner.GetData<VarInt>("VersionListLength"),
-                                                 procedureOwner.GetData<VarInt>("VersionListHashCode"),
-                                                 procedureOwner.GetData<VarInt>("VersionListZipLength"),
-                                                 procedureOwner.GetData<VarInt>("VersionListZipHashCode"),
+            GameEntry.Resource.UpdateVersionList(procedureOwner.GetData<VarInt32>("VersionListLength"),
+                                                 procedureOwner.GetData<VarInt32>("VersionListHashCode"),
+                                                 procedureOwner.GetData<VarInt32>("VersionListZipLength"),
+                                                 procedureOwner.GetData<VarInt32>("VersionListZipHashCode"),
                                                  m_UpdateVersionListCallbacks);
             procedureOwner.RemoveData("VersionListLength");
             procedureOwner.RemoveData("VersionListHashCode");

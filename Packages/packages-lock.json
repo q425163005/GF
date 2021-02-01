@@ -1,23 +1,27 @@
 {
   "dependencies": {
-    "com.coffee.ui-effect": {
-      "version": "https://gitee.com/q425163005/UIEffect.git",
+    "com.coffee.softmask-for-ugui": {
+      "version": "file:com.coffee.softmask-for-ugui",
       "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "b43e40508b167d143330d8b9eff0d5c9965cdf3c"
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.coffee.ui-effect": {
+      "version": "file:com.coffee.ui-effect",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.coffee.ui-particle": {
-      "version": "https://gitee.com/q425163005/ParticleEffectForUGUI.git",
+      "version": "file:com.coffee.ui-particle",
       "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "1b1ca56461c4aa1c1e1436fcf0de43a22c13c7c1"
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.jiangyin.gameframework": {
-      "version": "https://gitee.com/jiangyin/UnityGameFramework.git",
+      "version": "file:com.jiangyin.gameframework",
       "depth": 0,
-      "source": "git",
+      "source": "embedded",
       "dependencies": {
         "com.unity.modules.androidjni": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
@@ -26,15 +30,13 @@
         "com.unity.modules.imgui": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0",
         "com.unity.modules.unitywebrequest": "1.0.0"
-      },
-      "hash": "a9a9a8ae57325e7290c8e77c32dbc4f3d981b59f"
+      }
     },
     "com.ourpalm.ilruntime": {
-      "version": "1.6.5",
+      "version": "file:com.ourpalm.ilruntime",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://registry.npmjs.org"
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.unity.collab-proxy": {
       "version": "1.3.9",
@@ -113,6 +115,12 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
+    },
+    "jp.setchi.fancyscrollview": {
+      "version": "file:jp.setchi.fancyscrollview",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

@@ -330,7 +330,10 @@ MonoBehaviour:
   m_SelCodeName: Fuse.Editor.UICodeGenerateHelper
   m_SelSearchName: Fuse.Editor.AccurateSearchHelper
   m_EntityName: 
-  CompCollectorInfos: []
+  CompCollectorInfos:
+  - Name: Btn_Login
+    ComponentType: UnityEngine.UI.Button
+    Object: {fileID: 2815607966725479658}
 --- !u!114 &2996648947940666112
 MonoBehaviour:
   m_ObjectHideFlags: 0
