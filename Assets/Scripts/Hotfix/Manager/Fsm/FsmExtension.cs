@@ -12,10 +12,10 @@ namespace Fuse.Hotfix
     public static class FsmExtension
     {
         /// <summary>
-        /// ÇĞ»»µ±Ç°ÓĞÏŞ×´Ì¬»ú×´Ì¬¡£
+        /// åˆ‡æ¢å½“å‰æœ‰é™çŠ¶æ€æœºçŠ¶æ€ã€‚
         /// </summary>
-        /// <typeparam name="TState">ÒªÇĞ»»µ½µÄÓĞÏŞ×´Ì¬»ú×´Ì¬ÀàĞÍ¡£</typeparam>
-        /// <param name="fsm">ÓĞÏŞ×´Ì¬»úÒıÓÃ¡£</param>
+        /// <typeparam name="TState">è¦åˆ‡æ¢åˆ°çš„æœ‰é™çŠ¶æ€æœºçŠ¶æ€ç±»å‹ã€‚</typeparam>
+        /// <param name="fsm">æœ‰é™çŠ¶æ€æœºå¼•ç”¨ã€‚</param>
         public static void ChangeState<TState>(this IFsm fsm) where TState : FsmState
         {
             Fsm fsmImplement = (Fsm)fsm;
@@ -28,10 +28,10 @@ namespace Fuse.Hotfix
         }
 
         /// <summary>
-        /// ÇĞ»»µ±Ç°ÓĞÏŞ×´Ì¬»ú×´Ì¬¡£
+        /// åˆ‡æ¢å½“å‰æœ‰é™çŠ¶æ€æœºçŠ¶æ€ã€‚
         /// </summary>
-        /// <param name="fsm">ÓĞÏŞ×´Ì¬»úÒıÓÃ¡£</param>
-        /// <param name="stateType">ÒªÇĞ»»µ½µÄÓĞÏŞ×´Ì¬»ú×´Ì¬ÀàĞÍ¡£</param>
+        /// <param name="fsm">æœ‰é™çŠ¶æ€æœºå¼•ç”¨ã€‚</param>
+        /// <param name="stateType">è¦åˆ‡æ¢åˆ°çš„æœ‰é™çŠ¶æ€æœºçŠ¶æ€ç±»å‹ã€‚</param>
         public static void ChangeState(this IFsm fsm, Type stateType)
         {
             Fsm fsmImplement = (Fsm)fsm;

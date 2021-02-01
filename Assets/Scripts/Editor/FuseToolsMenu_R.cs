@@ -4,13 +4,13 @@ namespace Fuse.Editor
 {
     public class FuseToolsMenu_R
     {
-        [MenuItem("GameObject/¡ï×Ô¶¨Òå×é¼þ¡ï/UIPolygonImage", false, 10)]
+        [MenuItem("GameObject/â˜…è‡ªå®šä¹‰ç»„ä»¶â˜…/UIPolygonImage", false, 10)]
         public static void CreateUIPolygonImage()
         {
             UIPolygonImageHelper.CreateUIPolygonImage();
         }
 
-        [MenuItem("GameObject/¡ï×Ô¶¨Òå×é¼þ¡ï/UICurvedText", false, 11)]
+        [MenuItem("GameObject/â˜…è‡ªå®šä¹‰ç»„ä»¶â˜…/UICurvedText", false, 11)]
         public static void CreateUICurvedText()
         {
             var goRoot = Selection.activeGameObject;

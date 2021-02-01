@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace Fuse
 {
     /// <summary>
-    /// ²»¹æÔòµã»÷ÇøÓòÍ¼Æ¬
+    /// ä¸è§„åˆ™ç‚¹å‡»åŒºåŸŸå›¾ç‰‡
     /// </summary>
     [RequireComponent(typeof(PolygonCollider2D))]
     public class UIPolygonImage : Image

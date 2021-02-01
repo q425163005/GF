@@ -56,8 +56,8 @@ namespace Fuse
             }
             return rtn;
         }
-        #region 获取数组 T[]
-        /// <summary>通用方法</summary>
+        #region 鑾峰彇鏁扮粍 T[]
+        /// <summary>閫氱敤鏂规硶</summary>
         public static T[] GetArray<T>(string str, char separator = split_default)
         {
             if (str == string.Empty || str == null)
@@ -310,7 +310,7 @@ namespace Fuse
             IsArray = field.FieldType.IsArray;
             TypeName = field.FieldType.UnderlyingSystemType.Name;
 
-            //语言特殊处理
+            //璇█鐗规畩澶勭悊
             IsLang = field.FieldType.Name == "Lang";
             if (IsLang)
                 TypeName = field.FieldType.FullName;

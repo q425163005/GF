@@ -8,7 +8,7 @@ namespace Fuse.Hotfix
 {
     public class BaseEntityLogic : BaseObject
     {
-        /// <summary>Ö÷¹¤³ÌµÄÊµÌåÂß¼­½Å±¾</summary>
+        /// <summary>ä¸»å·¥ç¨‹çš„å®ä½“é€»è¾‘è„šæœ¬</summary>
         protected Fuse.HotfixEntityLogic EntityLogic { get; private set; }
 
         public baseEntityAction EntityAction(object userData)
@@ -32,19 +32,19 @@ namespace Fuse.Hotfix
         public bool isShow   { get; private set; } = false;
 
         /// <summary>
-        /// µÈ´ıÊµÌå¼ÓÔØÍê³É
+        /// ç­‰å¾…å®ä½“åŠ è½½å®Œæˆ
         /// </summary>
         public virtual async CTask Await()
         {
             await CTask.WaitUntil(() => isShow && isInstance);
         }
 
-        #region EntityLogicÉúÃüÖÜÆÚ
+        #region EntityLogicç”Ÿå‘½å‘¨æœŸ
 
         /// <summary>
-        /// ÊµÌå³õÊ¼»¯¡£
+        /// å®ä½“åˆå§‹åŒ–ã€‚
         /// </summary>
-        /// <param name="userData">ÓÃ»§×Ô¶¨ÒåÊı¾İ¡£</param>
+        /// <param name="userData">ç”¨æˆ·è‡ªå®šä¹‰æ•°æ®ã€‚</param>
         protected void OnInit(GameObject entityObj, object userData)
         {
 //            EntityLogic = entityObj.GetComponent<HotfixEntityLogic>();
@@ -53,9 +53,9 @@ namespace Fuse.Hotfix
         }
 
         /// <summary>
-        /// ÊµÌåÏÔÊ¾¡£
+        /// å®ä½“æ˜¾ç¤ºã€‚
         /// </summary>
-        /// <param name="userData">ÓÃ»§×Ô¶¨ÒåÊı¾İ¡£</param>
+        /// <param name="userData">ç”¨æˆ·è‡ªå®šä¹‰æ•°æ®ã€‚</param>
         protected virtual void OnShow(GameObject entityObj, object userData)
         {
             EntityLogic = entityObj.GetComponent<HotfixEntityLogic>();
@@ -65,7 +65,7 @@ namespace Fuse.Hotfix
         }
 
         /// <summary>
-        /// ÊµÌå»ØÊÕ¡£
+        /// å®ä½“å›æ”¶ã€‚
         /// </summary>
         protected virtual void OnRecycle()
         {
@@ -73,57 +73,57 @@ namespace Fuse.Hotfix
         }
 
         /// <summary>
-        /// ÊµÌåÒş²Ø¡£
+        /// å®ä½“éšè—ã€‚
         /// </summary>
-        /// <param name="isShutdown">ÊÇ·ñÊÇ¹Ø±ÕÊµÌå¹ÜÀíÆ÷Ê±´¥·¢¡£</param>
-        /// <param name="userData">ÓÃ»§×Ô¶¨ÒåÊı¾İ¡£</param>
+        /// <param name="isShutdown">æ˜¯å¦æ˜¯å…³é—­å®ä½“ç®¡ç†å™¨æ—¶è§¦å‘ã€‚</param>
+        /// <param name="userData">ç”¨æˆ·è‡ªå®šä¹‰æ•°æ®ã€‚</param>
         protected virtual void OnHide(bool isShutdown, object userData)
         {
         }
 
         /// <summary>
-        /// ÊµÌå¸½¼Ó×ÓÊµÌå¡£
+        /// å®ä½“é™„åŠ å­å®ä½“ã€‚
         /// </summary>
-        /// <param name="childEntity">¸½¼ÓµÄ×ÓÊµÌå¡£</param>
-        /// <param name="parentTransform">±»¸½¼Ó¸¸ÊµÌåµÄÎ»ÖÃ¡£</param>
-        /// <param name="userData">ÓÃ»§×Ô¶¨ÒåÊı¾İ¡£</param>
+        /// <param name="childEntity">é™„åŠ çš„å­å®ä½“ã€‚</param>
+        /// <param name="parentTransform">è¢«é™„åŠ çˆ¶å®ä½“çš„ä½ç½®ã€‚</param>
+        /// <param name="userData">ç”¨æˆ·è‡ªå®šä¹‰æ•°æ®ã€‚</param>
         protected virtual void OnAttached(EntityLogic childEntity, Transform parentTransform, object userData)
         {
         }
 
         /// <summary>
-        /// ÊµÌå½â³ı×ÓÊµÌå¡£
+        /// å®ä½“è§£é™¤å­å®ä½“ã€‚
         /// </summary>
-        /// <param name="childEntity">½â³ıµÄ×ÓÊµÌå¡£</param>
-        /// <param name="userData">ÓÃ»§×Ô¶¨ÒåÊı¾İ¡£</param>
+        /// <param name="childEntity">è§£é™¤çš„å­å®ä½“ã€‚</param>
+        /// <param name="userData">ç”¨æˆ·è‡ªå®šä¹‰æ•°æ®ã€‚</param>
         protected virtual void OnDetached(EntityLogic childEntity, object userData)
         {
         }
 
         /// <summary>
-        /// ÊµÌå¸½¼Ó×ÓÊµÌå¡£
+        /// å®ä½“é™„åŠ å­å®ä½“ã€‚
         /// </summary>
-        /// <param name="parentEntity">±»¸½¼ÓµÄ¸¸ÊµÌå¡£</param>
-        /// <param name="parentTransform">±»¸½¼Ó¸¸ÊµÌåµÄÎ»ÖÃ¡£</param>
-        /// <param name="userData">ÓÃ»§×Ô¶¨ÒåÊı¾İ¡£</param>
+        /// <param name="parentEntity">è¢«é™„åŠ çš„çˆ¶å®ä½“ã€‚</param>
+        /// <param name="parentTransform">è¢«é™„åŠ çˆ¶å®ä½“çš„ä½ç½®ã€‚</param>
+        /// <param name="userData">ç”¨æˆ·è‡ªå®šä¹‰æ•°æ®ã€‚</param>
         protected virtual void OnAttachTo(EntityLogic parentEntity, Transform parentTransform, object userData)
         {
         }
 
         /// <summary>
-        /// ÊµÌå½â³ı×ÓÊµÌå¡£
+        /// å®ä½“è§£é™¤å­å®ä½“ã€‚
         /// </summary>
-        /// <param name="parentEntity">±»½â³ıµÄ¸¸ÊµÌå¡£</param>
-        /// <param name="userData">ÓÃ»§×Ô¶¨ÒåÊı¾İ¡£</param>
+        /// <param name="parentEntity">è¢«è§£é™¤çš„çˆ¶å®ä½“ã€‚</param>
+        /// <param name="userData">ç”¨æˆ·è‡ªå®šä¹‰æ•°æ®ã€‚</param>
         protected virtual void OnDetachFrom(EntityLogic parentEntity, object userData)
         {
         }
 
         /// <summary>
-        /// ÊµÌåÂÖÑ¯¡£
+        /// å®ä½“è½®è¯¢ã€‚
         /// </summary>
-        /// <param name="elapseSeconds">Âß¼­Á÷ÊÅÊ±¼ä£¬ÒÔÃëÎªµ¥Î»¡£</param>
-        /// <param name="realElapseSeconds">ÕæÊµÁ÷ÊÅÊ±¼ä£¬ÒÔÃëÎªµ¥Î»¡£</param>
+        /// <param name="elapseSeconds">é€»è¾‘æµé€æ—¶é—´ï¼Œä»¥ç§’ä¸ºå•ä½ã€‚</param>
+        /// <param name="realElapseSeconds">çœŸå®æµé€æ—¶é—´ï¼Œä»¥ç§’ä¸ºå•ä½ã€‚</param>
         protected virtual void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
         }
@@ -141,7 +141,7 @@ namespace Fuse.Hotfix
         }
 
         /// <summary>
-        /// ÊµÌåÊÍ·Å
+        /// å®ä½“é‡Šæ”¾
         /// </summary>
         protected virtual void Disposed()
         {

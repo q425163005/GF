@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace Fuse
 {
     /// <summary>
-    /// Canvas×ÔÊÊÓ¦
+    /// Canvasè‡ªé€‚åº”
     /// </summary>
     [ExecuteInEditMode]
     public class CanvasAdaptive : MonoBehaviour
@@ -13,10 +13,10 @@ namespace Fuse
         private AspectRatioFitter aspect;
         private CanvasScaler      canvas;
 
-        //Á÷º£ÇĞ¸î¸ß¶È
+        //æµæµ·åˆ‡å‰²é«˜åº¦
         public int CutoutsHeight = 0;
 
-        //µ×²¿¸î¸ß¶È
+        //åº•éƒ¨å‰²é«˜åº¦
         public int CutoutsBottonHeight = 0;
 
         [HideInInspector] public float HightScale = 1;
@@ -35,7 +35,7 @@ namespace Fuse
 #endif
         }
 
-        //ÓĞµÄÊÖ»úÓĞÁ÷º£ÏÔÊ¾ÓĞbug,ÑÓÊ±Ö´ĞĞÒ»ÏÂ
+        //æœ‰çš„æ‰‹æœºæœ‰æµæµ·æ˜¾ç¤ºæœ‰bug,å»¶æ—¶æ‰§è¡Œä¸€ä¸‹
         IEnumerator ResetAdaptive()
         {
             for (int i = 0; i < 30; i++)
@@ -73,7 +73,7 @@ namespace Fuse
         {
             SetCutoutsHeight();
             float whRatio = Screen.width / (float) Screen.height;
-            if (whRatio < DefaultScale) //¿í¸ß±ÈĞ¡ÓÚ1920*1080
+            if (whRatio < DefaultScale) //å®½é«˜æ¯”å°äº1920*1080
             {
                 canvas.matchWidthOrHeight = 0;
                 aspect.aspectMode         = AspectRatioFitter.AspectMode.WidthControlsHeight;

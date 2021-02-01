@@ -16,10 +16,10 @@ namespace Fuse.Editor
         public static void ShowWindow()
         {
             CodeGeneratorEditor myWindow =
-                (CodeGeneratorEditor) GetWindow(typeof(CodeGeneratorEditor), true, "代码模板生成工具", true); //创建窗口
+                (CodeGeneratorEditor) GetWindow(typeof(CodeGeneratorEditor), true, "浠ｇ爜妯℃澘鐢熸垚宸ュ叿", true); //鍒涘缓绐楀彛
             myWindow.minSize = new Vector2(425, 540);
             myWindow.maxSize = new Vector2(425, 540);
-            myWindow.Show(); //展示
+            myWindow.Show(); //灞曠ず
         }
 
         private void OnGUI()
@@ -32,7 +32,7 @@ namespace Fuse.Editor
                 input_procedure = EditorGUILayout.TextField(new GUIContent(""), input_procedure, GUILayout.Width(200));
                 if (string.IsNullOrEmpty(input_procedure)) GUI.enabled = false;
 
-                if (GUILayout.Button("生成"))
+                if (GUILayout.Button("鐢熸垚"))
                 {
                     CreateProcedureCode();
                 }
@@ -52,7 +52,7 @@ namespace Fuse.Editor
             codeStr.AppendLine("using ProcedureOwner = Fuse.Hotfix.IFsm;");
             codeStr.AppendLine();
 
-            //命名空间
+            //鍛藉悕绌洪棿
             codeStr.AppendLine("namespace Fuse.Hotfix");
             codeStr.AppendLine("{");
             {

@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 namespace Fuse
 {
     /// <summary>
-    /// 组件自动绑定工具
+    /// 缁勪欢鑷姩缁戝畾宸ュ叿
     /// </summary>
     public class CompCollector : MonoBehaviour
     {

@@ -1,14 +1,14 @@
 namespace Fuse.Editor
 {
     /// <summary>
-    /// ×é¼şËÑË÷½Ó¿Ú
+    /// ç»„ä»¶æœç´¢æ¥å£
     /// </summary>
     public interface ICompSearchHelper
     {
-        /// <summary>ËÑË÷ÀàĞÍÃû</summary>
+        /// <summary>æœç´¢ç±»å‹å</summary>
         string CustomName();
 
-        /// <summary>ÊÇ·ñÆ¥Åä</summary>
+        /// <summary>æ˜¯å¦åŒ¹é…</summary>
         bool IsAccord(string inputStr, string targetStr);
     }
 }

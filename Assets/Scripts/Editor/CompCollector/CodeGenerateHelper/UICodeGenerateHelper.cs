@@ -16,7 +16,7 @@ namespace Fuse.Editor
             CreateUIView(modName, uiName, collector);
         }
 
-        #region 生成代码
+        #region 鐢熸垚浠ｇ爜
 
         private void CreateUI(string modName, string uiName)
         {
@@ -39,11 +39,11 @@ namespace Fuse.Editor
         private string getUICodeStr(string modName, string uiName)
         {
             StringBuilder codeStr = new StringBuilder();
-            //命名空间
+            //鍛藉悕绌洪棿
             codeStr.AppendLine("namespace Fuse.Hotfix." + modName);
             codeStr.AppendLine("{");
 
-            //类名
+            //绫诲悕
             codeStr.AppendLine($"\tpublic partial class {uiName} : BaseUI");
             codeStr.AppendLine("\t{");
 
@@ -71,25 +71,25 @@ namespace Fuse.Editor
         {
             StringBuilder codeStr = new StringBuilder();
 
-            //引用
-            codeStr.AppendLine("//工具生成不要修改");
-            codeStr.AppendLine($"//生成时间：{DateTime.Now}");
+            //寮曠敤
+            codeStr.AppendLine("//宸ュ叿鐢熸垚涓嶈淇敼");
+            codeStr.AppendLine($"//鐢熸垚鏃堕棿锛歿DateTime.Now}");
             codeStr.AppendLine("using UnityEngine;");
             codeStr.AppendLine("using UnityEngine.UI;");
             codeStr.AppendLine("");
 
-            //命名空间
+            //鍛藉悕绌洪棿
             codeStr.AppendLine("namespace Fuse.Hotfix." + modName);
             codeStr.AppendLine("{");
 
-            //类名
+            //绫诲悕
             codeStr.AppendLine($"\tpublic partial class {uiName}");
             codeStr.AppendLine("\t{");
 
             StringBuilder compStr = new StringBuilder();
 
             string objType;
-            //组件
+            //缁勪欢
             foreach (var variable in collector.CompCollectorInfos)
             {
                 objType = getTypeName(variable.ComponentType);
@@ -104,7 +104,7 @@ namespace Fuse.Editor
                 }
             }
 
-            codeStr.AppendLine("\t\t/// <summary>初始化UI控件</summary>");
+            codeStr.AppendLine("\t\t/// <summary>鍒濆鍖朥I鎺т欢</summary>");
             codeStr.AppendLine("\t\tprotected override void InitializeComponent()");
             codeStr.AppendLine("\t\t{");
 

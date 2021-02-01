@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace Fuse.Hotfix
 {
-    /// <summary>物品大类</summary>
+    /// <summary>鐗╁搧澶х被</summary>
     public enum EItemType
     {
-        /// <summary>虚拟物品</summary>
+        /// <summary>铏氭嫙鐗╁搧</summary>
         Virtual = 0,
 
-        /// <summary>道具</summary>
+        /// <summary>閬撳叿</summary>
         Prop = 1,
 
-        /// <summary>装备</summary>
+        /// <summary>瑁呭</summary>
         Equip = 2,
     }
     

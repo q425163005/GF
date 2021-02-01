@@ -13,43 +13,43 @@ namespace Fuse.Hotfix
     {
         #region Click
 
-        /// <summary> GameObject µã»÷ÊÂ¼ş</summary>
+        /// <summary> GameObject ç‚¹å‡»äº‹ä»¶</summary>
         public static void AddClick(this GameObject go, Action action)
         {
             EventListener.Get(go).onClick = data => { action(); };
         }
 
-        /// <summary> GameObject µã»÷ÊÂ¼ş,´ø1²ÎÊı</summary>
+        /// <summary> GameObject ç‚¹å‡»äº‹ä»¶,å¸¦1å‚æ•°</summary>
         public static void AddClick<T1>(this GameObject go, Action<T1> action, T1 arg1)
         {
             EventListener.Get(go).onClick = data => { action(arg1); };
         }
 
-        /// <summary> GameObject µã»÷ÊÂ¼ş,´ø2²ÎÊı</summary>
+        /// <summary> GameObject ç‚¹å‡»äº‹ä»¶,å¸¦2å‚æ•°</summary>
         public static void AddClick<T1, T2>(this GameObject go, Action<T1, T2> action, T1 arg1, T2 arg2)
         {
             EventListener.Get(go).onClick = data => { action(arg1, arg2); };
         }
 
-        /// <summary> ¿Ø¼şµã»÷ÊÂ¼ş</summary>
+        /// <summary> æ§ä»¶ç‚¹å‡»äº‹ä»¶</summary>
         public static void AddClick<T>(this T go, Action action) where T : Component
         {
             EventListener.Get(go).onClick = data => { action(); };
         }
 
-        /// <summary> ¿Ø¼şµã»÷ÊÂ¼ş</summary>
+        /// <summary> æ§ä»¶ç‚¹å‡»äº‹ä»¶</summary>
         public static void AddClick<T, T1>(this T go, Action<T1> action, T1 arg1) where T : Component
         {
             EventListener.Get(go).onClick = data => { action(arg1); };
         }
 
-        /// <summary> ¿Ø¼şµã»÷ÊÂ¼ş</summary>
+        /// <summary> æ§ä»¶ç‚¹å‡»äº‹ä»¶</summary>
         public static void AddClick<T, T1, T2>(this T go, Action<T1, T2> action, T1 arg1, T2 arg2) where T : Component
         {
             EventListener.Get(go).onClick = data => { action(arg1, arg2); };
         }
 
-        /// <summary> °´Å¥Ôö¼Óµã»÷ÊÂ¼ş(»¬¶¯´°¿ÚÖĞÊ¹ÓÃ£¬²»È»²»ÄÜÍÏ¶¯)</summary>
+        /// <summary> æŒ‰é’®å¢åŠ ç‚¹å‡»äº‹ä»¶(æ»‘åŠ¨çª—å£ä¸­ä½¿ç”¨ï¼Œä¸ç„¶ä¸èƒ½æ‹–åŠ¨)</summary>
         public static void AddClick(this Button btn, Action action)
         {
             btn.onClick.AddListener(() => { action(); });
@@ -59,37 +59,37 @@ namespace Fuse.Hotfix
 
         #region DoubleClick
 
-        /// <summary> GameObject Ë«»÷ÊÂ¼ş</summary>
+        /// <summary> GameObject åŒå‡»äº‹ä»¶</summary>
         public static void AddDoubleClick(this GameObject go, Action action)
         {
             EventListener.Get(go).onDoubleClick = data => { action(); };
         }
 
-        /// <summary> GameObject Ë«»÷ÊÂ¼ş,´ø1²ÎÊı</summary>
+        /// <summary> GameObject åŒå‡»äº‹ä»¶,å¸¦1å‚æ•°</summary>
         public static void AddDoubleClick<T1>(this GameObject go, Action<T1> action, T1 arg1)
         {
             EventListener.Get(go).onDoubleClick = data => { action(arg1); };
         }
 
-        /// <summary> GameObject Ë«»÷ÊÂ¼ş,´ø2²ÎÊı</summary>
+        /// <summary> GameObject åŒå‡»äº‹ä»¶,å¸¦2å‚æ•°</summary>
         public static void AddDoubleClick<T1, T2>(this GameObject go, Action<T1, T2> action, T1 arg1, T2 arg2)
         {
             EventListener.Get(go).onDoubleClick = data => { action(arg1, arg2); };
         }
 
-        /// <summary> ¿Ø¼şË«»÷ÊÂ¼ş</summary>
+        /// <summary> æ§ä»¶åŒå‡»äº‹ä»¶</summary>
         public static void AddDoubleClick<T>(this T go, Action action) where T : Component
         {
             EventListener.Get(go).onDoubleClick = data => { action(); };
         }
 
-        /// <summary> ¿Ø¼şË«»÷ÊÂ¼ş</summary>
+        /// <summary> æ§ä»¶åŒå‡»äº‹ä»¶</summary>
         public static void AddDoubleClick<T, T1>(this T go, Action<T1> action, T1 arg1) where T : Component
         {
             EventListener.Get(go).onDoubleClick = data => { action(arg1); };
         }
 
-        /// <summary> ¿Ø¼şË«»÷ÊÂ¼ş</summary>
+        /// <summary> æ§ä»¶åŒå‡»äº‹ä»¶</summary>
         public static void AddDoubleClick<T, T1, T2>(this T go, Action<T1, T2> action, T1 arg1, T2 arg2) where T : Component
         {
             EventListener.Get(go).onDoubleClick = data => { action(arg1, arg2); };
@@ -99,43 +99,43 @@ namespace Fuse.Hotfix
 
         #region Press Up Down Enter Exit
 
-        /// <summary> GameObject °´×¡ÊÂ¼ş</summary>
+        /// <summary> GameObject æŒ‰ä½äº‹ä»¶</summary>
         public static void AddPress(this GameObject go, Action action)
         {
             EventListener.Get(go).onPress = data => { action(); };
         }
 
-        /// <summary> GameObject Ì§ÆğÊÂ¼ş</summary>
+        /// <summary> GameObject æŠ¬èµ·äº‹ä»¶</summary>
         public static void AddPointUp(this GameObject go, Action action)
         {
             EventListener.Get(go).onUp = data => { action(); };
         }
 
-        /// <summary> GameObject °´ÏÂÊÂ¼ş</summary>
+        /// <summary> GameObject æŒ‰ä¸‹äº‹ä»¶</summary>
         public static void AddPointDown(this GameObject go, Action action)
         {
             EventListener.Get(go).onDown = data => { action(); };
         }
 
-        /// <summary> GameObject ½øÈëÊÂ¼ş</summary>
+        /// <summary> GameObject è¿›å…¥äº‹ä»¶</summary>
         public static void AddEnter(this GameObject go, Action action)
         {
             EventListener.Get(go).onEnter = data => { action(); };
         }
 
-        /// <summary> GameObject ÒÆ³öÊÂ¼ş</summary>
+        /// <summary> GameObject ç§»å‡ºäº‹ä»¶</summary>
         public static void AddExit(this GameObject go, Action action)
         {
             EventListener.Get(go).onExit = data => { action(); };
         }
 
-        /// <summary> ½øÈëÊÂ¼ş</summary>
+        /// <summary> è¿›å…¥äº‹ä»¶</summary>
         public static void AddEnter<T>(this T go, Action action) where T : Component
         {
             EventListener.Get(go).onEnter = (data) => { action(); };
         }
 
-        /// <summary> ÒÆ³öÊÂ¼ş</summary>
+        /// <summary> ç§»å‡ºäº‹ä»¶</summary>
         public static void AddExit<T>(this T go, Action action) where T : Component
         {
             EventListener.Get(go).onExit = (data) => { action(); };
@@ -207,37 +207,37 @@ namespace Fuse.Hotfix
 
         #region else component
 
-        /// <summary>ÏÂÀ­¿ò¸Ä±äÊÂ¼ş</summary>
+        /// <summary>ä¸‹æ‹‰æ¡†æ”¹å˜äº‹ä»¶</summary>
         public static void AddChange(this Dropdown drop, UnityAction<int> action)
         {
             drop.onValueChanged.AddListener(action);
         }
 
-        /// <summary>Toggle¸Ä±äÊÂ¼ş</summary>
+        /// <summary>Toggleæ”¹å˜äº‹ä»¶</summary>
         public static void AddChange(this Toggle toogle, UnityAction<bool, Toggle> action)
         {
             toogle.onValueChanged.AddListener((bool value) => action(value, toogle));
         }
 
-        /// <summary>Scrol¸Ä±äÊÂ¼ş</summary>
+        /// <summary>Scrolæ”¹å˜äº‹ä»¶</summary>
         public static void AddChange(this ScrollRect scrollRect, UnityAction<Vector2> action)
         {
             scrollRect.onValueChanged.AddListener(action);
         }
 
-        /// <summary>Slider¸Ä±äÊÂ¼ş</summary>
+        /// <summary>Slideræ”¹å˜äº‹ä»¶</summary>
         public static void AddChange(this Slider slider, UnityAction<float> action)
         {
             slider.onValueChanged.AddListener(action);
         }
 
-        /// <summary>Scrollbar¸Ä±äÊÂ¼ş</summary>
+        /// <summary>Scrollbaræ”¹å˜äº‹ä»¶</summary>
         public static void AddChange(this Scrollbar scrollbar, UnityAction<float> action)
         {
             scrollbar.onValueChanged.AddListener(action);
         }
 
-        /// <summary>input¸Ä±äÊÂ¼ş</summary>
+        /// <summary>inputæ”¹å˜äº‹ä»¶</summary>
         public static void AddChange(this InputField input, UnityAction<string> action)
         {
             input.onValueChanged.AddListener(action);
@@ -248,13 +248,13 @@ namespace Fuse.Hotfix
 
         //================================================================================================================
         
-        #region »ñÈ¡¶ÔÏóµÄRectTransform
+        #region è·å–å¯¹è±¡çš„RectTransform
 
         public static RectTransform RectTransform(this GameObject obj)
         {
             RectTransform rect = obj.GetComponent<RectTransform>();
             if (rect == null)
-                Log.Error($"¶ÔÏó[{obj.name}]µÄRectTransform×é¼şÎ´ÕÒµ½");
+                Log.Error($"å¯¹è±¡[{obj.name}]çš„RectTransformç»„ä»¶æœªæ‰¾åˆ°");
             return rect;
         }
 
@@ -265,10 +265,10 @@ namespace Fuse.Hotfix
 
         #endregion
 
-        #region UIÏà¹ØÊÍ·Å
+        #region UIç›¸å…³é‡Šæ”¾
 
         /// <summary>
-        /// ÊÍ·ÅUIÉÏµÄItemÁĞ±í
+        /// é‡Šæ”¾UIä¸Šçš„Itemåˆ—è¡¨
         /// </summary>
         public static void Disposed<T>(this List<T> list) where T : BaseItem
         {

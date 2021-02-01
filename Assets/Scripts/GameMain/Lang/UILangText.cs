@@ -15,7 +15,7 @@ namespace Fuse
         {
             textTarget = gameObject.GetComponent<Text>();
             if (GameEntry.Localization != null)
-                textTarget.text = GameEntry.Localization.GetString(key); //²éÕÒKey
+                textTarget.text = GameEntry.Localization.GetString(key); //æŸ¥æ‰¾Key
         }
 
         public string Key {
@@ -25,7 +25,7 @@ namespace Fuse
                 {
                     key = value;
                     Value = GameEntry.Localization.GetString(key);
-                    if (textTarget != null) //ÖØĞÂ²éÕÒÖµ
+                    if (textTarget != null) //é‡æ–°æŸ¥æ‰¾å€¼
                         textTarget.text = Value;
                 }
             }
