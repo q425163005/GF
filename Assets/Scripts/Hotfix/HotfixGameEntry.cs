@@ -1,4 +1,5 @@
-﻿namespace Fuse.Hotfix
+﻿
+namespace Fuse.Hotfix
 {
     /// <summary>
     /// 热更新层游戏入口
@@ -19,6 +20,7 @@
             Mgr.Fsm.Update(elapseSeconds, realElapseSeconds);
             Mgr.Event.Update(elapseSeconds, realElapseSeconds);
             Mgr.Timer.timerUpdateEvent(elapseSeconds, realElapseSeconds);
+            
         }
 
         public static void Shutdown()

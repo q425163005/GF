@@ -1,7 +1,6 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using GameFramework;
 
 namespace Fuse.Editor
 {

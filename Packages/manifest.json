@@ -1,11 +1,10 @@
 {
   "dependencies": {
-    "com.coffee.ui-effect": "file:../Packages/com.coffee.ui-effect",
-    "com.coffee.ui-particle": "file:../Packages/com.coffee.ui-particle",
-    "com.coffee.softmask-for-ugui": "file:../Packages/com.coffee.softmask-for-ugui",
-    "com.jiangyin.gameframework": "file:../Packages/com.jiangyin.gameframework",
-    "com.ourpalm.ilruntime": "file:../Packages/com.ourpalm.ilruntime",
-    "jp.setchi.fancyscrollview": "file:../Packages/jp.setchi.fancyscrollview",
+    "com.coffee.softmask-for-ugui": "https://gitee.com/q425163005/SoftMaskForUGUI.git",
+    "com.coffee.ui-effect": "https://gitee.com/q425163005/UIEffect.git",
+    "com.coffee.ui-particle": "https://gitee.com/q425163005/ParticleEffectForUGUI.git",
+    "com.jiangyin.gameframework": "https://gitee.com/q425163005/UnityGameFramework.git",
+    "com.ourpalm.ilruntime": "1.6.6",
     "com.unity.collab-proxy": "1.3.9",
     "com.unity.ide.rider": "2.0.7",
     "com.unity.ide.visualstudio": "2.0.5",
