@@ -135,6 +135,14 @@ namespace Fuse
 
         private async Task<byte[]> GetDll(string dllname)
         {
+            string dllpath = Path.GetFullPath(dllname);
+            FileStream fileStream = new FileStream(dllpath, FileMode.Open, FileAccess.Read);
+            fileStream.Seek(0, SeekOrigin.Begin);
+            byte[] bye = new byte[fileStream.Length];
+            fileStream.Read(bye, 0, bye.Length);
+            fileStream.Close();
+            return bye;
+            
             string path = Application.dataPath.Replace("Assets","") + dllname;
             return await GameEntry.WebRequest.AwaitAddWebRequest(path);
         }
